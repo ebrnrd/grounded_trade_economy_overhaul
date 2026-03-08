@@ -1,0 +1,1659 @@
+; =============================================================================
+; trade_categories.ltx
+; Item categories for the Grounded trader economy system.
+;
+; These categories are used by generate_trade_buy.py to produce the
+; [trade_generic_buy] section for each trader's LTX file.
+;
+; Rules:
+;   - Categories here are your labels, not game values.
+;   - Item names must match exactly what the game uses.
+;   - Lines starting with ; are comments.
+;   - Blank lines are ignored.
+;   - All traders share this file. Multipliers are set per-trader in
+;     trader_categories_multipliers.ltx.
+;
+; TIER LOGIC (weapons):
+;   wpn_pistol_low    — cheap common pistols, rookies carry these
+;   wpn_pistol_high   — higher-end pistols, less common
+;   wpn_rifle_low     — common low-tier rifles, older/rough weapons
+;   wpn_rifle_mid     — mid-tier assault rifles, standard stalker fare
+;   wpn_rifle_high    — high-tier rifles, military/specialist grade
+;   wpn_sniper        — dedicated sniper rifles
+;   wpn_shotgun       — shotguns
+;   wpn_smg           — submachine guns (split from rifles for tuning)
+;   wpn_lmg           — light machine guns
+;   wpn_addons        — scopes, silencers, grenade launchers
+;   wpn_melee         — knives and axes
+;   wpn_explosive     — grenades, mines, launchers
+; =============================================================================
+
+[wpn_pistol_rus_low]
+; Soviet sidearms — what every rookie and cop carries
+wpn_pm ;4890
+wpn_pm_custom ;6890
+wpn_pmm ;7580
+wpn_pb ;6580
+wpn_pb_custom ;8190
+wpn_fort ;5660
+wpn_fort_snag ;5660
+
+[wpn_pistol_rus_high]
+; Higher-end Russian/Soviet pistols — less common
+wpn_aps ;9380
+wpn_mp443 ;11580
+wpn_gsh18 ;9680
+wpn_gsh18_custom ;11580
+wpn_hpsa ;8650
+wpn_hpsa_alt ;9960
+wpn_mp412 ;14680
+wpn_cz52 ;9850
+wpn_tt33 ;9860
+wpn_tt33_modern ;12350
+wpn_oc33 ;8860
+
+[wpn_pistol_nato_low]
+wpn_beretta ;7120
+wpn_beretta_camo ;11650
+wpn_beretta_modern ;9390
+wpn_beretta_alt ;8290
+wpn_walther ;4890
+wpn_walther_custom ;5680
+
+[wpn_pistol_nato_high]
+; Western pistols — brought in by mercs and traders, no low tier equivalent
+wpn_colt1911 ;8560
+wpn_colt1911_duty ;14580
+wpn_colt1911_merc ;14860
+wpn_colt1911_camo ;13880
+wpn_colt1911_custom ;12550
+wpn_colt1911_modern ;12380
+wpn_colt1911_alt ;11280
+wpn_colt1911_new ;10480
+wpn_cz75 ;9850
+wpn_cz75_auto ;11650
+wpn_desert_eagle ;19680
+wpn_desert_eagle_custom ;23580
+wpn_desert_eagle_modern ;22250
+wpn_desert_eagle_nimble ;25880
+wpn_fn57 ;15280
+wpn_fnp45 ;14860
+wpn_fnp45_custom ;17550
+wpn_fnx45 ;15880
+wpn_fnx45_custom ;18650
+wpn_fnx45_alt ;12850
+wpn_glock ;10960
+wpn_glock_custom ;13580
+wpn_glock_modern ;15680
+wpn_sig220 ;12980
+wpn_sig220_custom ;15880
+wpn_sig220_nimble ;18560
+wpn_usp ;10960
+wpn_usp_custom ;13580
+wpn_usp_match ;15360
+wpn_usp_nimble ;17690
+
+; =============================================================================
+; RIFLES — LOW TIER
+; =============================================================================
+
+[wpn_rifle_rus_low]
+; Old Soviet iron — AKMs, AKSUs, PPSh, SKS, WWII relics
+; What the Zone has been recycling for decades
+wpn_ak74u ;20870
+wpn_ak74u_1p29 ;20870
+wpn_ak74u_kobra ;20870
+wpn_ak74u_ps01 ;20870
+wpn_ak74u_camo ;24550
+wpn_ak74u_camo_1p29 ;24550
+wpn_ak74u_camo_kobra ;24550
+wpn_ak74u_camo_ps01 ;24550
+wpn_ak74u_custom ;23880
+wpn_ak74u_custom_1p29 ;23880
+wpn_ak74u_custom_kobra ;23880
+wpn_ak74u_custom_ps01 ;23880
+wpn_ak74u_old ;17860
+wpn_ak74u_snag ;28950
+wpn_ak ;22650
+wpn_aks ;22650
+wpn_aks74 ;25860
+wpn_aks74_1p29 ;25860
+wpn_aks74_kobra ;25860
+wpn_aks74_ps01 ;25860
+wpn_aks74_new ;26880
+wpn_aks74_new_1p29 ;26880
+wpn_aks74_new_kobra ;26880
+wpn_aks74_new_ps01 ;26880
+wpn_bizon ;18560
+wpn_bizon_1p29 ;18560
+wpn_bizon_kobra ;18560
+wpn_bizon_ps01 ;18560
+wpn_kiparis ;16880
+wpn_ppsh41 ;15840
+wpn_ppsh41_rednew ;20580
+wpn_ppsh41_woodnew ;18180
+wpn_sks ;19580
+wpn_sks_modern ;22960
+wpn_svt40 ;24850
+wpn_svt40_modern ;26350
+wpn_k98 ;22590
+wpn_g43 ;23980
+wpn_type63 ;17880
+wpn_vityaz ;20880
+wpn_vityaz_ac10632 ;20880
+wpn_vityaz_acog ;20880
+wpn_vityaz_eot ;20880
+wpn_pp2000 ;19650
+wpn_pp2000_ac10632 ;19650
+wpn_pp2000_acog ;19650
+wpn_pp2000_eot ;19650
+
+[wpn_rifle_nato_low]
+; Czech SMG — Eastern bloc but NATO-adjacent, low tier
+wpn_vz61 ;15680
+wpn_vz61_freedom ;17980
+wpn_vz61_camo ;18960
+wpn_vz61_alt ;13960
+
+; =============================================================================
+; RIFLES — MID TIER
+; =============================================================================
+
+[wpn_rifle_rus_mid]
+; Standard AK family and Russian SMGs — the backbone of the Zone
+wpn_akms ;28780
+wpn_akms_1p29 ;28780
+wpn_akms_kobra ;28780
+wpn_akms_ps01 ;28780
+wpn_akms_alt ;26540
+wpn_akms_alt_1p29 ;26540
+wpn_akms_alt_kobra ;26540
+wpn_akms_alt_ps01 ;26540
+wpn_akm ;28780
+wpn_akm_1p29 ;28780
+wpn_akm_kobra ;28780
+wpn_akm_ps01 ;28780
+wpn_ak74 ;26950
+wpn_ak74_1p29 ;26950
+wpn_ak74_kobra ;26950
+wpn_ak74_ps01 ;26950
+wpn_ak74_custom ;31580
+wpn_ak74_custom_1p29 ;31580
+wpn_ak74_custom_kobra ;31580
+wpn_ak74_custom_ps01 ;31580
+wpn_ak74_modern ;29560
+wpn_ak74_modern_1p29 ;29560
+wpn_ak74_modern_kobra ;29560
+wpn_ak74_modern_ps01 ;29560
+wpn_ak74_alt ;30380
+wpn_ak74_alt_1p29 ;30380
+wpn_ak74_alt_kobra ;30380
+wpn_ak74_alt_ps01 ;30380
+wpn_ak74_old ;23580
+wpn_ak74_rpk ;33680
+wpn_ak74m ;30980
+wpn_ak74m_1p29 ;30980
+wpn_ak74m_kobra ;30980
+wpn_ak74m_ps01 ;30980
+wpn_ak74m_duty ;38580
+wpn_ak74m_duty_1p29 ;38580
+wpn_ak74m_duty_kobra ;38580
+wpn_ak74m_duty_ps01 ;38580
+wpn_ak74m_camo ;38360
+wpn_ak74m_camo_1p29 ;38360
+wpn_ak74m_camo_kobra ;38360
+wpn_ak74m_camo_ps01 ;38360
+wpn_ak74m_custom ;33980
+wpn_ak74m_custom_1p29 ;33980
+wpn_ak74m_custom_kobra ;33980
+wpn_ak74m_custom_ps01 ;33980
+wpn_ak74m_alt ;31850
+wpn_ak74m_alt_1p29 ;31850
+wpn_ak74m_alt_kobra ;31850
+wpn_ak74m_alt_ps01 ;31850
+wpn_ak74m_pka ;40680
+wpn_ak102 ;26690
+wpn_ak102_ac10632 ;26690
+wpn_ak102_acog ;26690
+wpn_ak102_eot ;26690
+wpn_ak102_1p29 ;26690
+wpn_ak102_kobra ;26690
+wpn_ak102_ps01 ;26690
+wpn_ak104 ;26550
+wpn_ak104_1p29 ;26550
+wpn_ak104_kobra ;26550
+wpn_ak104_ps01 ;26550
+wpn_ak105 ;24480
+wpn_ak105_1p29 ;24480
+wpn_ak105_kobra ;24480
+wpn_ak105_ps01 ;24480
+wpn_9a91 ;28860
+wpn_9a91_1p29 ;28860
+wpn_9a91_kobra ;28860
+wpn_9a91_pso1m21 ;28860
+wpn_9a91_ps01 ;28860
+
+[wpn_rifle_nato_mid]
+; Western rifles and SMGs — brought in by Freedom, mercs, traders from outside
+wpn_sig552 ;32580
+wpn_sig552_ac10632 ;32580
+wpn_sig552_acog ;32580
+wpn_sig552_eot ;32580
+wpn_l85 ;33860
+wpn_l85_custom ;40580
+wpn_l85_modern ;38980
+wpn_l85_alt ;35680
+wpn_l85a2 ;35860
+wpn_l85a2_custom ;41560
+wpn_l85a2_modern ;38580
+wpn_l85a2_alt ;36980
+wpn_lr300 ;26480
+wpn_lr300_ac10632 ;26480
+wpn_lr300_acog ;26480
+wpn_lr300_eot ;26480
+wpn_lr300_camo ;36880
+wpn_lr300_camo_ac10632 ;36880
+wpn_lr300_camo_acog ;36880
+wpn_lr300_camo_eot ;36880
+wpn_lr300_custom ;33550
+wpn_lr300_custom_ac10632 ;33550
+wpn_lr300_custom_acog ;33550
+wpn_lr300_custom_eot ;33550
+wpn_ace21 ;31580
+wpn_ace21_ac10632 ;31580
+wpn_ace21_acog ;31580
+wpn_ace21_eot ;31580
+wpn_mp5 ;20380
+wpn_mp5_ac10632 ;20380
+wpn_mp5_acog ;20380
+wpn_mp5_eot ;20380
+wpn_mp5_custom ;23680
+wpn_mp5_custom_ac10632 ;23680
+wpn_mp5_custom_acog ;23680
+wpn_mp5_custom_eot ;23680
+wpn_mp5_alt ;22350
+wpn_mp5_alt_ac10632 ;22350
+wpn_mp5_alt_acog ;22350
+wpn_mp5_alt_eot ;22350
+wpn_mp5_nimble ;28950
+wpn_mp5_nimble_ac10632 ;28950
+wpn_mp5_nimble_acog ;28950
+wpn_mp5_nimble_eot ;28950
+wpn_mp5sd ;21880
+wpn_mp5sd_ac10632 ;21880
+wpn_mp5sd_acog ;21880
+wpn_mp5sd_eot ;21880
+wpn_mp5sd_custom ;24560
+wpn_mp5sd_custom_ac10632 ;24560
+wpn_mp5sd_custom_acog ;24560
+wpn_mp5sd_custom_eot ;24560
+wpn_mp5sd_new ;22650
+wpn_mp5sd_new_ac10632 ;22650
+wpn_mp5sd_new_acog ;22650
+wpn_mp5sd_new_eot ;22650
+wpn_ump45 ;28980
+wpn_ump45_ac10632 ;28980
+wpn_ump45_acog ;28980
+wpn_ump45_eot ;28980
+wpn_ump45_custom ;33880
+wpn_ump45_custom_ac10632 ;33880
+wpn_ump45_custom_acog ;33880
+wpn_ump45_custom_eot ;33880
+wpn_mp7 ;23300
+wpn_mp7_acog ;23300
+wpn_mp7_eot ;23300
+wpn_mp7_ac10632 ;23300
+wpn_mp7_c-more ;23300
+wpn_fnc ;27000
+wpn_m4a1 ;29560
+wpn_m4a1_ac10632 ;29560
+wpn_m4a1_acog ;29560
+wpn_m4a1_eot ;29560
+wpn_m4a1_freedom ;33350
+wpn_m4a1_freedom_ac10632 ;33350
+wpn_m4a1_freedom_acog ;33350
+wpn_m4a1_freedom_eot ;33350
+wpn_m4a1_camo ;38680
+wpn_m4a1_camo_ac10632 ;38680
+wpn_m4a1_camo_acog ;38680
+wpn_m4a1_camo_eot ;38680
+wpn_m4a1_custom ;35980
+wpn_m4a1_custom_ac10632 ;35980
+wpn_m4a1_custom_acog ;35980
+wpn_m4a1_custom_eot ;35980
+wpn_fal ;31300
+wpn_fal_ac10632 ;31300
+wpn_fal_acog ;31300
+wpn_fal_eot ;31300
+wpn_fal_c-more ;31300
+
+; =============================================================================
+; RIFLES — HIGH TIER
+; =============================================================================
+
+[wpn_rifle_rus_high]
+; Late-generation Russian military — Abakan, AK12, 9x39 carbines, ASh-12
+wpn_abakan ;35850
+wpn_abakan_1p29 ;35850
+wpn_abakan_kobra ;35850
+wpn_abakan_ps01 ;35850
+wpn_abakan_camo ;40860
+wpn_abakan_camo_1p29 ;40860
+wpn_abakan_camo_kobra ;40860
+wpn_abakan_camo_ps01 ;40860
+wpn_ak12 ;36880
+wpn_ak12_ac10632 ;36880
+wpn_ak12_acog ;36880
+wpn_ak12_eot ;36880
+wpn_ak101 ;33850
+wpn_ak101_ac10632 ;33850
+wpn_ak101_acog ;33850
+wpn_ak101_eot ;33850
+wpn_ak101_1p29 ;33850
+wpn_ak101_kobra ;33850
+wpn_ak101_ps01 ;33850
+wpn_ak101_camo ;38380
+wpn_ak101_camo_ac10632 ;38380
+wpn_ak101_camo_acog ;38380
+wpn_ak101_camo_eot ;38380
+wpn_ak101_camo_1p29 ;38380
+wpn_ak101_camo_kobra ;38380
+wpn_ak101_camo_ps01 ;38380
+wpn_ak103 ;33860
+wpn_ak103_1p29 ;33860
+wpn_ak103_kobra ;33860
+wpn_ak103_ps01 ;33860
+wpn_ak103_camo ;38980
+wpn_ak103_camo_1p29 ;38980
+wpn_ak103_camo_kobra ;38980
+wpn_ak103_camo_ps01 ;38980
+wpn_aek ;38950
+wpn_aek_1p29 ;38950
+wpn_aek_kobra ;38950
+wpn_aek_ps01 ;38950
+wpn_aek_camo ;45760
+wpn_aek_camo_1p29 ;45760
+wpn_aek_camo_kobra ;45760
+wpn_aek_camo_ps01 ;45760
+wpn_aek_duty ;41580
+wpn_aek_duty_1p29 ;41580
+wpn_aek_duty_kobra ;41580
+wpn_aek_duty_ps01 ;41580
+wpn_groza ;36860
+wpn_groza_nimble ;38580
+wpn_ash12 ;37100
+wpn_ash12_ac10632 ;37100
+wpn_ash12_acog ;37100
+wpn_ash12_eot ;37100
+wpn_ash12_c-more ;37100
+
+[wpn_rifle_nato_high]
+; Military-grade Western rifles — G3, G36, HK416, M4/M16 family, SCAR, FAL
+wpn_galil ;38580
+wpn_galil_custom ;41480
+wpn_galil_modern ;43680
+wpn_sig550 ;43580
+wpn_sig550_ac10632 ;43580
+wpn_sig550_acog ;43580
+wpn_sig550_eot ;43580
+wpn_sig550_camo ;50860
+wpn_sig550_camo_ac10632 ;50860
+wpn_sig550_camo_acog ;50860
+wpn_sig550_camo_eot ;50860
+wpn_sig550_custom ;45860
+wpn_sig550_custom_ac10632 ;45860
+wpn_sig550_custom_acog ;45860
+wpn_sig550_custom_eot ;45860
+wpn_sig550_luckygun ;51980
+wpn_sig550_luckygun_eot ;51980
+wpn_sig550_luckygun_acog ;51980
+wpn_sig550_luckygun_ac10632 ;51980
+wpn_aug ;40680
+wpn_aug_freedom ;43380
+wpn_aug_merc ;45180
+wpn_aug_custom ;46580
+wpn_aug_modern ;42580
+wpn_aug_a3 ;43600
+wpn_aug_a3_ac10632 ;43600
+wpn_aug_a3_acog ;43600
+wpn_aug_a3_eot ;43600
+wpn_aug_a3_c-more ;43600
+wpn_fn2000 ;45880
+wpn_fn2000_camo ;53650
+wpn_fn2000_custom ;49350
+wpn_fn2000_nimble ;48550
+wpn_famas3 ;44900
+wpn_famas3_eot ;44900
+wpn_famas3_acog ;44900
+wpn_famas3_ac10632 ;44900
+wpn_p90 ;39880
+wpn_p90_ac10632 ;39880
+wpn_p90_acog ;39880
+wpn_p90_eot ;39880
+wpn_g3 ;39880
+wpn_g3_ac10632 ;39880
+wpn_g3_acog ;39880
+wpn_g3_eot ;39880
+wpn_g3sg1 ;43980
+wpn_g36 ;43880
+wpn_g36_camo ;48850
+wpn_g36_nimble ;43880
+wpn_g36k ;33860
+wpn_hk416 ;49580
+wpn_hk416_ac10632 ;49580
+wpn_hk416_acog ;49580
+wpn_hk416_eot ;49580
+wpn_hk417 ;35000
+wpn_hk417_acog ;35000
+wpn_hk417_eot ;35000
+wpn_m4 ;35560
+wpn_m4_ac10632 ;35560
+wpn_m4_acog ;35560
+wpn_m4_eot ;35560
+wpn_m16 ;35690
+wpn_m16_ac10632 ;35690
+wpn_m16_acog ;35690
+wpn_m16_eot ;35690
+wpn_m16a2 ;35880
+wpn_scar ;55880
+wpn_scar_ac10632 ;55880
+wpn_scar_acog ;55880
+wpn_scar_eot ;55880
+wpn_scar_custom ;63580
+wpn_scar_custom_ac10632 ;63580
+wpn_scar_custom_acog ;63580
+wpn_scar_custom_eot ;63580
+wpn_scar_new ;58880
+wpn_scar_new_ac10632 ;58880
+wpn_scar_new_acog ;58880
+wpn_scar_new_eot ;58880
+wpn_mk14 ;40000
+wpn_mk14_ac10632 ;40000
+wpn_mk14_acog ;40000
+wpn_mk14_eot ;40000
+wpn_mk14_c-more ;40000
+wpn_xm8 ;43880
+
+
+; =============================================================================
+; SNIPERS
+; =============================================================================
+
+[wpn_sniper_rus]
+; Russian precision rifles — SVD, SVU, Vintorez, Val, SV98, Mosin
+wpn_svd ;40550
+wpn_svd_1p29 ;40550
+wpn_svd_kobra ;40550
+wpn_svd_ps01 ;40550
+wpn_svd_custom ;45360
+wpn_svd_custom_1p29 ;45360
+wpn_svd_custom_kobra ;45360
+wpn_svd_custom_ps01 ;45360
+wpn_svd_nimble ;55880
+wpn_svu ;43860
+wpn_svu_1p29 ;43860
+wpn_svu_kobra ;43860
+wpn_svu_ps01 ;43860
+wpn_svu_alt ;48850
+wpn_svu_alt_1p29 ;48850
+wpn_svu_alt_kobra ;48850
+wpn_svu_alt_ps01 ;48850
+wpn_svu_nimble ;48580
+wpn_svu_nimble_1p29 ;48580
+wpn_svu_nimble_kobra ;48580
+wpn_svu_nimble_ps01 ;48580
+wpn_vintorez ;40580
+wpn_vintorez_1p29 ;40580
+wpn_vintorez_kobra ;40580
+wpn_vintorez_pso1m21 ;40580
+wpn_vintorez_alt ;41860
+wpn_vintorez_alt_1p29 ;41860
+wpn_vintorez_alt_kobra ;41860
+wpn_vintorez_alt_pso1m21 ;41860
+wpn_vintorez_1pn93 ;55880
+wpn_vintorez_nimble ;51850
+wpn_vsk94 ;33960
+wpn_vsk94_1p29 ;33960
+wpn_vsk94_kobra ;33960
+wpn_vsk94_pso1m21 ;33960
+wpn_vssk ;95680
+wpn_vihr ;30580
+wpn_vihr_1p29 ;30580
+wpn_vihr_kobra ;30580
+wpn_vihr_pso1m21 ;30580
+wpn_vihr_ps01 ;30580
+wpn_val ;38860
+wpn_val_1p29 ;38860
+wpn_val_kobra ;38860
+wpn_val_pso1m21 ;38860
+wpn_val_modern ;41580
+wpn_val_modern_1p29 ;41580
+wpn_val_modern_kobra ;41580
+wpn_val_modern_ps01 ;41580
+wpn_sv98 ;58580
+wpn_sv98_custom ;63680
+wpn_mosin ;21560
+
+[wpn_sniper_nato]
+; Western precision rifles — SR25, L96, M24, Remington700, WA2000, TRG, M98B
+wpn_sr25 ;50780
+wpn_sig550_sniper ;49560
+wpn_l96a1 ;65880
+wpn_l96a1m ;76580
+wpn_m98b ;88980
+wpn_wa2000 ;90000
+wpn_m24 ;76680
+wpn_trg ;71880
+wpn_remington700 ;33000
+
+
+; =============================================================================
+; SHOTGUNS
+; =============================================================================
+
+[wpn_shotgun_rus_low]
+; Break-action and basic pump — Soviet/Russian, cheap and everywhere
+wpn_bm16 ;10650
+wpn_bm16_alt ;12850
+wpn_bm16_full ;15480
+wpn_bm16_full_alt ;18250
+wpn_toz34 ;14800
+wpn_toz34_decor ;18550
+wpn_toz34_custom ;16680
+wpn_toz34_obrez ;9860
+wpn_toz34_obrez_decor ;13880
+wpn_toz34_obrez_custom ;12690
+wpn_mp133 ;19960
+wpn_fort500 ;17700
+
+[wpn_shotgun_rus_high]
+; Russian semi-auto shotguns — Saiga, Vepr, Fort500
+wpn_saiga12s ;31680
+wpn_saiga12s_1p29 ;31680
+wpn_saiga12s_kobra ;31680
+wpn_saiga12s_ps01 ;31680
+wpn_vepr ;36980
+wpn_vepr_1p29 ;36980
+wpn_vepr_kobra ;36980
+wpn_vepr_ps01 ;36980
+wpn_mp153 ;30580
+wpn_toz34_bull ;98950
+wpn_toz34_mark4 ;36860
+
+[wpn_shotgun_nato_low]
+wpn_wincheaster1300 ;19580
+wpn_wincheaster1300_trapper ;19580
+wpn_mossberg590 ;24850
+wpn_remington870 ;23600
+wpn_remington870_ac10632 ;23600
+wpn_remington870_eot ;23600
+wpn_remington870_c-more ;23600
+
+[wpn_shotgun_nato_high]
+; Western tactical shotguns — Mossberg, SPAS, Winchester, Remington, Protecta
+wpn_spas12 ;29390
+wpn_spas12_custom ;32580
+wpn_spas12_nimble ;34860
+wpn_protecta ;28550
+wpn_protecta_camo ;33850
+wpn_protecta_custom ;30650
+wpn_protecta_aim ;33780
+wpn_protecta_nimble ;32680
+wpn_usas12 ;38660
+
+
+; =============================================================================
+; LMGs
+; =============================================================================
+
+[wpn_lmg_rus]
+; PKM family and RPK variants — Soviet heavy support
+wpn_pkm ;53850
+wpn_pkm_zulus ;58960
+wpn_pkp ;61880
+wpn_rpk ;35860
+wpn_rpk74 ;38980
+wpn_rpk74_1p29 ;38980
+wpn_rpk74_kobra ;38980
+wpn_rpk74_ps01 ;38980
+wpn_rpd ;24580
+
+[wpn_lmg_nato]
+; Western heavy support — M249, M60, M82
+wpn_m249 ;56580
+wpn_m249_ac10632 ;56580
+wpn_m249_acog ;56580
+wpn_m249_eot ;56580
+wpn_m60 ;67000
+wpn_m82 ;50000
+
+; -----------------------------------------------------------------------------
+; WEAPON ADDONS
+; -----------------------------------------------------------------------------
+
+[wpn_addons]
+wpn_addon_scope
+wpn_addon_scope_po4x34
+wpn_addon_scope_pu
+wpn_addon_scope_zf4
+wpn_addon_scope_susat
+wpn_addon_scope_galil
+wpn_addon_scope_g43
+wpn_addon_scope_mosin
+1p29
+kobra
+ps01
+pso1m21
+ac10632
+acog
+eot
+c-more
+ac11090
+wpn_sil_9mm
+wpn_sil_45
+wpn_sil_pbs1
+wpn_sil_pbs4
+wpn_sil_tgp-a
+wpn_sil_nato
+wpn_sil_kzrzp
+wpn_sil_atg
+wpn_sil_aps
+wpn_sil_9a91
+wpn_sil_6p9
+wpn_sil_vihr
+wpn_sil_sr25
+wpn_sil_gemtech
+wpn_sil_57
+wpn_addon_silencer
+wpn_addon_grenade_launcher
+wpn_addon_grenade_launcher_m203
+
+; -----------------------------------------------------------------------------
+; MELEE
+; -----------------------------------------------------------------------------
+
+[wpn_melee]
+wpn_knife
+wpn_knife2
+wpn_knife3
+wpn_knife4
+wpn_knife5
+wpn_axe
+wpn_axe2
+wpn_axe3
+
+; -----------------------------------------------------------------------------
+; EXPLOSIVES
+; -----------------------------------------------------------------------------
+
+[wpn_explosive]
+grenade_f1
+grenade_rgd5
+grenade_gd-05
+grenade_smoke
+mine_new
+ied_rpg_new
+ied_new
+wpn_m79
+wpn_rg-6
+wpn_rpg7
+
+; =============================================================================
+; AMMO
+; =============================================================================
+
+[ammo_rus_common]
+; Soviet calibers — what most stalkers shoot, always in demand
+ammo_9x18_fmj
+ammo_9x18_pmm
+ammo_9x18_ap
+ammo_5.45x39_fmj
+ammo_5.45x39_ep
+ammo_5.45x39_ap
+ammo_12x70_buck
+ammo_12x70_buck_self
+ammo_12x76_zhekan
+ammo_12x76_dart
+ammo_12x76_bull
+
+[ammo_rus_mid]
+; Less common Soviet calibers — older weapons, WWII era
+ammo_7.62x39_fmj
+ammo_7.62x39_ap
+ammo_7.62x25_p
+ammo_7.62x25_ps
+ammo_7.92x33_fmj
+ammo_7.92x33_ap
+
+[ammo_rus_rare]
+; Specialist Russian calibers — military/subsonic, almost no one in Cordon uses these
+ammo_9x39_ap
+ammo_9x39_pab9
+ammo_7.62x54_7h1
+ammo_7.62x54_7h14
+ammo_7.62x54_ap
+ammo_12.7x55_fmj
+ammo_12.7x55_ap
+ammo_pkm_100
+
+[ammo_nato_common]
+ammo_9x19_pbp
+ammo_9x19_fmj
+ammo_9x19_ap
+
+[ammo_nato_mid]
+; Western calibers — 9x19, 5.56, .45, 5.7, .357
+; Mercs and Freedom bring this in, no organic supply in Cordon
+ammo_11.43x23_hydro
+ammo_11.43x23_fmj
+ammo_5.56x45_fmj
+ammo_5.56x45_ss190
+ammo_5.56x45_ap
+ammo_5.7x28_ss190
+ammo_5.7x28_ss195
+ammo_357_hp_mag
+
+[ammo_nato_rare]
+; High-powered Western calibers — virtually no buyers in Cordon
+ammo_7.62x51_fmj
+ammo_7.62x51_ap
+ammo_magnum_300
+
+[ammo_degraded]
+; All worn ammo regardless of origin — pennies, last resort sell
+ammo_9x18_fmj_bad
+ammo_9x18_pmm_bad
+ammo_9x18_ap_bad
+ammo_9x19_pbp_bad
+ammo_9x19_fmj_bad
+ammo_9x19_ap_bad
+ammo_11.43x23_hydro_bad
+ammo_11.43x23_fmj_bad
+ammo_12x70_buck_bad
+ammo_12x76_zhekan_bad
+ammo_12x76_dart_bad
+ammo_5.45x39_ap_bad
+ammo_5.45x39_fmj_bad
+ammo_5.45x39_ep_bad
+ammo_9x39_ap_bad
+ammo_9x39_pab9_bad
+ammo_5.56x45_fmj_bad
+ammo_5.56x45_ss190_bad
+ammo_5.56x45_ap_bad
+ammo_7.62x51_fmj_bad
+ammo_7.62x51_ap_bad
+ammo_7.62x25_p_bad
+ammo_7.62x25_ps_bad
+ammo_7.62x39_ap_bad
+ammo_7.62x39_fmj_bad
+ammo_7.62x54_7h1_bad
+ammo_7.62x54_7h14_bad
+ammo_7.62x54_ap_bad
+ammo_7.92x33_fmj_bad
+ammo_7.92x33_ap_bad
+ammo_magnum_300_bad
+ammo_12.7x55_fmj_bad
+ammo_12.7x55_ap_bad
+ammo_pkm_100_bad
+ammo_357_hp_mag_bad
+ammo_5.7x28_ss190_bad
+ammo_5.7x28_ss195_bad
+ammo_9x18_fmj_verybad
+ammo_9x18_pmm_verybad
+ammo_9x18_ap_verybad
+ammo_9x19_pbp_verybad
+ammo_9x19_fmj_verybad
+ammo_9x19_ap_verybad
+ammo_11.43x23_hydro_verybad
+ammo_11.43x23_fmj_verybad
+ammo_12x70_buck_verybad
+ammo_12x76_zhekan_verybad
+ammo_12x76_dart_verybad
+ammo_5.45x39_ap_verybad
+ammo_5.45x39_fmj_verybad
+ammo_5.45x39_ep_verybad
+ammo_9x39_ap_verybad
+ammo_9x39_pab9_verybad
+ammo_5.56x45_fmj_verybad
+ammo_5.56x45_ss190_verybad
+ammo_5.56x45_ap_verybad
+ammo_7.62x51_fmj_verybad
+ammo_7.62x51_ap_verybad
+ammo_7.62x25_p_verybad
+ammo_7.62x25_ps_verybad
+ammo_7.62x39_ap_verybad
+ammo_7.62x39_fmj_verybad
+ammo_7.62x54_7h1_verybad
+ammo_7.62x54_7h14_verybad
+ammo_7.62x54_ap_verybad
+ammo_7.92x33_fmj_verybad
+ammo_7.92x33_ap_verybad
+ammo_magnum_300_verybad
+ammo_12.7x55_fmj_verybad
+ammo_12.7x55_ap_verybad
+ammo_pkm_100_verybad
+ammo_357_hp_mag_verybad
+ammo_5.7x28_ss190_verybad
+ammo_5.7x28_ss195_verybad
+
+[outfit_novice]
+; Rookie and bandit basics — the floor of the market
+novice_outfit
+novice_outfit_tourist
+novice_outfit_camo
+bandit_novice_outfit
+bandit_novice_outfit_alt
+army_outfit
+trenchcoat_outfit
+trenchcoat_brown_outfit
+trenchcoat_green_outfit
+wastelander_outfit
+travel_outfit
+nomad_outfit
+
+[outfit_stalker]
+; Standard stalker suits — common, most traders can move these
+stalker_outfit
+stalker_outfit_barge
+stalker_outfit_alt
+stalker_outfit_camo
+stalker_bear_outfit
+stalker_salamander_outfit
+stalker_graphite_outfit
+stalker_drought_outfit
+stalker_predator_outfit
+stalker_autumn_outfit
+stalker_vineleaf_outfit
+stalker_tigerstripe_outfit
+cs_light_novice_outfit
+cs_light_outfit
+cs_medium_outfit
+cs_novice_outfit
+cs_stalker_outfit
+dolg_novice_outfit
+dolg_outfit
+redline_novice_outfit
+svoboda_light_outfit
+banditmerc_outfit
+renegademerc_outfit
+merc_outfit
+merc_sun_outfit
+merc_scout_outfit
+merc_fighter_outfit
+merc_jackal_outfit
+merc_coyote_outfit
+merc_sunset_outfit
+merc_wolven_outfit
+merc_nighthunter_outfit
+light_merc_outfit
+light_monolit_outfit
+light_voen_outfit
+light_loner_outfit
+light_dolg_outfit
+light_freedom_outfit
+light_isg_outfit
+hybrid_outfit
+ghillie_outfit
+
+[outfit_armored]
+; Heavy armored suits — slow, valuable, hard to move
+cs_heavy_outfit
+dolg_heavy_outfit
+dolg_pantsir_outfit
+dolg_scout_outfit
+dolg_red_outfit
+dolg_voin_outfit
+dolg_specops_red_outfit
+dolg_heavy_redline_outfit
+dolg_heavy_proto_exo_outfit
+military_outfit
+military_merc_outfit
+military_bandit_outfit
+military_monolit_outfit
+military_freedom_outfit
+military_sky_outfit
+specops_outfit
+specops_merc_outfit
+specops_bandit_outfit
+specops_dolg_outfit
+monolith_outfit
+svoboda_heavy_outfit
+svoboda_heavy_outfit_2
+merc_ace_outfit
+merc_nosorog_outfit
+army_nosorog_outfit
+freedom_nosorog_outfit
+monolith_nosorog_outfit
+dolg_nosorog_outfit
+merc_scientific_armored_outfit
+greh_armored_outfit
+greh_armored_camo_outfit
+isg_outfit
+isg_camo_outfit
+isg_lcs_outfit
+isg_lcs_camo_outfit
+isg_lcs_urban_outfit
+
+[outfit_exo]
+; Exoskeletons — rare, extremely valuable, very few buyers
+exo_outfit
+exo_wood_outfit
+exo_dolg_outfit
+exo_dolg_wood_outfit
+exo_dolg_urban_outfit
+exo_merc_urban_outfit
+exo_merc_wood_outfit
+exo_merc_grass_outfit
+bandit_exo_outfit
+cs_exo_outfit
+dolg_exo_outfit
+merc_exo_outfit
+military_exo_outfit
+monolith_exo_outfit
+svoboda_exo_outfit
+renegade_exo_outfit
+freedom_exo_vineleaf_outfit
+isg_exo_outfit
+greh_exo_outfit
+exolight_outfit
+military_exolight_outfit
+cs_exolight_outfit
+bandit_exolight_outfit
+monolith_exolight_outfit
+dolg_exolight_outfit
+merc_exolight_outfit
+svoboda_exolight_outfit
+isg_exolight_outfit
+cs_stalker_proto_exo_outfit
+monolith_proto_exo_outfit
+military_proto_exo_outfit
+svoboda_light_proto_exo_outfit
+dolg_proto_exo_outfit
+stalker_proto_exo_outfit
+isg_proto_exo_outfit
+
+[outfit_scientific]
+; Scientific and NBC suits — niche market, mainly ecologist contacts
+scientific_outfit
+ecolog_outfit_green
+ecolog_outfit_orange
+ecolog_outfit_red
+ecolog_outfit_yello
+ecolog_outfit_white
+ecolog_outfit_blue
+ecolog_guard_outfit
+dolg_scientific_outfit
+dolg_scientific_red_outfit
+dolg_scientific_wood_outfit
+monolith_scientific_outfit
+monolith_scientific_light_outfit
+svoboda_scientific_outfit
+merc_scientific_outfit
+bandit_scientific_outfit
+bandit_scientific_dark_outfit
+cs_scientific_outfit
+cs_scientific_outfit_good
+renegade_scientific_outfit
+isg_scientific_outfit
+greh_trenchcoat_outfit
+monolith_trenchcoat_outfit
+trenchcoat_dolg_brown_outfit
+trenchcoat_freedom_brown_outfit
+nbc_outfit
+nbc_freedom_outfit
+nbc_dolg_outfit
+nbc_merc_outfit
+cs_nbc_outfit
+monolith_nbc_outfit
+bandit_nbc_outfit
+
+
+; -----------------------------------------------------------------------------
+; HEADGEAR
+; -----------------------------------------------------------------------------
+
+[headgear_basic]
+helm_bandana
+helm_rp_bala
+helm_resp
+helm_respirator_gp5
+helm_respirator
+helm_respirator_old
+helm_respirator_joker
+helm_cloth_mask
+helm_hardhat
+helm_hardhat_snag
+helm_metro
+
+[headgear_combat]
+helm_tactic
+helm_ranger
+helm_ppm88
+helm_m50
+helm_m40
+helm_protective
+helm_ach7
+helm_ach7ex
+helm_spartan
+helm_battle
+helm_exo
+
+
+; -----------------------------------------------------------------------------
+; BACKPACKS
+; -----------------------------------------------------------------------------
+
+[backpacks]
+itm_backpack
+equ_small_pack
+equ_small_military_pack
+equ_military_pack
+equ_tourist_pack
+
+
+; -----------------------------------------------------------------------------
+; FOOD
+; -----------------------------------------------------------------------------
+
+[food_cooked]
+; Raw and cooked mutant meat — the hunter's income source
+; Note: bloodsucker and controller meat excluded per Grounded design
+meat_tushkano
+meat_dog
+meat_pseudodog
+meat_flesh
+meat_boar
+meat_snork
+meat_chimera
+meat_lurker
+meat_psysucker
+meat_tushkano_b
+meat_dog_b
+meat_pseudodog_b
+meat_flesh_b
+meat_boar_b
+meat_snork_b
+meat_chimera_b
+meat_lurker_b
+meat_psysucker_b
+meat_tushkano_a
+meat_dog_a
+meat_pseudodog_a
+meat_flesh_a
+meat_boar_a
+meat_snork_a
+meat_chimera_a
+meat_lurker_a
+meat_psysucker_a
+
+[food_packaged]
+; Processed and canned food — expensive because it's rare
+bread
+breadold
+kolbasa
+conserva
+tomato
+sausage
+corn
+beans
+chili
+salmon
+raisins
+chocolate
+chocolate_p
+nuts
+mre
+mint
+ration_ru
+ration_ukr
+tushonka
+
+
+; -----------------------------------------------------------------------------
+; DRINKS
+; -----------------------------------------------------------------------------
+
+[drink_basic]
+mineral_water
+water_drink
+tea
+flask
+bottle_metal
+energy_drink
+
+[drink_alcohol]
+vodka
+vodka2
+vodka_quality
+drink_crow
+beer
+
+
+; -----------------------------------------------------------------------------
+; MEDICAL
+; -----------------------------------------------------------------------------
+
+[drug_basic]
+; Bandages, basic medkits — always needed, fast turnover
+bandage
+jgut
+medkit
+tetanus
+glucose
+glucose_s
+akvatab
+antirad_kalium
+antirad_cystamine
+antibio_sulfad
+antiemetic
+antibio_chlor
+medkit_ai1
+e_syringe
+itm_drugkit
+
+[drug_military]
+; Army and scientific grade supplies — rarer, worth considerably more
+medkit_army
+medkit_scientic
+stimpack
+stimpack_army
+stimpack_scientic
+survival_kit
+rebirth
+drug_booster
+drug_coagulant
+drug_psy_blockade
+drug_antidot
+drug_radioprotector
+drug_anabiotic
+protein
+yadylin
+analgetic
+antirad
+medkit_ai2
+medkit_ai3
+
+[drug_chem]
+; Combat chemicals and hard drugs — very niche buyers
+cocaine
+adrenalin
+salicidic_acid
+morphine
+caffeine
+drug_sleepingpills
+
+
+; -----------------------------------------------------------------------------
+; CIGARETTES
+; -----------------------------------------------------------------------------
+
+[cigs]
+hand_rolling_tobacco
+cigar
+cigar1
+cigar2
+cigar3
+cigarettes_lucky
+cigarettes_russian
+cigarettes
+matches
+box_matches
+tobacco
+marijuana
+joint
+
+
+; -----------------------------------------------------------------------------
+; ARTIFACTS
+; -----------------------------------------------------------------------------
+
+[artefacts]
+af_dragon_eye
+af_ameba_mica
+af_ameba_slime
+af_ameba_slug
+af_baloon
+af_blood
+af_compass
+af_cristall
+af_cristall_flower
+af_drops
+af_dummy_battery
+af_dummy_dummy
+af_dummy_glassbeads
+af_dummy_pellicle
+af_dummy_spring
+af_electra_flash
+af_electra_moonlight
+af_electra_sparkler
+af_eye
+af_fire
+af_fireball
+af_fuzz_kolobok
+af_glass
+af_gold_fish
+af_gravi
+af_ice
+af_medusa
+af_mincer_meat
+af_night_star
+af_oasis_heart
+af_quest_b14_twisted
+af_rusty_kristall
+af_rusty_sea
+af_rusty_thorn
+af_soul
+af_vyvert
+jup_b1_half_artifact
+af_monolith
+af_cocoon
+af_cell
+af_fountain
+af_spaika
+af_signet
+af_repei
+af_bat
+af_sun
+af_ear
+af_chelust
+af_atom
+af_lighthouse
+af_fire_loop
+af_zhelch
+af_sandstone
+af_kislushka
+af_black_angel
+af_grapes
+af_skull_miser
+af_star_phantom
+af_medallion
+af_peas
+af_generator
+af_fonar
+af_tapeworm
+af_moh
+af_serofim
+af_elektron
+af_kogot
+af_ball
+af_black_spray
+af_bracelet
+af_empty
+af_full_empty
+af_itcher
+af_lobster_eyes
+af_pin
+af_ring
+af_sponge
+af_death_lamp
+
+
+; -----------------------------------------------------------------------------
+; MUTANT PARTS
+; Note: bloodsucker, controller parts excluded per Grounded design
+; -----------------------------------------------------------------------------
+
+[mutant_parts]
+mutant_part_flesh_meat
+mutant_part_boar_chop
+mutant_part_dog_meat
+mutant_part_psevdodog_meat
+mutant_part_snork_hand
+mutant_part_chimera_meat
+mutant_part_tushkano_meat
+mutant_part_boar_leg
+mutant_part_chimera_kogot
+mutant_part_dog_tail
+mutant_part_flesh_eye
+mutant_part_psevdodog_tail
+mutant_part_snork_leg
+mutant_part_snork_mask
+mutant_part_tushkano_head
+mutant_part_pseudogigant_eye
+mutant_part_pseudogigant_hand
+mutant_part_chimera_claw
+mutant_part_cat_tail
+mutant_part_burer_hand
+mutant_part_zombi_hand
+mutant_part_fracture_hand
+mutant_part_dog_liver
+mutant_part_dog_heart
+mutant_part_cat_thyroid
+mutant_part_cat_claw
+mutant_part_tusk_boar
+mutant_part_fang_psevdodog
+mutant_part_brain_burer
+mutant_part_heart_chimera
+mutant_part_lurker_tail
+mutant_part_lurker_eye
+mutant_part_lurker_meat
+mutant_part_psysucker_hand
+mutant_part_psysucker_meat
+hide_chimera
+hide_pseudogiant
+hide_psy_dog
+hide_pseudodog
+hide_burer
+hide_boar
+hide_flesh
+hide_lurker
+hide_psysucker
+; excluded: mutant_part_krovosos_meat, mutant_part_krovosos_jaw
+; excluded: mutant_part_controller_hand, mutant_part_controller_glass
+; excluded: hide_controller, hide_bloodsucker
+
+
+; -----------------------------------------------------------------------------
+; REPAIR KITS
+; -----------------------------------------------------------------------------
+
+[repair_kits_weapon]
+gun_oil
+gun_oil_ru_d
+gun_oil_ru
+solvent
+cleaning_kit_p
+cleaning_kit_s
+cleaning_kit_r5
+cleaning_kit_r7
+cleaning_kit_u
+toolkit_p
+toolkit_s
+toolkit_r5
+toolkit_r7
+sharpening_stones
+ramrod_tool
+light_repair_kit
+medium_repair_kit
+heavy_repair_kit
+
+[repair_kits_outfit]
+glue_b
+glue_a
+glue_e
+armor_repair_fa
+helmet_repair_kit
+sewing_kit_b
+sewing_kit_a
+sewing_kit_h
+sewing_thread
+heavy_sewing_thread
+exo_repair_kit
+
+
+; -----------------------------------------------------------------------------
+; WEAPON & OUTFIT PARTS
+; -----------------------------------------------------------------------------
+
+[parts_weapon]
+prt_w_barrel_1
+prt_w_barrel_2
+prt_w_barrel_3
+prt_w_barrel_4
+prt_w_barrel_5
+prt_w_barrel_6
+prt_w_barrel_7
+prt_w_barrel_8
+prt_w_barrel_9
+prt_w_barrel_10
+prt_w_barrel_11
+prt_w_barrel_12
+prt_w_trigger_components_1
+prt_w_trigger_components_2
+prt_w_trigger_components_3
+prt_w_trigger_components_4
+prt_w_trigger_components_5
+prt_w_trigger_components_6
+prt_w_bolt_carrier_1
+prt_w_bolt_carrier_2
+prt_w_bolt_carrier_3
+prt_w_bolt_carrier_4
+prt_w_bolt_carrier_5
+prt_w_bolt_carrier_6
+prt_w_bolt_carrier_7
+prt_w_bolt_carrier_8
+prt_w_bolt_carrier_9
+prt_w_bolt_carrier_10
+prt_w_bolt_carrier_11
+prt_w_bolt_1
+prt_w_bolt_2
+prt_w_bolt_3
+prt_w_bolt_4
+prt_w_bolt_5
+prt_w_bolt_6
+prt_w_bolt_7
+prt_w_bolt_8
+prt_w_bolt_9
+prt_w_bolt_10
+prt_w_bolt_11
+prt_w_bolt_12
+prt_w_bolt_13
+prt_w_bolt_14
+prt_w_bolt_15
+prt_w_bolt_16
+prt_w_bolt_17
+prt_w_gas_tube_1
+prt_w_gas_tube_2
+prt_w_gas_tube_3
+prt_w_gas_tube_4
+prt_w_gas_tube_5
+prt_w_gas_tube_6
+prt_w_gas_tube_7
+prt_w_gas_tube_8
+prt_w_gas_tube_9
+prt_w_gas_tube_10
+prt_w_gas_tube_11
+prt_w_p_barrel_1
+prt_w_p_barrel_2
+prt_w_p_barrel_3
+prt_w_p_barrel_4
+prt_w_p_barrel_5
+prt_w_p_barrel_6
+prt_w_p_barrel_7
+prt_w_p_trigger_1
+prt_w_p_trigger_2
+prt_w_p_trigger_3
+prt_w_p_trigger_4
+prt_w_p_spring_1
+prt_w_p_spring_2
+prt_w_p_spring_3
+prt_w_p_spring_4
+prt_w_p_spring_5
+prt_w_p_spring_6
+
+[parts_outfit]
+prt_o_fabrics_1
+prt_o_fabrics_2
+prt_o_fabrics_3
+prt_o_fabrics_4
+prt_o_retardant_1
+prt_o_retardant_2
+prt_o_retardant_3
+prt_o_retardant_4
+prt_o_retardant_5
+prt_o_retardant_6
+prt_o_retardant_7
+prt_o_retardant_8
+prt_o_retardant_9
+prt_o_retardant_10
+prt_o_retardant_11
+prt_o_retardant_12
+prt_o_retardant_13
+prt_o_retardant_14
+prt_o_retardant_15
+prt_o_retardant_16
+prt_o_retardant_17
+prt_o_retardant_18
+prt_o_retardant_19
+prt_o_retardant_20
+prt_o_ballistic_1
+prt_o_ballistic_2
+prt_o_ballistic_3
+prt_o_ballistic_4
+prt_o_ballistic_5
+prt_o_ballistic_6
+prt_o_ballistic_7
+prt_o_ballistic_8
+prt_o_ballistic_9
+prt_o_ballistic_10
+prt_o_ballistic_11
+prt_o_ballistic_12
+prt_o_ballistic_13
+prt_o_ballistic_14
+prt_o_ballistic_15
+prt_o_ballistic_16
+prt_o_ballistic_17
+prt_o_ballistic_18
+prt_o_ballistic_19
+prt_o_ballistic_20
+prt_o_support_1
+
+[parts_misc]
+prt_i_ammo
+prt_i_paper
+prt_i_textolite
+prt_i_capacitors
+prt_i_transistors
+prt_i_resistors
+prt_i_copper
+prt_i_wood
+prt_i_scrap
+prt_i_fasteners
+prt_i_glass
+prt_i_ceramic
+prt_i_leather
+prt_i_plastic
+prt_i_rubber
+
+
+; -----------------------------------------------------------------------------
+; DEVICES
+; -----------------------------------------------------------------------------
+
+[devices_basic]
+detector_radio
+detector_geiger
+detector_simple
+device_flashlight
+batteries_dead
+
+[devices_advanced]
+detector_advanced
+detector_elite
+detector_scientific
+device_torch_nv_1
+device_torch_nv_2
+device_torch_nv_3
+device_pda_1
+device_pda_2
+device_pda_3
+lead_box
+af_freon_up
+af_frames_up
+af_camelbak_up
+af_grid_up
+af_cooler_up
+af_surge_up
+af_surge
+af_frames
+af_grid
+af_freon
+af_cooler
+af_kevlar
+af_plates
+af_camelbak
+af_iam
+af_aac
+af_aam
+
+
+; -----------------------------------------------------------------------------
+; TOOLS & CAMPING
+; -----------------------------------------------------------------------------
+
+[tools]
+swiss_knife
+grooming
+duct_tape
+grease
+steel_wool
+ball_hammer
+leatherman_tool
+rasp_tool
+itm_mapkit_1
+itm_mapkit_2
+itm_mapkit_3
+itm_mapkit_4
+itm_mapkit_5
+itm_mapkit_6
+itm_mapkit_7
+itm_mapkit_8
+itm_mapkit_9
+
+[camping]
+itm_sleepbag
+cooking
+army_bowler
+fieldcooker
+compression_bag
+bolts_pack
+kit_hunt
+itm_tent
+
+[fuels]
+kerosene
+charcoal
+explo_balon_gas
+explo_jerrycan_fuel
+
+
+; -----------------------------------------------------------------------------
+; TRASH
+; Low-value junk — pennies on the ruble, or nothing at all
+; -----------------------------------------------------------------------------
+
+[trash]
+bolt
+bolt_bullet
+broken_detector
+ammo_box
+gloves
+hand_watch
+guitar_a
+harmonica_a
+shovel_old
+shovel_mili
+jar
+beadspread
+walkie
+cards
+journal
+boots
+headlamp
+mirror
+welding_goggles
+jewelry_box
+picture_woman
+flashlight_broken
+underwear
+tarpaulin
+rope
+synthrope
+cutlery
+radio
+radio2
+explo_balon_gas_empty
+explo_jerrycan_fuel_empty
+explo_metalcan_powder
+stalker_patch
+csky_patch
+bandit_patch
+dolg_patch
+freedom_patch
+ecolog_patch
+army_patch
+killer_patch
+monolith_patch
+isg_patch
+greh_patch
+renegade_patch
