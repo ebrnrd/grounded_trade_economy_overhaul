@@ -1,0 +1,214 @@
+--[[
+	GROUNDED - Layer 2: Dynamic Liquidity
+
+	Traders have finite money pools that deplete as the player sells to them.
+	When a trader is running low, they offer progressively less for items.
+
+	Flow:
+	- trade_manager.update() is monkey patched to detect restocks
+	- on restock, a drift delta is applied to the trader's last known funds
+	  the delta direction is guided by bracket_min/bracket_max
+	- new funds are stored as pending until the player opens trade
+	- when player opens trade, pending funds are applied via npc:give_money()
+	- on_get_item_cost reads npc:money() directly to scale the offered price
+	- engine handles deduction automatically (infinitive="0" in XML)
+
+	XML requirement: each trader must have infinitive="0"
+	Config: gamedata/configs/plugins/grounded_trade_liquidity.ltx
+--]]
+
+local cur_npc_id = nil
+
+-- [npc_id] = { pending, last_funds }
+-- pending:    funds to apply on next trade open (nil if nothing queued)
+-- last_funds: last known funds after applying pending, used as drift baseline
+local trader_state = {}
+
+local FUNDS_LOW_FLOOR = 0.5  -- minimum price multiplier when trader is out of money
+
+---------------- config ----------------
+local liquidity_cfg = nil
+
+local function get_liquidity_cfg()
+	if liquidity_cfg then return liquidity_cfg end
+	liquidity_cfg = ini_file("plugins\\grounded_trade_liquidity.ltx")
+	return liquidity_cfg
+end
+
+local function get_trader_config(npc_sec)
+	local cfg = get_liquidity_cfg()
+	local sec = (cfg and cfg:section_exist(npc_sec)) and npc_sec or "default"
+	local function r(key, fallback)
+		return (cfg and cfg:r_float_ex(sec, key)) or fallback
+	end
+	return {
+		bracket_min    = r("bracket_min",    6000),
+		bracket_max    = r("bracket_max",    14000),
+		drift_median   = r("drift_median",   1500),
+		drift_variance = r("drift_variance", 0.5),
+		init_min       = r("init_min",       8000),
+		init_max       = r("init_max",       12000),
+	}
+end
+
+---------------- drift ----------------
+local function calc_drift(current, cfg)
+	local center   = (cfg.bracket_min + cfg.bracket_max) / 2
+	local range    = cfg.bracket_max - cfg.bracket_min
+
+	-- how far from center as a ratio: -1 = at floor, 0 = center, +1 = at ceiling
+	local deviation = (current - center) / (range / 2)
+	deviation = math.max(-1, math.min(1, deviation))
+
+	-- base magnitude randomized around drift_median with drift_variance
+	local variance  = cfg.drift_variance
+	local magnitude = cfg.drift_median * (1 + (math.random() * 2 - 1) * variance)
+
+	-- direction: negative deviation (below center) pulls positive, and vice versa
+	-- the further from center, the stronger the pull
+	-- at center: small random delta in either direction
+	local direction
+	if deviation > 0.8 then
+    	direction = math.random() < 0.05 and 1 or -1    -- 5% chance of bucking the trend
+	elseif deviation < -0.8 then
+    	direction = math.random() < 0.05 and -1 or 1    -- 5% chance of bucking the trend
+	else
+		-- in the middle zone: bias toward center with some randomness
+		local center_pull = -deviation	-- positive when below center, negative when above
+		direction = center_pull + (math.random() * 0.4 - 0.2)
+		direction = direction > 0 and 1 or -1
+	end
+
+	return math.floor(magnitude * direction)
+end
+
+local function apply_drift(npc_id, npc_sec, current_funds)
+	local cfg   = get_trader_config(npc_sec)
+	local delta = calc_drift(current_funds, cfg)
+	local new_funds = math.max(cfg.bracket_min, current_funds + delta)
+
+	if not trader_state[npc_id] then
+		trader_state[npc_id] = {}
+	end
+	trader_state[npc_id].pending = new_funds
+
+	printf("[grounded liquidity] drift for %s: %s + %s = %s RU",
+		npc_sec, current_funds, delta, new_funds)
+end
+
+local function init_trader(npc_id, npc_sec)
+	local cfg       = get_trader_config(npc_sec)
+	local new_funds = math.floor(cfg.init_min + math.random() * (cfg.init_max - cfg.init_min))
+	trader_state[npc_id] = { pending = new_funds, last_funds = new_funds }
+	printf("[grounded liquidity] init %s: %s RU", npc_sec, new_funds)
+end
+
+---------------- monkey patch trade_manager.update ----------------
+local function patch_trade_manager()
+	local original_update = trade_manager.update
+
+	trade_manager.update = function(npc, force_refresh)
+		local id = npc and npc:id()
+		local old_resupply = id and trade_manager.get_trade_profile(id, "resupply_time")
+
+		original_update(npc, force_refresh)
+
+		local new_resupply = id and trade_manager.get_trade_profile(id, "resupply_time")
+
+		-- first ever visit
+		if not old_resupply and new_resupply then
+			init_trader(id, npc:section())
+			return
+		end
+
+		-- restock fired: apply drift from last known funds
+		if old_resupply and new_resupply
+		and (old_resupply.h ~= new_resupply.h or old_resupply.D ~= new_resupply.D) then
+			local state        = trader_state[id]
+			local current      = (state and state.last_funds) or npc:money()
+			apply_drift(id, npc:section(), current)
+		end
+	end
+end
+
+---------------- open/close trade ----------------
+function open_trade(mode)
+	if mode ~= 2 then return end
+
+	local npc = mob_trade.GetTalkingNpc()
+	if not npc then return end
+	if not trade_manager.get_trade_profile(npc:id(), "cfg_ltx") then return end
+
+	cur_npc_id = npc:id()
+
+	local state = trader_state[cur_npc_id]
+	if state and state.pending then
+		local new_funds = state.pending
+		local current   = npc:money()
+		npc:give_money(new_funds - current)
+		state.last_funds = new_funds
+		state.pending    = nil
+		printf("[grounded liquidity] applied funds to %s: %s RU", npc:section(), new_funds)
+	end
+end
+
+function close_trade(mode)
+	if cur_npc_id and mode ~= 2 then
+		-- snapshot actual funds on close so drift has an accurate baseline
+		-- (accounts for what the player sold during this session)
+		local npc = level.object_by_id(cur_npc_id)
+		if npc and trader_state[cur_npc_id] then
+			trader_state[cur_npc_id].last_funds = npc:money()
+		end
+		cur_npc_id = nil
+	end
+end
+
+---------------- cost scaling ----------------
+local function get_liquidity_multiplier(npc, npc_sec, item_cost)
+	local current = npc:money()
+	local cfg     = get_trader_config(npc_sec)
+	local ratio   = math.max(0, (current - item_cost) / cfg.bracket_max)
+
+	if ratio >= 0.5 then
+		return 1.0
+	else
+		return FUNDS_LOW_FLOOR + (ratio / 0.5) * (1.0 - FUNDS_LOW_FLOOR)
+	end
+end
+
+function on_get_item_cost(kind, obj, profile, vanilla_cost, ret)
+	if profile.mode ~= 1 then return end
+	if not cur_npc_id then return end
+
+	local npc = mob_trade.GetTalkingNpc()
+	if not npc then return end
+
+	local base       = ret.new_cost or vanilla_cost
+	local multiplier = get_liquidity_multiplier(npc, npc:section(), base)
+	if multiplier >= 1.0 then return end
+
+	ret.new_cost = math.floor(base * multiplier)
+
+	printf("[grounded liquidity] %s: %s -> %s (x%.2f, funds: %s)",
+		obj:section(), base, ret.new_cost, multiplier, npc:money())
+end
+
+---------------- save/load ----------------
+function save_state(m_data)
+	m_data.grounded_trader_state = trader_state
+end
+
+function load_state(m_data)
+	trader_state = m_data.grounded_trader_state or {}
+end
+
+---------------- init ----------------
+function on_game_start()
+	patch_trade_manager()
+	RegisterScriptCallback("ActorMenu_on_mode_changed", open_trade)
+	RegisterScriptCallback("ActorMenu_on_mode_changed", close_trade)
+	RegisterScriptCallback("on_get_item_cost", on_get_item_cost)
+	RegisterScriptCallback("save_state", save_state)
+	RegisterScriptCallback("load_state", load_state)
+end
