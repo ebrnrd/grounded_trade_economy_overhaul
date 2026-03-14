@@ -1,0 +1,97 @@
+[medic]
+; Generic medic buy multipliers.
+; He buys medical supplies to restock his inventory. Nothing else.
+; Bandages, medkits, drugs, antirad — all welcome.
+; Everything else is simply not his concern.
+; Normalized to 1.0 max. General trader_discount applied separately.
+
+; --- WEAPONS --- not his business
+wpn_pistol_rus_low
+wpn_pistol_rus_high
+wpn_pistol_nato_low
+wpn_pistol_nato_high
+wpn_rifle_rus_low
+wpn_rifle_rus_mid
+wpn_rifle_rus_high
+wpn_rifle_nato_low
+wpn_rifle_nato_mid
+wpn_rifle_nato_high
+wpn_sniper_rus
+wpn_sniper_nato
+wpn_shotgun_rus_low
+wpn_shotgun_rus_high
+wpn_shotgun_nato_low
+wpn_shotgun_nato_high
+wpn_lmg_rus
+wpn_lmg_nato
+wpn_addons
+wpn_melee
+wpn_explosive
+
+; --- AMMO ---
+ammo_rus_common
+ammo_rus_mid
+ammo_rus_rare
+ammo_nato_common
+ammo_nato_mid
+ammo_nato_rare
+ammo_degraded
+
+; --- OUTFITS ---
+outfit_novice
+outfit_stalker
+outfit_armored
+outfit_exo
+outfit_scientific
+headgear_basic
+headgear_combat
+
+; --- EQUIPMENT ---
+backpacks
+
+; --- REPAIR ---
+repair_kits_weapon
+repair_kits_outfit
+parts_weapon
+parts_outfit
+parts_misc
+
+; --- DEVICES ---
+devices_basic
+devices_advanced
+
+; --- TOOLS & CAMPING ---
+tools
+camping
+fuels
+
+; --- ZONE ITEMS ---
+; A medic doesn't fence artifacts or cook mutant meat
+artefacts
+mutant_parts
+
+; --- FOOD & DRINK ---
+; Not restocking a pantry
+food_cooked
+food_packaged
+drink_basic
+drink_alcohol
+cigs
+
+; --- PATCHES ---
+patches
+
+; --- TRASH ---
+trash
+
+; =============================================================================
+; WHAT HE ACTUALLY BUYS
+; =============================================================================
+
+; --- MEDICAL SUPPLIES ---
+; Basic drugs: bandages, glucose, antibiotics — core restock items
+drug_basic              = 1.0, 0.85
+; Military drugs: stimpacks, boosters, adrenalin — always useful
+drug_military           = 0.90, 0.75
+; Chemical drugs: morphine, salicidic acid — medical applications accepted
+drug_chem               = 0.75, 0.60

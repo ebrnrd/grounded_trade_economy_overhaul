@@ -1,0 +1,110 @@
+[barman]
+; Generic barman buy multipliers.
+; He runs a bar, not an arms store. Food, drink, smokes — that's his economy.
+; Mutant meat is his best buy: the cook needs a steady supply.
+; Zone items (artifacts) are accepted — barmans fence these as a side business.
+; Everything weapon or gear related is simply not his problem.
+; Normalized to 1.0 max. General trader_discount applied separately.
+
+; --- WEAPONS ---
+; Not his business. At all.
+wpn_pistol_rus_low
+wpn_pistol_rus_high
+wpn_pistol_nato_low
+wpn_pistol_nato_high
+wpn_rifle_rus_low
+wpn_rifle_rus_mid
+wpn_rifle_rus_high
+wpn_rifle_nato_low
+wpn_rifle_nato_mid
+wpn_rifle_nato_high
+wpn_sniper_rus
+wpn_sniper_nato
+wpn_shotgun_rus_low
+wpn_shotgun_rus_high
+wpn_shotgun_nato_low
+wpn_shotgun_nato_high
+wpn_lmg_rus
+wpn_lmg_nato
+wpn_addons
+wpn_melee
+wpn_explosive
+
+; --- AMMO ---
+ammo_rus_common
+ammo_rus_mid
+ammo_rus_rare
+ammo_nato_common
+ammo_nato_mid
+ammo_nato_rare
+ammo_degraded
+
+; --- OUTFITS & HEADGEAR ---
+outfit_novice
+outfit_stalker
+outfit_armored
+outfit_exo
+outfit_scientific
+headgear_basic
+headgear_combat
+
+; --- EQUIPMENT ---
+backpacks
+
+; --- REPAIR ---
+repair_kits_weapon
+repair_kits_outfit
+parts_weapon
+parts_outfit
+parts_misc
+
+; --- DEVICES ---
+devices_basic
+devices_advanced
+
+; --- TOOLS ---
+tools
+
+; --- PATCHES ---
+patches
+
+; =============================================================================
+; WHAT HE ACTUALLY BUYS
+; =============================================================================
+
+; --- FOOD ---
+; Cooked mutant meat: the cook's primary ingredient — best buy rate
+food_cooked             = 1.0, 0.85
+; Packaged and preserved food: restocking the pantry
+food_packaged           = 0.80, 0.65
+
+; --- DRINKS ---
+; Basic drinks: water and non-alcoholic — always needed
+drink_basic             = 0.85, 0.70
+; Alcohol: the bar's core product — buys well to restock
+drink_alcohol           = 1.0, 0.85
+
+; --- DRUGS & SMOKES ---
+; Cigarettes: bar staple, fast turnover
+cigs                    = 0.90, 0.75
+; Basic drugs: bandages, glucose — small first aid stock
+drug_basic              = 0.55, 0.40
+; Military drugs: not his market
+drug_military           = 0.20, 0.12
+; Chemical drugs: he's not a dealer, takes them reluctantly
+drug_chem               = 0.35, 0.25
+
+; --- ZONE ITEMS ---
+; Artifacts: barmans fence these — moderate but real demand
+artefacts               = 0.70, 0.55
+; Mutant parts: the cook uses some of these, claws and bones less so
+mutant_parts            = 0.75, 0.60
+
+; --- CAMPING & FUELS ---
+; Camping gear: sells to stalkers passing through
+camping                 = 0.55, 0.40
+; Fuels: the kitchen burns through kerosene and gas
+fuels                   = 0.80, 0.65
+
+; --- TRASH ---
+trash                   = 0.10, 0.05

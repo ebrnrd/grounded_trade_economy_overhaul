@@ -1,0 +1,50 @@
+<string_table>
+    <string id="grounded_disc_group_xt_weapons">
+        <text>Weapons</text>
+    </string>
+    <string id="grounded_disc_group_xt_armors">
+        <text>Armor</text>
+    </string>
+    <string id="grounded_disc_group_xt_supplies">
+        <text>Supplies</text>
+    </string>
+    <string id="grounded_disc_group_xt_med">
+        <text>Medicine</text>
+    </string>
+    <string id="grounded_disc_group_xt_repair">
+        <text>Repair</text>
+    </string>
+    <string id="grounded_disc_group_arts">
+        <text>Artifacts</text>
+    </string>
+    <string id="grounded_disc_group_muts">
+        <text>Mutant parts</text>
+    </string>
+    <string id="grounded_disc_group_meat">
+        <text>Mutant meat</text>
+    </string>
+    <string id="grounded_disc_group_hides">
+        <text>Hides</text>
+    </string>
+    <string id="grounded_disc_group_xt_ammo">
+        <text>Ammo</text>
+    </string>
+    <string id="grounded_disc_event_header">
+        <text>Market event</text>
+    </string>
+    <string id="grounded_disc_mode_sell">
+        <text>Buying with a bonus</text>
+    </string>
+    <string id="grounded_disc_mode_buy">
+        <text>Selling at a discount</text>
+    </string>
+    <string id="grounded_disc_duration">
+        <text>Duration:</text>
+    </string>
+    <string id="grounded_disc_day">
+        <text>day</text>
+    </string>
+    <string id="grounded_disc_days">
+        <text>days</text>
+    </string>
+</string_table>

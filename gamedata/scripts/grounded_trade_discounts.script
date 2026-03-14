@@ -1,0 +1,544 @@
+--[[
+	GROUNDED - Layer 3: Dynamic Discounts
+
+	Traders periodically run market events that temporarily boost prices
+	for specific item categories. Events fire independently for sell and buy
+	directions. When an event fires the player is notified via PDA.
+
+	This module exposes one function to the liquidity script:
+		grounded_trade_discounts.get_discount_multiplier(npc_id, item_section, mode)
+		  mode 1 = player selling to trader (we want multiplier > 1.0)
+		  mode 2 = player buying from trader (we want multiplier < 1.0)
+		  returns a float multiplier applied on top of all other calculations
+		  returns 1.0 if no active discount for this item/mode
+
+	Event lifecycle:
+	- Each trader has independent sell and buy event timers
+	- On timer expiry a new event fires: 1-3 random eligible categories
+	  are selected and assigned a random discount percentage
+	- Events last a random number of in-game days
+	- First event for each trader fires after a 1-day delay
+	- PDA notification sent when event fires (if discount crosses threshold)
+
+	Config: gamedata/configs/plugins/grounded_trade_discounts.ltx
+	Items:  gamedata/configs/plugins/grounded_item_groups.ltx
+--]]
+
+local gt              = game.translate_string
+local ctime_to_t      = utils_data.CTime_to_table
+local t_to_ctime      = utils_data.CTime_from_table
+
+local cur_npc_id
+
+-- these are read once and cached; on_option_change refreshes them
+local MIN_EVENT_DURATION  = nil  -- in-game days
+local MAX_EVENT_DURATION  = nil
+local MIN_DISCOUNT        = nil  -- percent
+local MAX_DISCOUNT        = nil
+local MAX_CATS            = nil  -- max categories per event (1-3)
+local MSG_THRESHOLD       = nil  -- minimum % to trigger PDA notification
+
+local function refresh_config()
+	MIN_EVENT_DURATION = grounded_trade_mcm.get_config("min_event_duration")
+	MAX_EVENT_DURATION = grounded_trade_mcm.get_config("max_event_duration")
+	MIN_DISCOUNT       = grounded_trade_mcm.get_config("min_discount")
+	MAX_DISCOUNT       = grounded_trade_mcm.get_config("max_discount")
+	MAX_CATS           = grounded_trade_mcm.get_config("max_categories")
+	MSG_THRESHOLD      = grounded_trade_mcm.get_config("msg_threshold")
+end
+
+function on_option_change()
+	refresh_config()
+end
+
+---------------- item groups ----------------
+-- maps item section -> group string (e.g. "xt_weapons", "arts_3")
+-- built once on first update via categorize_items()
+local item_to_group = {}
+
+local VANILLA_CATEGORIES = {
+	["Items (Drink)"]    = "xt_supplies",
+	["Items (Tool)"]     = "xt_supplies",
+	["Items (Medical)"]  = "xt_med",
+	["Items (Repair)"]   = "xt_repair",
+	["Items (Parts)"]    = "xt_repair",
+	["Weapons (Ammo)"]   = "xt_ammo",
+	["Weapons (Melee)"]  = "xt_weapons",
+	["Weapons (Pistol)"] = "xt_weapons",
+	["Weapons (Shotgun)"]= "xt_weapons",
+	["Weapons (SMG)"]    = "xt_weapons",
+	["Weapons (Rifle)"]  = "xt_weapons",
+	["Weapons (Sniper)"] = "xt_weapons",
+	["Helmets"]          = "xt_armors",
+	["Outfits (Light)"]  = "xt_armors",
+	["Outfits (Medium)"] = "xt_armors",
+	["Outfits (Heavy)"]  = "xt_armors",
+}
+
+local function categorize_items()
+	-- vanilla categories via debug spawn table
+	for dbg_name, group in pairs(VANILLA_CATEGORIES) do
+		local ar = ui_debug_main.get_spawn_table(dbg_name)
+		if ar then
+			for i = 1, #ar do
+				item_to_group[ar[i]] = group
+			end
+		end
+	end
+
+	-- additional categories from LTX
+	-- format: each section name is the group, each key is an item section
+	local ltx = ini_file("plugins\\grounded_item_groups.ltx")
+	if not ltx then return end
+	ltx:section_for_each(function(sec)
+		local n = ltx:line_count(sec)
+		for i = 0, n - 1 do
+			local _, id, _ = ltx:r_line_ex(sec, i, "", "")
+			if id and id ~= "" then
+				item_to_group[id] = sec
+			end
+		end
+	end)
+end
+
+---------------- trader discount definitions ----------------
+-- Each trader lists which item groups are eligible for sell and buy events.
+-- sell = player sells to trader at a bonus
+-- buy  = player buys from trader at a discount
+-- Events pick 1-MAX_CATS random categories from the eligible list.
+-- Generic fallbacks used when npc section not found directly.
+
+local traders_t = {
+
+	-- generic fallbacks by role
+	["trader"] = {
+		sell = { "muts", "arts", "xt_weapons", "xt_supplies" },
+		buy  = { "xt_supplies", "xt_weapons", "xt_armors" },
+	},
+	["mechanic"] = {
+		sell = { "xt_weapons", "xt_armors", "xt_repair" },
+		buy  = { "xt_repair", "xt_weapons" },
+	},
+	["medic"] = {
+		sell = { "xt_med" },
+		buy  = { "xt_med" },
+	},
+	["barman"] = {
+		sell = { "meat", "muts", "xt_supplies" },
+		buy  = { "xt_supplies", "xt_weapons" },
+	},
+
+	-- Cordon
+	["m_trader"] = { -- sidorovich
+		sell = { "xt_supplies", "xt_weapons", "xt_ammo", "xt_armors", "xt_med" },
+		buy  = { "xt_supplies", "xt_ammo" },
+	},
+	["esc_main_base_trader_mlr"] = { -- loris
+		sell = { "xt_weapons", "xt_ammo", "xt_armors" },
+		buy  = { "xt_weapons", "xt_ammo", "xt_armors" },
+	},
+	["esc_3_16_military_trader"] = { -- zhurov
+		sell = { "xt_weapons", "xt_armors", "xt_repair", "xt_ammo" },
+		buy  = { "xt_weapons", "xt_ammo", "xt_armors" },
+	},
+
+	-- Garbage
+	["hunter_gar_trader"] = {  -- Butcher
+		sell = { "meat", "hides", "muts" },
+		buy  = { "xt_supplies" },
+	},
+	["gar_flea_market_trader"] = {  -- Flea Market day
+		sell = { "xt_weapons", "xt_armors", "xt_supplies" },
+		buy  = { "xt_weapons", "xt_armors", "xt_supplies" },
+	},
+	["gar_flea_market_trader_night"] = {  -- Flea Market night
+		sell = { "xt_weapons", "xt_armors", "arts" },
+		buy  = { "xt_weapons", "xt_armors", "arts" },
+	},
+
+}
+
+local function get_trader_table(npc_sec)
+	if traders_t[npc_sec] then
+		return traders_t[npc_sec]
+	end
+	-- group fallback via grounded_trader_groups.ltx if present
+	local ltx = ini_file("plugins\\grounded_trader_groups.ltx")
+	if not ltx then return nil end
+	local ret
+	ltx:section_for_each(function(sec)
+		if ret then return end
+		local n = ltx:line_count(sec)
+		for i = 0, n - 1 do
+			local _, id, _ = ltx:r_line_ex(sec, i, "", "")
+			if id == npc_sec and traders_t[sec] then
+				ret = traders_t[sec]
+				break
+			end
+		end
+	end)
+	return ret
+end
+
+local furniture = {
+    ["esc_m_trader"] = true,
+    ["red_m_lesnik"] = true
+}
+
+local blacklisted_comms = {
+    ["trader"] = true,
+    ["monster"] = true
+}
+
+function get_real_community(se_obj, default)
+
+	if se_obj.name and se_obj:name() and furniture[se_obj:name()] then
+		return default
+	end
+	local community = se_obj.community and se_obj:community()
+	if (not community) then return default end
+	if not blacklisted_comms[community] then
+		return community
+	end
+	local squad_community = get_object_squad(se_obj) and get_object_squad(se_obj):get_squad_community()
+	if not blacklisted_comms[squad_community] then
+		return squad_community
+	else
+		return default
+	end
+end
+
+---------------- event state ----------------
+-- [npc_id] = {
+--   trader_name, trader_icon,
+--   sell_event = { [group] = discount_pct, ... },
+--   buy_event  = { [group] = discount_pct, ... },
+--   sell_event_start, sell_event_duration,  (CTime tables)
+--   buy_event_start,  buy_event_duration,
+-- }
+local trader_events = {}
+
+local function pick_random_from_list(t, count)
+	local result = {}
+	local pool = {}
+	for i = 1, #t do pool[i] = t[i] end
+	-- fisher-yates partial shuffle
+	for i = 1, math.min(count, #pool) do
+		local j = math.random(i, #pool)
+		pool[i], pool[j] = pool[j], pool[i]
+		result[#result + 1] = pool[i]
+	end
+	return result
+end
+
+local function fire_event(npc_id, mode, eligible, cur_time)
+	-- pick 0 to MAX_CATS categories
+	local count = math.random(0, math.min(MAX_CATS, #eligible))
+	local picked = pick_random_from_list(eligible, count)
+
+	local event_table = {}
+	for _, group in ipairs(picked) do
+		event_table[group] = math.random(MIN_DISCOUNT, MAX_DISCOUNT)
+	end
+
+	-- store event
+	trader_events[npc_id][mode .. "_event"]          = event_table
+	trader_events[npc_id][mode .. "_event_start"]    = ctime_to_t(cur_time)
+	local days = math.random(MIN_EVENT_DURATION, MAX_EVENT_DURATION)
+	trader_events[npc_id][mode .. "_event_duration"] = 86400 * days
+
+    printf("[grounded discounts] fire_event: npc_id=%s mode=%s", tostring(npc_id), mode)
+    for group, pct in pairs(event_table) do
+        printf("  %s = %s%%", group, tostring(pct))
+    end
+
+	return event_table, days
+end
+
+local function init_trader_events(npc_id, npc)
+	local cur_time = game.get_game_time()
+	trader_events[npc_id] = {
+		sell_event          = {},
+		buy_event           = {},
+		sell_event_start    = ctime_to_t(cur_time),
+		sell_event_duration = 86400,  -- first event after 1 day
+		buy_event_start     = ctime_to_t(cur_time),
+		buy_event_duration  = 86400,
+	}
+	local se_npc = alife_object(npc_id)
+	if se_npc then
+		trader_events[npc_id].trader_name = se_npc:character_name()
+		trader_events[npc_id].trader_icon = se_npc:character_icon()
+		trader_events[npc_id].section_name = npc:section()
+		printf("[grounded discounts] init trader events: id=%s sec=%s", tostring(npc_id), tostring(trader_events[npc_id].section_name))
+	end
+end
+
+---------------- PDA notification ----------------
+local function send_pda_notification(npc_id, mode, event_table, days)
+	local t = trader_events[npc_id]
+	if not t then return end
+
+	-- check if any discount crosses the threshold
+	local has_notable = false
+	for _, pct in pairs(event_table) do
+		if pct >= MSG_THRESHOLD then
+			has_notable = true
+			break
+		end
+	end
+	if not has_notable then return end
+
+	local g_clr = utils_xml.get_color("d_green")
+	local w_clr = utils_xml.get_color("pda_white")
+	local p_clr = utils_xml.get_color("d_purple")
+
+	local amount_sign
+	if mode == "buy" then
+		amount_sign = "+"
+	elseif mode == "sell" then
+		amount_sign = "-"
+	end
+
+	-- build category list string
+	local cat_str = ""
+	for group, pct in pairs(event_table) do
+		local label = gt("grounded_disc_group_" .. group)
+		cat_str = cat_str .. w_clr .. label .. " " .. g_clr .. amount_sign .. pct .. "%" .. w_clr .. "  " .. "\\n"
+	end
+
+	local mode_str = gt("grounded_disc_mode_" .. mode)  -- "buying" or "selling"
+	local days_str = days .. " " .. gt(days > 1 and "grounded_disc_days" or "grounded_disc_day")
+	local msg = w_clr .. mode_str .. "\\n"
+		.. w_clr .. cat_str .. "\\n"
+		.. w_clr .. gt("grounded_disc_duration") .. " " .. days_str
+
+	dynamic_news_helper.send_tip(
+		msg,
+		t.trader_name or "Trader",
+		nil,
+		20,
+		t.trader_icon,
+		"important",
+		"npc"
+	)
+end
+
+---------------- public interface ----------------
+-- called from zzz_grounded_trade_overhaul.on_get_item_cost
+-- mode 1 = sell to trader, mode 2 = buy from trader
+-- returns a multiplier: > 1.0 means higher price (good for player)
+function get_discount_multiplier(npc_id, item_section, mode)
+	if not trader_events[npc_id] then return 1.0 end
+
+	local group = item_to_group[item_section]
+	if not group then return 1.0 end
+
+	local event_key = (mode == 1) and "sell_event" or "buy_event"
+	local event     = trader_events[npc_id][event_key]
+	if not event then return 1.0 end
+
+	local pct = event[group]
+	if not pct then return 1.0 end
+
+	-- mode 1: player sells at a bonus  -> multiplier > 1.0
+	-- mode 2: player buys at a discount -> multiplier < 1.0
+	if mode == 1 then
+		return 1.0 + (pct / 100)
+	elseif mode == 2 then
+		return 1.0 - (pct / 100)
+	end
+end
+
+---------------- update loop ----------------
+local tmr = 0
+function actor_on_update()
+	local tg = time_global()
+	if tg < tmr then return end
+	tmr = tg + 10000  -- check every 30 real seconds
+
+	if cur_npc_id then return end
+
+	local cur_time = game.get_game_time()
+
+	for npc_id, t in pairs(trader_events) do
+		local tdef = get_trader_table(trader_events[npc_id].section_name or "")
+		if tdef then
+			-- check sell event timer
+			if t.sell_event_start and t.sell_event_duration then
+				local elapsed = cur_time:diffSec(t_to_ctime(t.sell_event_start))
+				if elapsed > t.sell_event_duration and tdef.sell and #tdef.sell > 0 then
+					local event_table, days = fire_event(npc_id, "sell", tdef.sell, cur_time)
+					send_pda_notification(npc_id, "sell", event_table, days)
+				end
+			end
+
+			-- check buy event timer independently
+			if t.buy_event_start and t.buy_event_duration then
+				local elapsed = cur_time:diffSec(t_to_ctime(t.buy_event_start))
+				if elapsed > t.buy_event_duration and tdef.buy and #tdef.buy > 0 then
+					local event_table, days = fire_event(npc_id, "buy", tdef.buy, cur_time)
+					send_pda_notification(npc_id, "buy", event_table, days)
+				end
+			end
+		end
+	end
+end
+
+-- called from zzz_grounded_trade_overhaul.open_trade after cur_npc is set
+function on_trade_opened(npc, mode)
+	if mode ~= 2 then return end
+
+	local is_trader = npc and trade_manager.get_trade_profile(npc:id(), "cfg_ltx")
+	if not is_trader then return end		-- if not trader
+
+	local sec = npc:section()
+	if not get_trader_table(sec) then printf("discounts trader sec: [%s] not found", sec) return end			-- if npc section not found in discount table
+
+	-- add faction check if not enemy
+	local npc_comm = alife_object(npc:id()) and get_real_community(alife_object(npc:id()), "stalker")
+	if (not npc_comm) or (game_relations.is_factions_enemies(get_actor_true_community(), npc_comm)) then return end
+
+	local npc_id = npc:id()
+
+	if not trader_events[npc_id] then
+		init_trader_events(npc_id, npc)
+	end
+
+	cur_npc_id = npc_id
+
+	-- start HUD
+	CreateTimeEvent("delay_trade_hud_e", "delay_trade_hud_a", 0.2, function()
+		if not cur_npc_id then	-- if was closed before this function
+			return true
+		end
+
+		activate_hud(cur_npc_id)
+		return true
+	end)
+end
+
+function close_trade(mode)
+	if cur_npc_id and mode ~= 2 then
+		cur_npc_id = nil
+		deactivate_hud()
+	end
+end
+
+---------------- HUD ----------------
+HUD = nil
+
+local function sort_alphabetically(t)
+    local keys = {}
+    for k in pairs(t) do keys[#keys + 1] = k end
+    table.sort(keys)
+    return keys
+end
+
+local function build_sell_str(npc_id)
+    local t = trader_events[npc_id]
+    
+	printf("[grounded discounts] build_sell_str: npc_id=%s t=%s sell_event=%s",
+    tostring(npc_id),
+    tostring(t ~= nil),
+    t and t.sell_event and next(t.sell_event) and "has_entries" or "empty_or_nil"
+    )
+
+    if not (t and t.sell_event and next(t.sell_event)) then return "" end
+    local g_clr = utils_xml.get_color("d_green")
+    local w_clr = utils_xml.get_color("pda_white")
+    local str = ""
+    for _, group in ipairs(sort_alphabetically(t.sell_event)) do
+        local pct = t.sell_event[group]
+		printf("[grounded discounts] build_sell_str: group=%s pct=%s", tostring(group), tostring(pct))
+        str = str .. g_clr .. "-" .. pct .. "% " .. w_clr .. gt("grounded_disc_group_" .. group) .. " \\n"
+    end
+	printf("Sell string: %s", str)
+    return str
+end
+
+local function build_buy_str(npc_id)
+    local t = trader_events[npc_id]
+    if not (t and t.buy_event and next(t.buy_event)) then return "" end
+    local g_clr = utils_xml.get_color("d_green")
+    local w_clr = utils_xml.get_color("pda_white")
+    local str = ""
+    for _, group in ipairs(sort_alphabetically(t.buy_event)) do
+        local pct = t.buy_event[group]
+        str = str .. g_clr .. "+" .. pct .. "% " .. w_clr .. gt("grounded_disc_group_" .. group) .. " \\n"
+    end
+	printf("Buy string: ", str)
+    return str
+end
+
+function activate_hud(npc_id)
+    if HUD == nil then
+        HUD = grounded_discount_hud()
+        get_hud():AddDialogToRender(HUD)
+    end
+	HUD:Update(true)
+end
+
+function deactivate_hud()
+    if HUD ~= nil then
+        get_hud():RemoveDialogToRender(HUD)
+        HUD = nil
+    end
+end
+
+class "grounded_discount_hud" (CUIScriptWnd)
+function grounded_discount_hud:__init() super()
+	self:InitControls()
+end
+
+function grounded_discount_hud:InitControls()
+    self:SetWndRect(Frect():set(0, 0, 1024, 768))
+    self:SetAutoDelete(true)
+
+    self.xml = CScriptXmlInit()
+	local xml = self.xml
+    xml:ParseFile("ui_grounded_trade.xml")
+
+    self.sell_text = self.xml:InitStatic("grounded_sell_discounts", self)
+    self.buy_text  = self.xml:InitStatic("grounded_buy_discounts", self)
+
+	if cur_npc_id then
+		self.sell_text:TextControl():SetText(build_sell_str(cur_npc_id))
+		self.buy_text:TextControl():SetText(build_buy_str(cur_npc_id))
+	end
+end
+
+function grounded_discount_hud:Update()
+    CUIScriptWnd.Update(self)
+	--[[
+	if cur_npc_id then
+        local str = build_sell_str(cur_npc_id)
+        printf("[grounded discounts] Update: setting sell text, len=%s", tostring(#str))
+        self.sell_text:TextControl():SetText(str)
+        self.buy_text:TextControl():SetText(build_buy_str(cur_npc_id))
+    end
+	]]
+end
+
+function grounded_discount_hud:__finalize()
+end
+
+---------------- save/load ----------------
+function save_state(m_data)
+	m_data.grounded_trade_events = trader_events
+end
+
+function load_state(m_data)
+	trader_events = m_data.grounded_trade_events or {}
+end
+
+---------------- init ----------------
+function on_game_start()
+	refresh_config()
+	RegisterScriptCallback("actor_on_update",       actor_on_update)
+	RegisterScriptCallback("actor_on_first_update", categorize_items)
+	RegisterScriptCallback("save_state",            save_state)
+	RegisterScriptCallback("load_state",            load_state)
+	RegisterScriptCallback("on_option_change",      on_option_change)
+	RegisterScriptCallback("ActorMenu_on_mode_changed", close_trade)
+end

@@ -1,0 +1,151 @@
+[petrenko]
+; Duty - General Petrenko buy multipliers.
+; Russian ecosystem is doctrine — he pays well for anything his soldiers can use.
+; NATO is a liability: wrong ammo, wrong supply chain, ideologically suspect.
+; Zone items are not bought. Duty does not traffic in anomaly products. Ever.
+; Military discipline means repair, medical, and ammo are always in demand.
+; Normalized to 1.0 max. General trader_discount applied separately.
+
+; --- WEAPONS: PISTOLS ---
+; Russian low: standard sidearms, every soldier carries one
+wpn_pistol_rus_low          = 0.85, 0.70
+; Russian high: officer-grade, solid resale within Duty
+wpn_pistol_rus_high         = 0.75, 0.60
+; NATO low: he'll accept it but pays poorly — no one to sell it to
+wpn_pistol_nato_low         = 0.35, 0.25
+; NATO high: almost useless to him
+wpn_pistol_nato_high        = 0.20, 0.12
+
+; --- WEAPONS: RIFLES ---
+; Russian low: old iron still arms recruits and reserve squads
+wpn_rifle_rus_low           = 0.90, 0.75
+; Russian mid: the backbone of Duty's armed strength — best buy rate
+wpn_rifle_rus_mid           = 1.0, 0.85
+; Russian high: Duty's elite gear — he wants it back if it's floating loose
+wpn_rifle_rus_high          = 0.85, 0.70
+; NATO low: low demand, occasional curiosity
+wpn_rifle_nato_low          = 0.30, 0.20
+; NATO mid: poor value, no supply chain
+wpn_rifle_nato_mid          = 0.20, 0.12
+; NATO high: he won't turn it away but barely pays for it
+wpn_rifle_nato_high         = 0.15, 0.08
+
+; --- WEAPONS: SNIPERS ---
+; Russian snipers: Duty uses designated marksmen, solid demand
+wpn_sniper_rus              = 0.80, 0.65
+; NATO snipers: barely functional in Duty logistics
+wpn_sniper_nato             = 0.20, 0.12
+
+; --- WEAPONS: SHOTGUNS ---
+; Russian shotguns: used by Duty patrols for zone-clearing
+wpn_shotgun_rus_low         = 0.80, 0.65
+wpn_shotgun_rus_high        = 0.65, 0.50
+; NATO shotguns: accepted, low value
+wpn_shotgun_nato_low        = 0.30, 0.20
+wpn_shotgun_nato_high       = 0.20, 0.12
+
+; --- WEAPONS: LMG ---
+; Russian LMGs: Duty runs suppression fire, real demand
+wpn_lmg_rus                 = 0.75, 0.60
+; NATO LMGs: wrong ammo, low value
+wpn_lmg_nato                = 0.15, 0.08
+
+; --- WEAPONS: MISC ---
+; Addons: Russian optics and silencers welcomed, applied to Duty weapons
+wpn_addons                  = 0.80, 0.65
+; Melee: standard issue, moderate demand
+wpn_melee                   = 0.65, 0.50
+; Explosives: Duty uses grenades and IEDs actively
+wpn_explosive               = 0.75, 0.60
+
+; --- AMMO ---
+; Russian common: Duty's primary consumption — highest demand
+ammo_rus_common             = 1.0, 0.85
+; Russian mid: solid demand for standard Duty calibers
+ammo_rus_mid                = 0.90, 0.75
+; Russian rare: 9x39, .338, large calibers — specialist units use these
+ammo_rus_rare               = 0.75, 0.60
+; NATO common: accepted but low priority, no resale chain
+ammo_nato_common            = 0.35, 0.25
+; NATO mid: barely worth stocking
+ammo_nato_mid               = 0.22, 0.14
+; NATO rare: almost nothing
+ammo_nato_rare              = 0.12, 0.06
+; Degraded: Duty doesn't buy garbage ammo
+ammo_degraded               = 0.20, 0.12
+
+; --- OUTFITS ---
+; Duty faction outfits: rearming or stripping fallen soldiers — good value
+outfit_novice               = 0.75, 0.60
+; Stalker outfits: limited use, occasional recruit kitting
+outfit_stalker              = 0.45, 0.35
+; Armored: if it's Russian-made, useful for Duty heavy units
+outfit_armored              = 0.55, 0.40
+; Exo: Duty runs exo suits — accepts these at decent rate
+outfit_exo                  = 0.65, 0.50
+; Scientific: useless to Duty
+outfit_scientific           = 0.20, 0.12
+; Basic headgear: always circulating among recruits
+headgear_basic              = 0.70, 0.55
+; Combat helmets: real demand for Duty soldiers
+headgear_combat             = 0.65, 0.50
+
+; --- EQUIPMENT ---
+; Backpacks: supply logistics, solid demand
+backpacks                   = 0.75, 0.60
+
+; --- FOOD & CONSUMABLES ---
+; Zoned produced food: ew
+food_cooked                 = 0.10, 0.20
+; Packaged food: rations are Duty supply chain staples
+food_packaged               = 0.85, 0.70
+; Basic drinks: water resupply for patrols
+drink_basic                 = 0.80, 0.65
+; Alcohol: Duty tolerates it, moderate demand
+drink_alcohol               = 0.65, 0.50
+; Basic drugs: medical supplies for soldiers
+drug_basic                  = 0.85, 0.70
+; Military drugs: stims and boosters — Duty issues these
+drug_military               = 1.0, 0.85
+; Chemical drugs: Duty doesn't traffic these — poor pay
+drug_chem                   = 0.30, 0.20
+; Cigarettes: standard soldier currency
+cigs                        = 0.80, 0.65
+
+; --- ZONE ITEMS ---
+; Artifacts: NOT BOUGHT. Duty does not deal in Zone products.
+artefacts
+; Mutant parts: NOT BOUGHT.
+mutant_parts
+
+; --- REPAIR ---
+; Weapon repair kits: Duty maintains its arsenal — high demand
+repair_kits_weapon          = 0.90, 0.75
+; Outfit repair: armor maintenance is Duty priority
+repair_kits_outfit          = 0.85, 0.70
+; Weapon parts: solid demand for Russian parts
+parts_weapon                = 0.65, 0.50
+; Outfit parts: armor parts useful for Duty workshops
+parts_outfit                = 0.60, 0.45
+; Misc parts: electronics and components for equipment
+parts_misc                  = 0.55, 0.40
+
+; --- DEVICES ---
+; Basic devices: standard patrol equipment
+devices_basic               = 0.75, 0.60
+; Advanced devices: NV, PDAs — Duty equips its officers well
+devices_advanced            = 0.65, 0.50
+
+; --- TOOLS & CAMPING ---
+; Tools: field maintenance, solid demand
+tools                       = 0.75, 0.60
+; Camping gear: supply for long patrols
+camping                     = 0.70, 0.55
+; Fuels: patrol logistics, always needed
+fuels                       = 0.80, 0.65
+
+; --- MISC ---
+; Trash: Duty has no use for junk
+trash                       = 0.10, 0.05
+; Patches: low priority but soldiers collect them
+patches                     = 0.40, 0.30

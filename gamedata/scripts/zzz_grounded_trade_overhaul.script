@@ -14,7 +14,7 @@
 	- engine handles deduction automatically (infinitive="0" in XML)
 
 	XML requirement: each trader must have infinitive="0"
-	Config: gamedata/configs/plugins/grounded_trade_liquidity.ltx
+	Config: gamedata/configs/plugins/grounded_trader_liquidity.ltx
 --]]
 
 local cur_npc_id = nil
@@ -31,7 +31,7 @@ local liquidity_cfg = nil
 
 local function get_liquidity_cfg()
 	if liquidity_cfg then return liquidity_cfg end
-	liquidity_cfg = ini_file("plugins\\grounded_trade_liquidity.ltx")
+	liquidity_cfg = ini_file("plugins\\grounded_trader_liquidity.ltx")
 	return liquidity_cfg
 end
 
@@ -141,6 +141,9 @@ function open_trade(mode)
 
 	cur_npc_id = npc:id()
 
+	-- notify discount module so it can initialize event state for this trader
+	grounded_trade_discounts.on_trade_opened(npc, mode)
+
 	local state = trader_state[cur_npc_id]
 	if state and state.pending then
 		local new_funds = state.pending
@@ -167,8 +170,13 @@ end
 ---------------- cost scaling ----------------
 local function get_liquidity_multiplier(npc, npc_sec, item_cost)
 	local current = npc:money()
-	local cfg     = get_trader_config(npc_sec)
-	local ratio   = math.max(0, (current - item_cost) / cfg.bracket_max)
+	local cfg = get_trader_config(npc_sec)
+	local money_after = current - item_cost
+	if money_after >= cfg.bracket_min then
+		return 1.0
+	end
+	
+	local ratio   = math.max(0, money_after / cfg.bracket_min)
 
 	if ratio >= 0.5 then
 		return 1.0
@@ -178,20 +186,51 @@ local function get_liquidity_multiplier(npc, npc_sec, item_cost)
 end
 
 function on_get_item_cost(kind, obj, profile, vanilla_cost, ret)
-	if profile.mode ~= 1 then return end
-	if not cur_npc_id then return end
+	if profile.mode == 1 then --items sold by player
+		if not cur_npc_id then return end
 
-	local npc = mob_trade.GetTalkingNpc()
-	if not npc then return end
+		local npc = mob_trade.GetTalkingNpc()
+		if not npc then return end
 
-	local base       = ret.new_cost or vanilla_cost
-	local multiplier = get_liquidity_multiplier(npc, npc:section(), base)
-	if multiplier >= 1.0 then return end
+		local base       = ret.new_cost or vanilla_cost
+		local l_multiplier = get_liquidity_multiplier(npc, npc:section(), base)
+		if l_multiplier >= 1.0 then l_multiplier = 1 end
 
-	ret.new_cost = math.floor(base * multiplier)
+		local d_multiplier = grounded_trade_discounts.get_discount_multiplier(cur_npc_id, obj:section(), profile.mode)
+		
+		ret.new_cost = math.floor(base * l_multiplier * d_multiplier)
 
-	printf("[grounded liquidity] %s: %s -> %s (x%.2f, funds: %s)",
-		obj:section(), base, ret.new_cost, multiplier, npc:money())
+		printf("[grounded discount player selling] %s: Old price = %s, Inflated price = %s", obj:section(), base, base * d_multiplier)
+
+		printf("[grounded liquidity] %s: %s -> %s (x%.2f, funds: %s)", obj:section(), base, ret.new_cost, l_multiplier, npc:money())
+		
+	elseif profile.mode == 2 then --items sold by trader
+		if not cur_npc_id then return end
+
+		local npc = mob_trade.GetTalkingNpc()
+		if not npc then return end
+
+		local base = ret.new_cost or vanilla_cost
+		local obj_condition = obj:condition() or 1.0
+		local cfg_name = trade_manager.get_trade_profile(npc:id(), "cfg_ltx")
+		printf("Trader Config Name: %s", cfg_name)
+		local cfg = cfg_name and trade_manager.get_trade_cfg(cfg_name)
+		local sell_exp = 1.0
+		if cfg and cfg:line_exist("trader", "sell_item_exponent") then
+			sell_exp = cfg:r_float("trader", "sell_item_exponent")
+		end
+
+		local c_multiplier = 1
+		if IsWeapon(obj) or IsOutfit(obj) or IsHeadgear(obj) then -- The sell condition multiplier is applied only to outfits and weapons
+			c_multiplier = obj_condition ^ sell_exp
+		end
+
+		local d_multiplier = grounded_trade_discounts.get_discount_multiplier(cur_npc_id, obj:section(), profile.mode)
+
+		ret.new_cost = math.floor(base * d_multiplier * c_multiplier)
+
+		printf("[grounded discount trader selling] %s: Old price = %s, Discounted price = %s", obj:section(), base, base * d_multiplier * c_multiplier)
+	end
 end
 
 ---------------- save/load ----------------

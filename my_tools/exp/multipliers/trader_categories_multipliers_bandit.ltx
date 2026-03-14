@@ -1,0 +1,148 @@
+[bandit]
+; Bandit trader buy multipliers.
+; Russian ecosystem is his bread and butter — his crew runs on it.
+; NATO is accepted but he takes a bigger cut: harder to move, wrong ammo supply chain.
+; High tier military gear is nearly worthless to him — too conspicuous, wrong clients.
+; Drugs, smokes, booze, food: always welcome. His camp consumes these constantly.
+; Normalized to 1.0 max. General trader_discount applied separately.
+
+; --- WEAPONS: PISTOLS ---
+; Russian low tier: every bandit has one, easy resell
+wpn_pistol_rus_low          = 1.0, 0.85
+; Russian high tier: rarer but his guys will pay for an upgrade
+wpn_pistol_rus_high         = 0.75, 0.60
+; NATO low: accepts it, small penalty for resale friction
+wpn_pistol_nato_low         = 0.55, 0.45
+; NATO high: almost no market, someone has to want a Desert Eagle
+wpn_pistol_nato_high        = 0.30, 0.20
+
+; --- WEAPONS: RIFLES ---
+; Russian low: AKs, PPSh, SKS — the Zone's standard currency
+wpn_rifle_rus_low           = 0.95, 0.80
+; Russian mid: good gear, his better clients will pay up
+wpn_rifle_rus_mid           = 0.65, 0.50
+; Russian high: military-grade, too hot for most bandit buyers
+wpn_rifle_rus_high          = 0.30, 0.20
+; NATO low: occasional demand, lower than Russian equivalent
+wpn_rifle_nato_low          = 0.50, 0.40
+; NATO mid: niche market, Freedom leaners or curious buyers only
+wpn_rifle_nato_mid          = 0.25, 0.15
+; NATO high: almost no one to sell this to
+wpn_rifle_nato_high         = 0.15, 0.08
+
+; --- WEAPONS: SNIPERS ---
+; Snipers are specialist gear — few buyers among bandits
+wpn_sniper_rus              = 0.35, 0.25
+wpn_sniper_nato             = 0.15, 0.08
+
+; --- WEAPONS: SHOTGUNS ---
+; Shotguns are popular in bandit circles, close-quarters staple
+wpn_shotgun_rus_low         = 1.0, 0.85
+wpn_shotgun_rus_high        = 0.55, 0.45
+wpn_shotgun_nato_low        = 0.45, 0.35
+wpn_shotgun_nato_high       = 0.30, 0.20
+
+; --- WEAPONS: LMG ---
+; Heavy weapons rarely move through bandit hands
+wpn_lmg_rus                 = 0.25, 0.15
+wpn_lmg_nato                = 0.10, 0.05
+
+; --- WEAPONS: MISC ---
+; Addons: always useful, small market
+wpn_addons                  = 0.70, 0.55
+; Melee: knives circulate constantly in bandit camps
+wpn_melee                   = 0.80, 0.65
+; Explosives: he'll take grenades off your hands, IEDs less so
+wpn_explosive               = 0.55, 0.40
+
+; --- AMMO ---
+; Russian common: high demand, fast turnover
+ammo_rus_common             = 1.0, 0.85
+; Russian mid: solid demand
+ammo_rus_mid                = 0.75, 0.60
+; Russian rare: specialty calibers, slower but he'll take them
+ammo_rus_rare               = 0.55, 0.40
+; NATO common: lower demand, but 9x19 and 5.56 do circulate
+ammo_nato_common            = 0.50, 0.40
+; NATO mid: niche buyers only
+ammo_nato_mid               = 0.30, 0.20
+; NATO rare: almost no one shooting these in his camp
+ammo_nato_rare              = 0.15, 0.08
+; Degraded: takes it cheap, moves it to desperate buyers
+ammo_degraded               = 0.30, 0.20
+
+; --- OUTFITS ---
+; Bandit faction gear: his primary market, buys well
+outfit_novice               = 1.0, 0.85
+; Stalker gear: useful, his guys sometimes wear it
+outfit_stalker              = 0.55, 0.45
+; Armored: rarely moves, wrong fit for bandit buyers
+outfit_armored              = 0.25, 0.15
+; Exo: almost no market whatsoever
+outfit_exo                  = 0.10, 0.05
+; Scientific: useless to him
+outfit_scientific           = 0.15, 0.08
+; Basic headgear: caps, balaclavas — always circulating
+headgear_basic              = 0.90, 0.75
+; Combat helmets: limited buyers
+headgear_combat             = 0.30, 0.20
+
+; --- EQUIPMENT ---
+; Backpacks: useful, camp always needs more storage
+backpacks                   = 0.80, 0.65
+
+; --- FOOD & CONSUMABLES ---
+; Cooked food: bandits eat, mutant meat especially welcome
+food_cooked                 = 0.90, 0.75
+; Packaged food: cans, rations — solid camp supply
+food_packaged               = 0.85, 0.70
+; Basic drinks: water, beer — always needed
+drink_basic                 = 0.85, 0.70
+; Alcohol: vodka moves fast in a bandit camp
+drink_alcohol               = 1.0, 0.85
+; Basic drugs: painkillers, bandages — basic trauma care
+drug_basic                  = 0.80, 0.65
+; Military drugs: stims and serums, his guys want these
+drug_military               = 0.85, 0.70
+; Chemical drugs: cocaine, morphine — he trades in these freely
+drug_chem                   = 1.0, 0.85
+; Cigarettes: camp currency
+cigs                        = 1.0, 0.85
+
+; --- ZONE ITEMS ---
+; Artifacts: he has contacts but they're not great — moderate pay
+artefacts                   = 0.65, 0.50
+; Mutant parts: his camp processes these for food and sale
+mutant_parts                = 0.80, 0.65
+
+; --- REPAIR ---
+; Weapon repair kits: useful but not his priority
+repair_kits_weapon          = 0.65, 0.50
+; Outfit repair: even less priority
+repair_kits_outfit          = 0.55, 0.40
+; Weapon parts: he'll take them, slow resale
+parts_weapon                = 0.40, 0.25
+; Outfit parts: lower demand
+parts_outfit                = 0.35, 0.20
+; Misc parts: electronics and scrap, occasional use
+parts_misc                  = 0.55, 0.40
+
+; --- DEVICES ---
+; Basic devices: flashlights, detectors — always useful
+devices_basic               = 0.75, 0.60
+; Advanced devices: PDAs, NV — he can move these but slowly
+devices_advanced            = 0.45, 0.30
+
+; --- TOOLS & CAMPING ---
+; Tools: limited buyers but always someone who needs them
+tools                       = 0.70, 0.55
+; Camping gear: his camp uses it, decent demand
+camping                     = 0.75, 0.60
+; Fuels: kerosene and gas always welcome for camp fires and cooking
+fuels                       = 0.85, 0.70
+
+; --- MISC ---
+; Trash: takes it off your hands for almost nothing
+trash                       = 0.20, 0.10
+; Patches: collectors exist even among bandits
+patches                     = 0.50, 0.35

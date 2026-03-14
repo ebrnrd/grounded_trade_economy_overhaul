@@ -5,6 +5,9 @@ generate_trade_buy.py
 Reads trade_categories.ltx and trader_categories_multipliers.ltx and outputs
 a [trade_generic_buy] section populated with items and their min/max multipliers.
 
+If a category has no multiplier defined, its items are written without values,
+meaning the trader will not accept those items.
+
 Usage:
     python generate_trade_buy.py
     python generate_trade_buy.py --categories my_categories.ltx --multipliers my_multipliers.ltx --output output.ltx
@@ -128,39 +131,38 @@ def parse_multipliers(filepath):
 def generate_trade_generic_buy(categories, multipliers):
     """
     Build the lines for a [trade_generic_buy] section.
+    Categories with multipliers get   item = max, min
+    Categories without multipliers get bare item names (trader won't buy).
     Returns (output_lines, warnings) where output_lines is a list of strings.
     """
     lines = []
     warnings = []
 
-    # find which categories appear in multipliers
-    used_categories = []
+    # warn about multipliers defined for unknown categories
     for cat_name in multipliers:
         if cat_name not in categories:
             warnings.append(f"category '{cat_name}' defined in multipliers but not found in categories file — skipped")
-        else:
-            used_categories.append(cat_name)
-
-    # warn about categories defined but never assigned a multiplier
-    for cat_name in categories:
-        if cat_name not in multipliers:
-            warnings.append(f"category '{cat_name}' defined in categories file but has no multiplier — skipped")
 
     # build section
-    for cat_name in used_categories:
-        max_val, min_val = multipliers[cat_name]
+    for cat_name in categories:
         items = categories[cat_name]
 
         if not items:
             warnings.append(f"category '{cat_name}' has no items — skipped")
             continue
 
-        lines.append(f"; --- {cat_name} (max={max_val}, min={min_val})")
-        for item in items:
-            # format floats cleanly: use 2 decimal places, strip trailing zeros
-            max_str = f"{max_val:.2f}".rstrip("0").rstrip(".")
-            min_str = f"{min_val:.2f}".rstrip("0").rstrip(".")
-            lines.append(f"{item:<40} = {max_str}, {min_str}")
+        if cat_name not in multipliers:
+            lines.append(f"; --- {cat_name} (no buy)")
+            for item in items:
+                lines.append(f"{item}")
+        else:
+            max_val, min_val = multipliers[cat_name]
+            lines.append(f"; --- {cat_name} (max={max_val}, min={min_val})")
+            for item in items:
+                max_str = f"{max_val:.2f}".rstrip("0").rstrip(".")
+                min_str = f"{min_val:.2f}".rstrip("0").rstrip(".")
+                lines.append(f"{item:<40} = {max_str}, {min_str}")
+
         lines.append("")  # blank line between categories
 
     return lines, warnings
