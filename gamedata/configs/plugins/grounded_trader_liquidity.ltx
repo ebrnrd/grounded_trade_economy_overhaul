@@ -17,6 +17,33 @@ init_min       = 40000
 init_max       = 50000
 reserve_threshold = 10000
 
+[default_barman]
+bracket_min    = 30000
+bracket_max    = 60000
+drift_median   = 5000
+drift_variance = 0.6
+init_min       = 40000
+init_max       = 50000
+reserve_threshold = 10000
+
+[default_mechanic]
+bracket_min    = 20000
+bracket_max    = 40000
+drift_median   = 2000
+drift_variance = 0.4
+init_min       = 25000
+init_max       = 35000
+reserve_threshold = 5000
+
+[default_medic]
+bracket_min    = 10000
+bracket_max    = 30000
+drift_median   = 2000
+drift_variance = 0.4
+init_min       = 15000
+init_max       = 25000
+reserve_threshold = 4000
+
 ; ========== CORDON ==========
 
 ; Sidorovich
@@ -29,16 +56,6 @@ init_min       = 40000
 init_max       = 50000
 reserve_threshold = 10000
 
-; Xenotech  (Loner Mechanic at the Farm)
-[esc_smart_terrain_5_7_loner_mechanic_stalker]                        
-bracket_min    = 20000
-bracket_max    = 40000
-drift_median   = 2000
-drift_variance = 0.4
-init_min       = 25000
-init_max       = 35000
-reserve_threshold = 5000
-
 ; Loris (Loner Trader at the Farm)
 [esc_main_base_trader_mlr]                         
 bracket_min    = 20000
@@ -49,16 +66,6 @@ init_min       = 30000
 init_max       = 40000
 reserve_threshold = 8000
 
-; (Military Mechanic - Southern Outpost)
-[army_south_mechan_mlr]
-bracket_min    = 20000
-bracket_max    = 40000
-drift_median   = 2000
-drift_variance = 0.4
-init_min       = 25000
-init_max       = 35000
-reserve_threshold = 6000
-
 ; (Military Trader - Southern Outpost)
 [esc_3_16_military_trader]
 bracket_min    = 40000
@@ -68,16 +75,6 @@ drift_variance = 0.6
 init_min       = 50000
 init_max       = 60000
 reserve_threshold = 15000
-
-; Cordon Loner Medic (not_enough_people addon)
-[stalker_nep_cordon_medic]
-bracket_min    = 10000
-bracket_max    = 30000
-drift_median   = 2000
-drift_variance = 0.4
-init_min       = 15000
-init_max       = 25000
-reserve_threshold = 4000
 
 ; ===============================================
 
@@ -126,3 +123,78 @@ drift_variance = 0.6
 init_min       = 40000
 init_max       = 50000
 reserve_threshold = 10000
+
+; ===============================================
+
+; ========== ROSTOK ==========
+
+[bar_dolg_general_petrenko_stalker]
+bracket_min    = 40000
+bracket_max    = 70000
+drift_median   = 6000
+drift_variance = 0.6
+init_min       = 50000
+init_max       = 60000
+reserve_threshold = 15000
+
+; ================ BARMEN =================
+
+[mar_base_stalker_barmen]:default_barman
+
+[agr_1_6_barman_army_mlr]:default_barman
+
+[yan_povar_army_mlr]:default_barman
+
+[mil_freedom_barman_mlr]:default_barman
+
+[bar_visitors_barman_stalker_trader]:default_barman
+
+; ================ MEDICS =================
+
+[bandit_main_base_medic_mlr]:default_medic
+
+[mar_smart_terrain_base_doctor]:default_medic
+
+[agr_1_6_medic_army_mlr]:default_medic
+
+[bar_dolg_medic]:default_medic
+
+[mil_freedom_medic]:default_medic
+
+[cit_killers_merc_medic_stalker]:default_medic
+
+[stalker_nep_cordon_medic]:default_medic
+
+; ================ MECHANICS =================
+
+[esc_smart_terrain_5_7_loner_mechanic_stalker]:default_mechanic
+
+[army_south_mechan_mlr]:default_mechanic
+
+[dasc_tech_mlr]:default_mechanic
+
+[mar_base_stalker_tech]:default_mechanic
+
+[agr_smart_terrain_1_6_army_mechanic_stalker]:default_mechanic
+
+[bar_visitors_stalker_mechanic]:default_mechanic
+
+[val_smart_terrain_7_3_bandit_mechanic_stalker]:default_mechanic
+
+[trucks_cemetery_bandit_mechanic]:default_mechanic
+
+[mechanic_army_yan_mlr]:default_mechanic
+
+[mil_smart_terrain_7_7_freedom_mechanic_stalker]:default_mechanic
+
+[cit_killers_merc_mechanic_stalker]:default_mechanic
+
+[merc_pri_a18_mech_mlr_squad]:default_mechanic
+
+[pri_a16_mech_mlr]:default_mechanic
+
+[mechanic_monolith_kbo]:default_mechanic
+
+[pri_monolith_monolith_mechanic_stalker]:default_mechanic
+
+[red_greh_tech]:default_mechanic
