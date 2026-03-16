@@ -1,22 +1,3 @@
---[[
-	GROUNDED - Layer 2: Dynamic Liquidity
-
-	Traders have finite money pools that deplete as the player sells to them.
-	When a trader is running low, they offer progressively less for items.
-
-	Flow:
-	- trade_manager.update() is monkey patched to detect restocks
-	- on restock, a drift delta is applied to the trader's last known funds
-	  the delta direction is guided by bracket_min/bracket_max
-	- new funds are stored as pending until the player opens trade
-	- when player opens trade, pending funds are applied via npc:give_money()
-	- on_get_item_cost reads npc:money() directly to scale the offered price
-	- engine handles deduction automatically (infinitive="0" in XML)
-
-	XML requirement: each trader must have infinitive="0"
-	Config: gamedata/configs/plugins/grounded_trader_liquidity.ltx
---]]
-
 local cur_npc_id = nil
 
 -- [npc_id] = { pending, last_funds }
@@ -49,6 +30,87 @@ local function get_trader_config(npc_sec)
 		init_min       = r("init_min",       8000),
 		init_max       = r("init_max",       12000),
 	}
+end
+
+---------------- category multipliers ----------------
+
+local category_items  = {}   -- item_section  -> category_name
+local multipliers_cfg = nil  -- ini_file, loaded once at game start
+
+local function build_category_items()
+    local cfg = ini_file("plugins\\grounded_trade_categories.ltx")
+    if not cfg then
+        --printf("[grounded layer1] ERROR: could not load trade_categories.ltx")
+        return
+    end
+    cfg:section_for_each(function(category)
+        local n = cfg:line_count(category)
+        for i = 0, n - 1 do
+            local result, item, _ = cfg:r_line(category, i, "", "")
+            if result and item and item ~= "" then
+                category_items[item] = category
+				--printf("Added item %s with category %s", item, category)
+            end
+        end
+    end)
+end
+
+local function load_multipliers_cfg()
+    multipliers_cfg = ini_file("plugins\\grounded_trader_multipliers.ltx")
+    if not multipliers_cfg then
+        --printf("[grounded layer1] ERROR: could not load grounded_trader_multipliers.ltx")
+    else
+        --printf("[grounded layer1] grounded_trader_multipliers loaded")
+    end
+end
+
+-- Returns a float multiplier to apply to the price, or nil if vanilla should handle it.
+-- mode 1 = player selling to trader  -> looks up [section_buy]
+-- mode 2 = player buying from trader -> looks up [section_sell]
+-- Returns 1 if category is not found.
+local function get_category_multiplier(trader_section, item_section, mode)
+    if not multipliers_cfg then
+		--printf("[trade_overhaul] multipliers_cfg not loaded")
+		return 1
+	end
+
+    local section_name = trader_section .. (mode == 1 and "_buy" or "_sell")
+    if not multipliers_cfg:section_exist(section_name) then
+		--printf("[trade_overhaul] trader section not found: %s", section_name)
+		return 1
+	end
+
+    local category = category_items[item_section]
+    if not category then
+		--printf("[trade_overhaul] item category not found: %s", item_section)
+		return 1
+	end
+
+    if not multipliers_cfg:line_exist(section_name, category) then
+		--printf("[trade_overhaul] category doesn't exist in multipliers_cfg: %s", category)
+		return 1
+	end
+
+    local value = multipliers_cfg:r_string_ex(section_name, category)
+    if not value or value == "" then
+		--printf("[trade_overhaul] category exists but doesn't have multipliers: %s", category)
+        return 1
+    end
+
+    local max_v, min_v = value:match("([%d%.]+)%s*,%s*([%d%.]+)")
+	--printf("Category %s max multiplier = %s, min multiplier = %s", category, max_v, min_v)
+    if not max_v then return 1 end
+
+    local max_n = tonumber(max_v)
+    local min_n = tonumber(min_v)
+
+    -- get the stored roll for this trader, fall back to midpoint if not found
+    local roll = 0.5
+    if cur_npc_id and trader_state[cur_npc_id] then
+        roll = trader_state[cur_npc_id].price_roll or 0.5
+    end
+
+    return min_n + roll * (max_n - min_n)
 end
 
 ---------------- drift ----------------
@@ -99,9 +161,53 @@ end
 local function init_trader(npc_id, npc_sec)
 	local cfg       = get_trader_config(npc_sec)
 	local new_funds = math.floor(cfg.init_min + math.random() * (cfg.init_max - cfg.init_min))
-	trader_state[npc_id] = { pending = new_funds, last_funds = new_funds }
+	trader_state[npc_id] = { pending = new_funds, last_funds = new_fund, price_roll = math.random() }
 	printf("[grounded liquidity] init %s: %s RU", npc_sec, new_funds)
 end
+
+local player_sold_items = {}  -- [npc_id] = { [item_id] = true }
+
+-- called from actor_on_trade callback
+function actor_on_trade(item, sell_bye, money)
+	print("Actor on trade callback: item_id=%s, sell_bye=%s, money=%s", tostring(item:id()), tostring(sell_bye), tostring(money))
+    if not sell_bye then return end           -- player is buying, not selling
+    if not cur_npc_id then return end
+    if not player_sold_items[cur_npc_id] then
+        player_sold_items[cur_npc_id] = {}
+    end
+    player_sold_items[cur_npc_id][item:id()] = true
+	printf("Added sold items to %s, item_id = %s", cur_npc_id, item:id())
+end
+
+local function degrade_trader_inventory(npc)
+
+	local cfg_name = trade_manager.get_trade_profile(npc:id(), "cfg_ltx")
+	local cfg = cfg_name and trade_manager.get_trade_cfg(cfg_name)
+	local min_cond = 0.3
+	local max_cond = 0.98
+	if cfg and cfg:line_exist("trader", "sell_item_min_condition") then
+		min_cond = cfg:r_float("trader", "sell_item_min_condition")
+	end
+	if cfg and cfg:line_exist("trader", "sell_item_max_condition") then
+		max_cond = cfg:r_float("trader", "sell_item_max_condition")
+	end
+
+	local sold_items = player_sold_items[npc:id()] or {}
+
+    npc:iterate_inventory(function(npc, itm)
+		if not sold_items[itm:id()] then
+			local sec = itm:section()
+			if (IsWeapon(itm) and sec ~= "wpn_binoc_inv")
+			or IsOutfit(itm) or IsHeadgear(itm) or IsItem("device", sec) then
+				if itm:condition() >= 0.99 then
+					itm:set_condition(random_float(min_cond, max_cond))
+					printf("Set condition of item %s with item_id = %s", sec, itm:id())
+				end
+			end
+		end
+    end, npc)
+end
+
 
 ---------------- monkey patch trade_manager.update ----------------
 local function patch_trade_manager()
@@ -118,21 +224,27 @@ local function patch_trade_manager()
 		-- first ever visit
 		if not old_resupply and new_resupply then
 			init_trader(id, npc:section())
+			degrade_trader_inventory(npc)
 			return
 		end
 
 		-- restock fired: apply drift from last known funds
-		if old_resupply and new_resupply
-		and (old_resupply.h ~= new_resupply.h or old_resupply.D ~= new_resupply.D) then
+		if old_resupply and new_resupply and (old_resupply.h ~= new_resupply.h or old_resupply.D ~= new_resupply.D) then
 			local state        = trader_state[id]
 			local current      = (state and state.last_funds) or npc:money()
 			apply_drift(id, npc:section(), current)
+			degrade_trader_inventory(npc)
+		    if trader_state[id] then
+        		trader_state[id].price_roll = math.random()
+    		end
+			player_sold_items[id] = nil
 		end
 	end
 end
 
 ---------------- open/close trade ----------------
 function open_trade(mode)
+
 	if mode ~= 2 then return end
 
 	local npc = mob_trade.GetTalkingNpc()
@@ -140,6 +252,8 @@ function open_trade(mode)
 	if not trade_manager.get_trade_profile(npc:id(), "cfg_ltx") then return end
 
 	cur_npc_id = npc:id()
+
+	degrade_trader_inventory(npc)
 
 	-- notify discount module so it can initialize event state for this trader
 	grounded_trade_discounts.on_trade_opened(npc, mode)
@@ -198,11 +312,13 @@ function on_get_item_cost(kind, obj, profile, vanilla_cost, ret)
 
 		local d_multiplier = grounded_trade_discounts.get_discount_multiplier(cur_npc_id, obj:section(), profile.mode)
 		
-		ret.new_cost = math.floor(base * l_multiplier * d_multiplier)
+		local cat_multiplier = get_category_multiplier(npc:section(), obj:section(), profile.mode) or 1
 
-		printf("[grounded discount player selling] %s: Old price = %s, Inflated price = %s", obj:section(), base, base * d_multiplier)
+		ret.new_cost = math.floor(base * l_multiplier * d_multiplier * cat_multiplier)
 
-		printf("[grounded liquidity] %s: %s -> %s (x%.2f, funds: %s)", obj:section(), base, ret.new_cost, l_multiplier, npc:money())
+		--printf("[grounded discount player selling] %s: Old price = %s, Inflated price = %s", obj:section(), base, base * d_multiplier * cat_multiplier)
+
+		--printf("[grounded liquidity] %s: %s -> %s (x%.2f, funds: %s)", obj:section(), base, ret.new_cost, l_multiplier, npc:money())
 		
 	elseif profile.mode == 2 then --items sold by trader
 		if not cur_npc_id then return end
@@ -211,25 +327,14 @@ function on_get_item_cost(kind, obj, profile, vanilla_cost, ret)
 		if not npc then return end
 
 		local base = ret.new_cost or vanilla_cost
-		local obj_condition = obj:condition() or 1.0
-		local cfg_name = trade_manager.get_trade_profile(npc:id(), "cfg_ltx")
-		printf("Trader Config Name: %s", cfg_name)
-		local cfg = cfg_name and trade_manager.get_trade_cfg(cfg_name)
-		local sell_exp = 1.0
-		if cfg and cfg:line_exist("trader", "sell_item_exponent") then
-			sell_exp = cfg:r_float("trader", "sell_item_exponent")
-		end
-
-		local c_multiplier = 1
-		if IsWeapon(obj) or IsOutfit(obj) or IsHeadgear(obj) then -- The sell condition multiplier is applied only to outfits and weapons
-			c_multiplier = obj_condition ^ sell_exp
-		end
 
 		local d_multiplier = grounded_trade_discounts.get_discount_multiplier(cur_npc_id, obj:section(), profile.mode)
 
-		ret.new_cost = math.floor(base * d_multiplier * c_multiplier)
+		local cat_multiplier = get_category_multiplier(npc:section(), obj:section(), profile.mode) or 1
 
-		printf("[grounded discount trader selling] %s: Old price = %s, Discounted price = %s", obj:section(), base, base * d_multiplier * c_multiplier)
+		ret.new_cost = math.floor(base * d_multiplier * cat_multiplier)
+
+		--printf("[grounded discount trader selling] %s: Old price = %s, Discounted price = %s", obj:section(), base, base * d_multiplier * cat_multiplier)
 	end
 end
 
@@ -245,9 +350,12 @@ end
 ---------------- init ----------------
 function on_game_start()
 	patch_trade_manager()
+	build_category_items()
+	load_multipliers_cfg()
 	RegisterScriptCallback("ActorMenu_on_mode_changed", open_trade)
 	RegisterScriptCallback("ActorMenu_on_mode_changed", close_trade)
 	RegisterScriptCallback("on_get_item_cost", on_get_item_cost)
+	RegisterScriptCallback("actor_on_trade", actor_on_trade)
 	RegisterScriptCallback("save_state", save_state)
 	RegisterScriptCallback("load_state", load_state)
 end

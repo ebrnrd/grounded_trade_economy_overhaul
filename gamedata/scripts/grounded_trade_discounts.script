@@ -21,7 +21,7 @@
 	- PDA notification sent when event fires (if discount crosses threshold)
 
 	Config: gamedata/configs/plugins/grounded_trade_discounts.ltx
-	Items:  gamedata/configs/plugins/grounded_item_groups.ltx
+	Items:  gamedata/configs/plugins/grounded_discount_item_groups.ltx
 --]]
 
 local gt              = game.translate_string
@@ -57,22 +57,22 @@ end
 local item_to_group = {}
 
 local VANILLA_CATEGORIES = {
-	["Items (Drink)"]    = "xt_supplies",
-	["Items (Tool)"]     = "xt_supplies",
-	["Items (Medical)"]  = "xt_med",
-	["Items (Repair)"]   = "xt_repair",
-	["Items (Parts)"]    = "xt_repair",
-	["Weapons (Ammo)"]   = "xt_ammo",
-	["Weapons (Melee)"]  = "xt_weapons",
-	["Weapons (Pistol)"] = "xt_weapons",
-	["Weapons (Shotgun)"]= "xt_weapons",
-	["Weapons (SMG)"]    = "xt_weapons",
-	["Weapons (Rifle)"]  = "xt_weapons",
-	["Weapons (Sniper)"] = "xt_weapons",
-	["Helmets"]          = "xt_armors",
-	["Outfits (Light)"]  = "xt_armors",
-	["Outfits (Medium)"] = "xt_armors",
-	["Outfits (Heavy)"]  = "xt_armors",
+	["Items (Drink)"]    = "supplies_all",
+	["Items (Tool)"]     = "supplies_all",
+	["Items (Medical)"]  = "meds_all",
+	["Items (Repair)"]   = "repair_all",
+	["Items (Parts)"]    = "parts_all",
+	["Weapons (Ammo)"]   = "ammo_all",
+	["Weapons (Melee)"]  = "wpn_all",
+	["Weapons (Pistol)"] = "wpn_all",
+	["Weapons (Shotgun)"]= "wpn_all",
+	["Weapons (SMG)"]    = "wpn_all",
+	["Weapons (Rifle)"]  = "wpn_all",
+	["Weapons (Sniper)"] = "wpn_all",
+	["Helmets"]          = "outfit_all",
+	["Outfits (Light)"]  = "outfit_all",
+	["Outfits (Medium)"] = "outfit_all",
+	["Outfits (Heavy)"]  = "outfit_all",
 }
 
 local function categorize_items()
@@ -88,7 +88,7 @@ local function categorize_items()
 
 	-- additional categories from LTX
 	-- format: each section name is the group, each key is an item section
-	local ltx = ini_file("plugins\\grounded_item_groups.ltx")
+	local ltx = ini_file("plugins\\grounded_discount_item_groups.ltx")
 	if not ltx then return end
 	ltx:section_for_each(function(sec)
 		local n = ltx:line_count(sec)
@@ -105,57 +105,91 @@ end
 -- Each trader lists which item groups are eligible for sell and buy events.
 -- sell = player sells to trader at a bonus
 -- buy  = player buys from trader at a discount
--- Events pick 1-MAX_CATS random categories from the eligible list.
+-- Events pick 0 to MAX_CATS random categories from the eligible list.
 -- Generic fallbacks used when npc section not found directly.
 
 local traders_t = {
+    -- generic fallbacks by role
+    ["trader"] = {
+        sell = { "wpn_all", "ammo_all", "outfit_all", "supplies_all", "meds_all" },
+        buy  = { "wpn_all", "ammo_all", "outfit_all", "supplies_all", "meds_all" },
+    },
+    ["mechanic"] = {
+        sell = { "repair_all", "parts_all" },
+        buy  = { "repair_all", "parts_all" },
+    },
+    ["medic"] = {
+        sell = { "meds_all" },
+        buy  = { "meds_all" },
+    },
+    ["barman"] = {
+        sell = { "food_all", "supplies_all" },
+        buy  = { "food_all", "supplies_all" },
+    },
 
-	-- generic fallbacks by role
-	["trader"] = {
-		sell = { "muts", "arts", "xt_weapons", "xt_supplies" },
-		buy  = { "xt_supplies", "xt_weapons", "xt_armors" },
-	},
-	["mechanic"] = {
-		sell = { "xt_weapons", "xt_armors", "xt_repair" },
-		buy  = { "xt_repair", "xt_weapons" },
-	},
-	["medic"] = {
-		sell = { "xt_med" },
-		buy  = { "xt_med" },
-	},
-	["barman"] = {
-		sell = { "meat", "muts", "xt_supplies" },
-		buy  = { "xt_supplies", "xt_weapons" },
-	},
+    -- Cordon
+    ["m_trader"] = { -- Sidorovich
+        sell = { "wpn_all", "ammo_all", "outfit_all", "supplies_all", "meds_all" },
+        buy  = { "wpn_all", "ammo_all", "outfit_all", "supplies_all", "meds_all" },
+    },
+    ["esc_main_base_trader_mlr"] = { -- Loris
+        sell = { "wpn_all", "ammo_all", "outfit_all", "supplies_all", "meds_all" },
+        buy  = { "wpn_all", "ammo_all", "outfit_all", "supplies_all", "meds_all" },
+    },
+    ["esc_3_16_military_trader"] = { -- Zhurov
+        sell = { "wpn_all", "ammo_all", "outfit_all", "supplies_all", "meds_all" },
+        buy  = { "wpn_all", "ammo_all", "outfit_all", "supplies_all", "meds_all" },
+    },
 
-	-- Cordon
-	["m_trader"] = { -- sidorovich
-		sell = { "xt_supplies", "xt_weapons", "xt_ammo", "xt_armors", "xt_med" },
-		buy  = { "xt_supplies", "xt_ammo" },
-	},
-	["esc_main_base_trader_mlr"] = { -- loris
-		sell = { "xt_weapons", "xt_ammo", "xt_armors" },
-		buy  = { "xt_weapons", "xt_ammo", "xt_armors" },
-	},
-	["esc_3_16_military_trader"] = { -- zhurov
-		sell = { "xt_weapons", "xt_armors", "xt_repair", "xt_ammo" },
-		buy  = { "xt_weapons", "xt_ammo", "xt_armors" },
-	},
+    -- Garbage
+    ["hunter_gar_trader"] = { -- Butcher
+        sell = { "mutant_parts", "food_zone" },
+        buy  = { "mutant_parts", "food_zone" },
+    },
+    ["gar_flea_market_trader"] = { -- Flea Market day
+        sell = { "wpn_all", "ammo_all", "outfit_all", "supplies_all", "meds_all" },
+        buy  = { "wpn_all", "ammo_all", "outfit_all", "supplies_all", "meds_all" },
+    },
+    ["gar_flea_market_trader_night"] = { -- Flea Market night
+        sell = { "wpn_all", "ammo_all", "outfit_all", "supplies_all", "meds_all" },
+        buy  = { "wpn_all", "ammo_all", "outfit_all", "supplies_all", "meds_all" },
+    },
 
-	-- Garbage
-	["hunter_gar_trader"] = {  -- Butcher
-		sell = { "meat", "hides", "muts" },
-		buy  = { "xt_supplies" },
-	},
-	["gar_flea_market_trader"] = {  -- Flea Market day
-		sell = { "xt_weapons", "xt_armors", "xt_supplies" },
-		buy  = { "xt_weapons", "xt_armors", "xt_supplies" },
-	},
-	["gar_flea_market_trader_night"] = {  -- Flea Market night
-		sell = { "xt_weapons", "xt_armors", "arts" },
-		buy  = { "xt_weapons", "xt_armors", "arts" },
-	},
+    -- Dark Valley
+    ["val_smart_terrain_7_4_bandit_trader_stalker"] = { -- Bandit trader
+        sell = { "wpn_all", "ammo_all", "outfit_all", "supplies_all", "drug_chem" },
+        buy  = { "wpn_all", "ammo_all", "outfit_all", "supplies_all", "meds_all" },
+    },
 
+    -- Truck Cemetery
+    ["trucks_cemetery_bandit_trader"] = { -- Truck Cemetery bandit
+        sell = { "wpn_all", "ammo_all", "outfit_all", "supplies_all", "drug_chem" },
+        buy  = { "wpn_all", "ammo_all", "outfit_all", "supplies_all", "meds_all" },
+    },
+
+    -- Rostok
+    ["bar_dolg_general_petrenko_stalker"] = { -- Petrenko
+        sell = { "wpn_all", "ammo_all", "outfit_all", "supplies_all", "meds_all" },
+        buy  = { "wpn_all", "ammo_all", "outfit_all", "supplies_all", "meds_all" },
+    },
+
+    -- Great Swamps
+    ["mar_base_owl_stalker_trader"] = { -- Spore
+        sell = { "wpn_all", "ammo_all", "outfit_all", "supplies_all", "meds_all", "artefacts", "mutant_parts" },
+        buy  = { "wpn_all", "ammo_all", "outfit_all", "supplies_all", "meds_all", "artefacts", "mutant_parts" },
+    },
+
+    -- Darkscape
+    ["dasc_trade_mlr"] = { -- Darkscape loner trader
+        sell = { "wpn_all", "ammo_all", "outfit_all", "supplies_all", "meds_all", "mutant_parts" },
+        buy  = { "wpn_all", "ammo_all", "outfit_all", "supplies_all", "meds_all", "mutant_parts" },
+    },
+
+    -- Agroprom
+    ["agr_smart_terrain_1_6_army_trader_stalker"] = { -- Spooner
+        sell = { "wpn_all", "ammo_all", "outfit_all", "supplies_all", "meds_all", "artefacts" },
+        buy  = { "wpn_all", "ammo_all", "outfit_all", "supplies_all", "meds_all", "artefacts" },
+    },
 }
 
 local function get_trader_table(npc_sec)
@@ -232,9 +266,28 @@ local function pick_random_from_list(t, count)
 end
 
 local function fire_event(npc_id, mode, eligible, cur_time)
+
+    -- build exclusion set from the opposite direction's active event
+    local opposite = mode == "sell" and "buy" or "sell"
+    local excluded = {}
+    local opposite_event = trader_events[npc_id][opposite .. "_event"]
+    if opposite_event then
+        for group, _ in pairs(opposite_event) do
+            excluded[group] = true
+        end
+    end
+
+    -- filter eligible list to remove excluded categories
+    local filtered = {}
+    for _, group in ipairs(eligible) do
+        if not excluded[group] then
+            filtered[#filtered + 1] = group
+        end
+    end
+
 	-- pick 0 to MAX_CATS categories
-	local count = math.random(0, math.min(MAX_CATS, #eligible))
-	local picked = pick_random_from_list(eligible, count)
+	local count = math.random(0, math.min(MAX_CATS, #filtered))
+	local picked = pick_random_from_list(filtered, count)
 
 	local event_table = {}
 	for _, group in ipairs(picked) do
@@ -270,7 +323,8 @@ local function init_trader_events(npc_id, npc)
 		trader_events[npc_id].trader_name = se_npc:character_name()
 		trader_events[npc_id].trader_icon = se_npc:character_icon()
 		trader_events[npc_id].section_name = npc:section()
-		printf("[grounded discounts] init trader events: id=%s sec=%s", tostring(npc_id), tostring(trader_events[npc_id].section_name))
+		trader_events[npc_id].level_name = se_npc and alife():level_name(game_graph():vertex(se_npc.m_game_vertex_id):level_id()) or ""
+		printf("[grounded discounts] init trader events: id=%s sec=%s name=%s, level=%s", tostring(npc_id), tostring(trader_events[npc_id].section_name), tostring(trader_events[npc_id].trader_name), tostring(trader_events[npc_id].level_name))
 	end
 end
 
@@ -313,9 +367,15 @@ local function send_pda_notification(npc_id, mode, event_table, days)
 		.. w_clr .. cat_str .. "\\n"
 		.. w_clr .. gt("grounded_disc_duration") .. " " .. days_str
 
+	
+	local level_raw = t.level_name or ""
+	local level_display = level_raw ~= "" and game.translate_string(level_raw) or ""
+	local level_str = level_display ~= "" and ("(" .. level_display .. ")") or ""
+	local sender = (t.trader_name or "Trader") .. " " .. level_str
+
 	dynamic_news_helper.send_tip(
 		msg,
-		t.trader_name or "Trader",
+		sender,
 		nil,
 		20,
 		t.trader_icon,
@@ -396,8 +456,8 @@ function on_trade_opened(npc, mode)
 	if not get_trader_table(sec) then printf("discounts trader sec: [%s] not found", sec) return end			-- if npc section not found in discount table
 
 	-- add faction check if not enemy
-	local npc_comm = alife_object(npc:id()) and get_real_community(alife_object(npc:id()), "stalker")
-	if (not npc_comm) or (game_relations.is_factions_enemies(get_actor_true_community(), npc_comm)) then return end
+	--local npc_comm = alife_object(npc:id()) and get_real_community(alife_object(npc:id()), "stalker")
+	--if (not npc_comm) or (game_relations.is_factions_enemies(get_actor_true_community(), npc_comm)) then return end
 
 	local npc_id = npc:id()
 

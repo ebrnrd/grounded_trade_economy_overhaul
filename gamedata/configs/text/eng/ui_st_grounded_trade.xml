@@ -1,42 +1,48 @@
 <string_table>
-    <string id="grounded_disc_group_xt_weapons">
+    <string id="grounded_disc_group_wpn_all">
         <text>Weapons</text>
     </string>
-    <string id="grounded_disc_group_xt_armors">
-        <text>Armor</text>
+    <string id="grounded_disc_group_outfit_all">
+        <text>Outfits and armors</text>
     </string>
-    <string id="grounded_disc_group_xt_supplies">
+    <string id="grounded_disc_group_supplies_all">
         <text>Supplies</text>
     </string>
-    <string id="grounded_disc_group_xt_med">
+    <string id="grounded_disc_group_meds_all">
         <text>Medicine</text>
     </string>
-    <string id="grounded_disc_group_xt_repair">
-        <text>Repair</text>
+    <string id="grounded_disc_group_drug_chem">
+        <text>Drugs</text>
     </string>
-    <string id="grounded_disc_group_arts">
+    <string id="grounded_disc_group_repair_all">
+        <text>Repair kits and items</text>
+    </string>
+    <string id="grounded_disc_group_parts_all">
+        <text>Weapon and outfit parts</text>
+    </string>
+    <string id="grounded_disc_group_artefacts">
         <text>Artifacts</text>
     </string>
-    <string id="grounded_disc_group_muts">
+    <string id="grounded_disc_group_mutant_parts">
         <text>Mutant parts</text>
     </string>
-    <string id="grounded_disc_group_meat">
-        <text>Mutant meat</text>
+    <string id="grounded_disc_group_food_zone">
+        <text>Zone produced food</text>
     </string>
-    <string id="grounded_disc_group_hides">
-        <text>Hides</text>
+    <string id="grounded_disc_group_food_all">
+        <text>Food</text>
     </string>
-    <string id="grounded_disc_group_xt_ammo">
+    <string id="grounded_disc_group_ammo_all">
         <text>Ammo</text>
     </string>
     <string id="grounded_disc_event_header">
         <text>Market event</text>
     </string>
     <string id="grounded_disc_mode_sell">
-        <text>Buying with a bonus</text>
+        <text>Prices are down on some things. Won't last.</text>
     </string>
     <string id="grounded_disc_mode_buy">
-        <text>Selling at a discount</text>
+        <text>Short on supplies. Come sell.</text>
     </string>
     <string id="grounded_disc_duration">
         <text>Duration:</text>

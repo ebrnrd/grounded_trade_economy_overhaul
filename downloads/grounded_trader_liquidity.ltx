@@ -44,15 +44,6 @@ init_min       = 15000
 init_max       = 25000
 reserve_threshold = 4000
 
-[bandit_poor]
-bracket_min    = 15000
-bracket_max    = 35000
-drift_median   = 3000
-drift_variance = 0.80
-init_min       = 18000
-init_max       = 28000
-reserve_threshold = 5000
-
 ; ========== CORDON ==========
 
 ; Sidorovich
@@ -85,6 +76,7 @@ init_min       = 50000
 init_max       = 60000
 reserve_threshold = 15000
 
+; ===============================================
 
 ; ========== GARBAGE ==========
 
@@ -118,18 +110,7 @@ init_min       = 50000
 init_max       = 70000
 reserve_threshold = 20000
 
-
-; ========== AGROPROM ==========
-
-; Sergeant Spooner
-[agr_smart_terrain_1_6_army_trader_stalker]
-bracket_min    = 35000
-bracket_max    = 65000
-drift_median   = 6000
-drift_variance = 0.65
-init_min       = 45000
-init_max       = 58000
-reserve_threshold = 12000
+; ===============================================
 
 ; ========== DARK VALLEY ==========
 
@@ -143,19 +124,7 @@ init_min       = 40000
 init_max       = 50000
 reserve_threshold = 10000
 
-
-; ========== DARKSCAPE ==========
-
-;stalker trader
-[dasc_trade_mlr]
-bracket_min    = 12000
-bracket_max    = 30000
-drift_median   = 2500
-drift_variance = 0.85
-init_min       = 15000
-init_max       = 24000
-reserve_threshold = 4000
-
+; ===============================================
 
 ; ========== ROSTOK ==========
 
@@ -168,6 +137,7 @@ init_min       = 50000
 init_max       = 60000
 reserve_threshold = 15000
 
+; ===============================================
 
 ; ========== GREAT SWAMPS ==========
 
@@ -179,18 +149,6 @@ drift_variance = 0.6
 init_min       = 40000
 init_max       = 50000
 reserve_threshold = 10000
-
-
-; ========== TRUCKS CEMETERY ==========
-
-;bandit trader (poor)
-[trucks_cemetery_bandit_trader]:bandit_poor
-
-
-; ========== JUPITER ==========
-
-;bandit trader (poor)
-[jup_cont_trader_bandit]:bandit_poor
 
 ; ================ BARMEN =================
 
@@ -253,3 +211,28 @@ reserve_threshold = 10000
 [pri_monolith_monolith_mechanic_stalker]:default_mechanic
 
 [red_greh_tech]:default_mechanic
+
+; ========== DARKSCAPE ==========
+
+; Darkscape loner trader — extremely isolated, almost no foot traffic
+[dasc_trade_mlr]
+bracket_min    = 12000
+bracket_max    = 30000
+drift_median   = 2500
+drift_variance = 0.85
+init_min       = 15000
+init_max       = 24000
+reserve_threshold = 4000
+
+; ========== AGROPROM ==========
+
+; Sergeant Spooner — army trader, personal business under military cover
+; Reliable military bracket, slightly higher variance from personal dealings
+[agr_smart_terrain_1_6_army_trader_stalker]
+bracket_min    = 35000
+bracket_max    = 65000
+drift_median   = 6000
+drift_variance = 0.65
+init_min       = 45000
+init_max       = 58000
+reserve_threshold = 12000

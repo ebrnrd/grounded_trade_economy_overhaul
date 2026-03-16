@@ -1,26 +1,3 @@
-#include "presets\trade_discounts.ltx"
-#include "presets\trade_presets.ltx"
-
-[trader]
-buy_condition =  trade_generic_buy
-sell_condition = trade_generic_sell
-buy_supplies = {=actor_goodwill_ge(army:1000)} supplies_5, {=heavy_pockets_functor()} supplies_5, {=actor_goodwill_ge(army:800)} supplies_4, {=actor_goodwill_ge(army:600)} supplies_3, {=actor_goodwill_ge(army:400)} supplies_2,  supplies_1
-buy_item_condition_factor = 0.55		;0.40
-buy_item_exponent = 2.0
-sell_item_exponent = 0.7
-
-sell_item_min_condition = 0.6
-sell_item_max_condition = 0.98
-
-
-discounts = discount_supplier
-
-[trade_generic_buy]:supplier
-isg_patch = 4,4
-
-[trade_generic_sell]:supplier
-
-
 [supplies_1]:common_stock
 ; Sergeant Spooner. Agroprom main base. Field quartermaster on the surface.
 ; Personal merchant underneath. Most of this stock is clean military issue.

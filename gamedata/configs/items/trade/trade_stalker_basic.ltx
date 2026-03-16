@@ -5,9 +5,12 @@
 buy_condition =  trade_generic_buy
 sell_condition = trade_generic_sell
 buy_supplies = {=actor_goodwill_ge(stalker:700)} supplies_3, {=heavy_pockets_functor()} supplies_3, {=actor_goodwill_ge(stalker:400)} supplies_2,  supplies_1
-buy_item_condition_factor = 0.30		;0.40
+buy_item_condition_factor = 0.2		;0.40
 buy_item_exponent = 2.25
-sell_item_exponent = 0.5
+sell_item_exponent = 0.8
+
+sell_item_min_condition = 0.2
+sell_item_max_condition = 0.95
 
 discounts = discount_trasher
 
@@ -18,224 +21,266 @@ greh_patch = 3,3
 [trade_generic_sell]:trasher
 
 [supplies_1]:common_stock
-swiss_knife			= 1, 1
-detector_radio             = 1, 1
-;detector_geiger             = 1, 1
-;device_pda_1				= 1, 1
-bolts_pack				= 1, 1
-wpn_pm					= 1, 0.75
-wpn_fort 		= 1, 0.75
-;wpn_tt33 		= 1, 0.75
-;wpn_oc33 		= 1, 0.75
-wpn_colt1911 	= 1, 0.75
-wpn_walther				= 1, 0.75
-wpn_beretta 	= 1, 0.75
-wpn_usp 		= 1, 0.75
-wpn_ak74u_old			= 1, 0.75
-;wpn_ak74u 		= 1, 0.75
-wpn_mp5 				= 1, 0.75
-wpn_toz34				= 1, 0.75
-;wpn_toz34_custom		= 1, 0.75
-wpn_kiparis				= 1, 0.75
-;wpn_vz61				= 1, 0.75
-wpn_ppsh41      		= 1, 0.75
-;wpn_sks					= 1, 0.75
-wpn_mosin				= 1, 0.75
-;wpn_svt40 		= 1, 0.75
-wpn_toz34_obrez			= 1, 0.75
-;wpn_toz34_obrez_custom	= 1, 0.75
-wpn_bm16				= 1, 0.75
-;wpn_bm16_full 	= 1, 0.75
-;wpn_aks74 		= 1, 0.75
-;wpn_ak74 		= 1, 0.75
-wpn_knife				= 1, 1
-wpn_knife2				= 1, 1
-wpn_binoc_inv			= 1, 1
-;mine_new					= 2, 1
-;ied_rpg_new					= 2, 1
-;ied_new						= 2, 1
-ammo_9x18_fmj			= 8, 0.66
-ammo_9x19_fmj			= 8, 0.66
-ammo_11.43x23_fmj		= 8, 0.44
-ammo_12x70_buck			= 6, 0.66
-ammo_5.45x39_fmj		= 6, 0.66
-ammo_5.56x45_fmj		= 6, 0.33
-ammo_7.62x39_fmj		= 5, 0.66
-ammo_7.62x51_fmj		= 5, 0.33
-ammo_7.62x54_7h1		= 4, 0.33
-ammo_7.92x33_fmj		= 3, 0.66
-ammo_357_hp_mag			= 3, 0.22
-ammo_magnum_300			= 3, 0.11
-;grenade_rgd5			= 3, 0.66
-grenade_gd-05			= 3, 0.66
-grenade_smoke			= 3, 0.66
-;grenade_f1				= 3, 0.66
-;itm_tent                = 1, 1
-leatherman_tool			= 1, 1
-army_bowler             = 1, 1
-meat_tushkano			= 3, 1
-meat_dog				= 3, 1
-meat_pseudodog			= 2, 1
-meat_flesh				= 2, 1
-meat_boar				= 3, 1
-meat_snork				= 1, 1
-meat_bloodsucker		= 1, 0.75
-;bread					= 3, 1
-breadold				= 4, 1
-kolbasa					= 3, 1
-;conserva				= 3, 1
-;tomato					= 2, 1
-;sausage					= 2, 1
-;corn					= 2, 1
-beans					= 2, 1
-chili					= 2, 1
-;salmon					= 2, 1
-;raisins					= 2, 1
-;chocolate				= 2, 1
-nuts					= 2, 1
-;mint					= 3, 1
-energy_drink			= 3, 1
-;water_drink				= 3, 1
-;ration_ukr				= 1, 1
-;ration_ru				= 1, 1
-mre						= 1, 1
-beer					= 3, 1
-vodka					= 3, 1
-;vodka2					= 3, 1
-;vodka_quality			= 3, 1
-;cocaine					= 2, 1
-;salicidic_acid			= 2, 1
-;morphine				= 2, 1
-cigarettes 				= 2, 1
-;cigar1 					= 2, 1
-;cigar2 					= 2, 1
-;cigar3 					= 2, 1
-joint					= 2, 1
-marijuana				= 2, 1
-;tobacco					= 3, 1
-flask					= 2, 1
-;mineral_water			= 3, 1
-;caffeine				= 3, 1
-hand_rolling_tobacco	= 1, 1
-;cigar					= 1, 1
-;cigarettes_lucky		= 3, 1
-cigarettes_russian		= 2, 1
-;survival_kit			= 1, 1
-;antirad					= 2, 1
-bandage					= 3, 1
-medkit					= 2, 1
-;medkit_ai1				= 3, 1
-;medkit_ai2				= 3, 1
-;medkit_ai3				= 3, 1
-;antirad_kalium			= 4, 1
-;antirad_cystamine		= 3, 1
-;antibio_sulfad			= 2, 1
-;antiemetic				= 1, 1
-;antibio_chlor			= 4, 1
-jgut					= 3, 1
-yadylin					= 3, 1
-analgetic				= 3, 1
-;medkit_scientic			= 1, 1
-;medkit_army				= 2, 1
-;stimpack				= 2, 1
-;stimpack_army			= 1, 1
-;stimpack_scientic		= 1, 1
-drug_booster			= 1, 1
-drug_coagulant			= 2, 1
-drug_antidot			= 1, 1
-;drug_radioprotector		= 1, 1
-;drug_psy_blockade		= 1, 1
-drug_sleepingpills		= 1, 1
-cocaine					= 2, 1
-tetanus					= 2, 1
-;adrenalin				= 2, 1
-;salicidic_acid			= 1, 1
-;morphine				= 2, 1
-;akvatab				= 3, 1
-novice_outfit			= 1, 1
-stalker_outfit			= 1, 1
-nomad_outfit = 1, 1
-stalker_bear_outfit = 1, 1
-;stalker_salamander_outfit = 1, 1
-stalker_graphite_outfit = 1, 1
-;stalker_drought_outfit = 1, 1
-stalker_predator_outfit = 1, 1
-stalker_autumn_outfit = 1, 1
-;stalker_vineleaf_outfit = 1, 1
-stalker_tigerstripe_outfit = 1, 1
-helm_resp               = 1, 1
-helm_bandana            = 1, 1
-;helm_rp_bala            = 1, 1
-helm_cloth_mask			= 1, 1
-;helm_respirator_gp5     = 1, 1
-helm_respirator_old     = 1, 1
-helm_respirator 		= 1, 1
-;helm_ppm88				= 1, 1
-itm_sleepbag			= 1, 1
-compression_bag			= 1, 1
-;itm_actor_backpack		= 1, 1
-itm_backpack			= 1, 1
-device_flashlight		= 1, 1
-device_torch_dummy		= 1, 1
-;porn					= 1, 1
-detector_simple			= 1, 1
-;detector_advanced		= 1, 1
-shovel_mili				= 1, 1
-grooming				= 1, 1
-beadspread				= 1, 1
-;mirror					= 1, 1
-;kit_hunt				= 1, 1
-;tarpaulin				= 1, 1
-;rope					= 1, 1
-;synthrope				= 1, 1
-;cutlery					= 1, 1
-;fieldcooker				= 1, 1
-cooking					= 2, 1
-;kerosene				= 2, 1
-charcoal				= 1, 1
-explo_jerrycan_fuel		= 1, 1
-explo_balon_gas			= 1, 1
-batteries_dead			= 2, 1
-lead_box				= 1, 1
-af_grid					= 1, 1
-af_plates				= 1, 1
-;af_aac					= 1, 1
-box_matches			= 2, 1
+; Darkscape. An industrial dead zone between the Bar and the Army Warehouses.
+; Almost no foot traffic. High mutant presence. The trader makes do with what comes through.
+; High variance across the board — some visits there will be almost nothing worth buying.
+; Russian kit is the norm. Water and antirad are priorities here.
+
+; --- BASICS ---
+bolts_pack              = 2, 0.75
+box_matches             = 3, 0.75
+batteries_dead          = 3, 0.66
+rope                    = 1, 0.55
+tarpaulin               = 1, 0.50
+duct_tape               = 1, 0.44
+
+; --- FOOD ---
+; Mutant hunting is viable in Darkscape — boars and pseudodogs are common
+meat_tushkano           = 3, 0.75
+meat_dog                = 3, 0.75
+meat_boar               = 3, 0.70
+meat_flesh              = 2, 0.65
+meat_pseudodog          = 2, 0.60
+meat_snork              = 1, 0.50
+breadold                = 3, 0.66
+kolbasa                 = 2, 0.60
+conserva                = 2, 0.55
+beans                   = 2, 0.55
+chili                   = 1, 0.50
+nuts                    = 1, 0.44
+water_drink             = 4, 0.88
+vodka                   = 3, 0.75
+vodka2                  = 2, 0.60
+beer                    = 2, 0.60
+energy_drink            = 2, 0.50
+tobacco                 = 2, 0.66
+cigarettes              = 3, 0.70
+cigarettes_russian      = 2, 0.60
+hand_rolling_tobacco    = 2, 0.55
+joint                   = 1, 0.50
+marijuana               = 1, 0.44
+flask                   = 2, 0.55
+
+; --- COOKING ---
+cooking                 = 2, 0.80
+charcoal                = 2, 0.70
+kerosene                = 1, 0.60
+explo_balon_gas         = 1, 0.50
+explo_jerrycan_fuel     = 1, 0.44
+army_bowler             = 1, 0.55
+
+; --- MEDICAL ---
+; Antirad stocked better than typical loner trader — industrial zone hazards
+bandage                 = 4, 0.80
+jgut                    = 3, 0.70
+medkit                  = 2, 0.60
+tetanus                 = 2, 0.55
+glucose                 = 2, 0.60
+glucose_s               = 1, 0.50
+antirad_kalium          = 3, 0.80
+antirad_cystamine       = 2, 0.65
+antibio_chlor           = 2, 0.60
+antibio_sulfad          = 1, 0.50
+antiemetic              = 1, 0.50
+akvatab                 = 3, 0.70
+yadylin                 = 2, 0.55
+analgetic               = 2, 0.55
+drug_coagulant          = 1, 0.44
+drug_sleepingpills      = 1, 0.40
+cocaine                 = 1, 0.44
+
+; --- AMMO ---
+; Russian common is reliable, NATO present but thinner
+ammo_9x18_fmj           = 8, 0.80
+ammo_9x18_ap            = 5, 0.60
+ammo_9x18_pmm           = 4, 0.50
+ammo_9x19_fmj           = 6, 0.65
+ammo_9x19_ap            = 4, 0.50
+ammo_5.45x39_fmj        = 8, 0.75
+ammo_5.45x39_ep         = 5, 0.60
+ammo_7.62x39_fmj        = 7, 0.70
+ammo_7.62x39_ap         = 4, 0.55
+ammo_7.62x25_p          = 5, 0.55
+ammo_7.62x25_ps         = 4, 0.50
+ammo_7.92x33_fmj        = 4, 0.44
+ammo_12x70_buck         = 6, 0.70
+ammo_12x76_zhekan       = 4, 0.55
+ammo_5.56x45_fmj        = 5, 0.44
+ammo_11.43x23_fmj       = 4, 0.38
+grenade_gd-05           = 2, 0.60
+grenade_smoke           = 3, 0.65
+
+; --- WEAPONS ---
+; Russian low tier — what stalkers passing through Darkscape carry
+wpn_pm                  = 1, 0.66
+wpn_fort                = 1, 0.60
+wpn_pb                  = 1, 0.55
+wpn_tt33                = 1, 0.44
+; NATO low — sharper penalty than typical loner
+wpn_beretta             = 1, 0.44
+wpn_walther             = 1, 0.38
+wpn_colt1911            = 1, 0.33
+wpn_usp                 = 1, 0.33
+; Shotguns
+wpn_bm16                = 1, 0.66
+wpn_toz34               = 1, 0.60
+wpn_toz34_obrez         = 1, 0.44
+wpn_mp133               = 1, 0.50
+; Russian rifles
+wpn_ak74u_old           = 1, 0.66
+wpn_ak74u               = 1, 0.55
+wpn_ppsh41              = 1, 0.50
+wpn_kiparis             = 1, 0.44
+wpn_sks                 = 1, 0.44
+wpn_mosin               = 1, 0.40
+; NATO rifles — lower probability
+wpn_mp5                 = 1, 0.40
+wpn_vz61                = 1, 0.33
+; Melee
+wpn_knife               = 1, 0.88
+wpn_knife2              = 1, 0.75
+
+; --- OUTFITS ---
+novice_outfit           = 1, 0.60
+stalker_outfit          = 1, 0.55
+stalker_bear_outfit     = 1, 0.44
+stalker_graphite_outfit = 1, 0.40
+nomad_outfit            = 1, 0.44
+helm_bandana            = 1, 0.66
+helm_cloth_mask         = 1, 0.60
+helm_respirator_old     = 1, 0.55
+helm_resp               = 1, 0.50
+helm_respirator         = 1, 0.44
+
+; --- GEAR ---
+detector_radio          = 1, 0.65
+detector_geiger         = 1, 0.55
+device_flashlight       = 1, 0.75
+itm_sleepbag            = 1, 0.60
+compression_bag         = 1, 0.50
+itm_backpack            = 1, 0.50
+lead_box                = 2, 0.60
+wpn_binoc_inv           = 1, 0.44
+swiss_knife             = 1, 0.55
+leatherman_tool         = 1, 0.50
+shovel_mili             = 1, 0.44
 
 
 [supplies_2]:supplies_1
-device_torch_nv_1		= 1, 1
-equ_small_pack          = 1, 1
-wpn_ak					= 1, 0.5
-wpn_aks					= 1, 0.5
-wpn_aks74				= 1, 0.5
-wpn_ak74				= 1, 0.5
-wpn_knife3				= 1, 1
-;wpn_axe					= 1, 1
-wpn_axe2            	= 1, 1
-nbc_outfit              = 1, 1
-trenchcoat_outfit		= 1, 1
-;wastelander_outfit		= 1, 1
-;travel_outfit 			= 1, 1
-helm_m40				= 1, 1
-helm_hardhat			= 1, 1
-;helm_m50				= 1, 1
+; Some trust. He digs out what he's been holding back.
+; Mid-tier Russian weapons start appearing at low probability.
+; Better medical, light armor, a few attachment options.
+; Still sparse — don't expect anything exotic.
+
+; --- FOOD ---
+meat_chimera            = 1, 0.33
+ration_ru               = 1, 0.38
+mre                     = 1, 0.35
+cigar1                  = 1, 0.30
+vodka_quality           = 1, 0.33
+
+; --- MEDICAL ---
+medkit_ai1              = 1, 0.50
+drug_booster            = 1, 0.50
+drug_antidot            = 1, 0.44
+adrenalin               = 1, 0.38
+salicidic_acid          = 1, 0.40
+antirad                 = 1, 0.44
+
+; --- AMMO ---
+ammo_5.45x39_ap         = 5, 0.50
+ammo_7.62x39_ap         = 4, 0.44
+ammo_9x19_pbp           = 3, 0.38
+ammo_7.62x54_7h1        = 3, 0.38
+ammo_7.62x51_fmj        = 4, 0.33
+ammo_vog-25             = 2, 0.44
+grenade_rgd5            = 2, 0.50
+
+; --- WEAPONS ---
+; Russian low tier fills out
+wpn_ak                  = 1, 0.50
+wpn_aks                 = 1, 0.50
+wpn_aks74               = 1, 0.44
+wpn_ak74                = 1, 0.40
+wpn_ppsh41_woodnew      = 1, 0.40
+wpn_ppsh41_rednew       = 1, 0.35
+wpn_svt40               = 1, 0.35
+wpn_sks_modern          = 1, 0.33
+; Shotguns
+wpn_bm16_full           = 1, 0.50
+wpn_toz34_custom        = 1, 0.44
+; NATO low fills out slightly
+wpn_mp5                 = 1, 0.44
+wpn_vz61_alt            = 1, 0.33
+; Melee
+wpn_knife3              = 1, 0.55
+wpn_axe2                = 1, 0.50
+
+; --- OUTFITS ---
+stalker_predator_outfit = 1, 0.38
+stalker_autumn_outfit   = 1, 0.35
+stalker_tigerstripe_outfit = 1, 0.33
+nbc_outfit              = 1, 0.33
+trenchcoat_outfit       = 1, 0.38
+helm_m40                = 1, 0.50
+helm_hardhat            = 1, 0.44
+helm_ppm88              = 1, 0.40
+
+; --- GEAR ---
+device_torch_nv_1       = 1, 0.44
+equ_small_pack          = 1, 0.55
+detector_simple         = 1, 0.44
+device_pda_1            = 1, 0.40
+
+; --- OUTFIT ATTACHMENTS ---
+af_plates               = 1, 0.35
+af_grid                 = 1, 0.33
+af_kevlar               = 1, 0.30
+
+; --- SCOPES ---
+wpn_addon_scope_po4x34  = 1, 0.44
+wpn_addon_scope_pu      = 1, 0.40
+1p29                    = 1, 0.38
+kobra                   = 1, 0.33
 
 
 [supplies_3]:supplies_2
-;device_torch_nv_2		= 1, 1
-equ_small_military_pack = 1, 1
-;device_pda_2			= 1, 1
-wpn_tt33				= 1, 0.65
-wpn_oc33				= 1, 0.65
-wpn_pm_custom			= 1, 0.65
-wpn_pb					= 1, 0.65
-wpn_sks_modern			= 1, 0.65
-wpn_svt40				= 1, 0.65
-wpn_ppsh41_woodnew      = 1, 0.65
-wpn_ppsh41_rednew       = 1, 0.65
-wpn_knife4				= 1, 1
-wpn_axe3            	= 1, 1
-light_loner_outfit      = 1, 1
-;helm_metro              = 1, 1
-helm_ranger					= 1, 1
+; Real trust. The best this operation can offer.
+; A few mid-tier weapons, better outfits, modest upgrade gear.
+; The ceiling is low — Darkscape doesn't see enough traffic for more than this.
+
+; --- MEDICAL ---
+medkit_army             = 1, 0.40
+drug_radioprotector     = 1, 0.35
+morphine                = 1, 0.35
+
+; --- AMMO ---
+ammo_9x39_pab9          = 4, 0.38
+ammo_7.62x54_ap         = 3, 0.38
+ammo_5.56x45_ap         = 3, 0.30
+ammo_7.62x51_ap         = 3, 0.28
+
+; --- WEAPONS ---
+; Mid tier Russian — rarely but possible
+wpn_ak74m               = 1, 0.38
+wpn_akm                 = 1, 0.38
+wpn_akms                = 1, 0.33
+wpn_ak74_old            = 1, 0.44
+wpn_pm_custom           = 1, 0.38
+wpn_pb_custom           = 1, 0.33
+wpn_tt33_modern         = 1, 0.30
+wpn_oc33                = 1, 0.28
+wpn_knife4              = 1, 0.44
+wpn_axe3                = 1, 0.38
+
+; --- OUTFITS ---
+light_loner_outfit      = 1, 0.38
+helm_ranger             = 1, 0.35
+helm_m50                = 1, 0.30
+
+; --- GEAR ---
+equ_small_military_pack = 1, 0.40
+
+; --- OUTFIT ATTACHMENTS ---
+af_camelbak             = 1, 0.28
+af_frames               = 1, 0.25

@@ -1,0 +1,99 @@
+--[[
+rax_actor_on_trade_patch
+Reenables actor_on_trade callback for the lua trade UI in 1.5.1/2/3
+20FEB2024
+This work is licensed under a Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Unported License
+Author: RavenAscendant
+--]]
+
+function ui_inventory.UIInventory:TMode_Sell()
+	self:Print(nil, "TMode_Sell")
+	
+	local npc = self:GetPartner()
+	if (not npc) then
+		return
+	end
+	
+	local cc = self.CC["actor_trade"]
+	if (not cc) then
+		return
+	end
+	
+	-- Calculate full price
+	local tot_cost = 0
+	for idx,ci in pairs(cc.cell) do
+		tot_cost = tot_cost + cc:GetCellCost(ci)
+	end
+	tot_cost = math.floor(tot_cost)
+	
+	-- Don't processed if NPC doesn't have enough money
+	if npc:money() < tot_cost then
+		self.message_box:InitMessageBox("message_box_ok")
+		self.message_box:SetText( game.translate_string("not_enough_money_partner") )
+		self.message_box:ShowDialog(true)
+		return
+	end
+	
+	-- Transfer items
+	for id,idx in pairs(cc.indx_id) do
+		local ci = cc:GetCell_ID(id)
+		if ci then
+			self:On_Item_Exchange(db.actor, npc, level.object_by_id(id))
+			SendScriptCallback("actor_on_trade",level.object_by_id(id),true,cc:GetCellCost(ci))
+
+		end
+	end
+	
+	-- Transfer money
+	db.actor:give_money(tot_cost)
+	npc:give_money(-tot_cost)
+	
+	-- Update UI
+	self.update_info = true
+end
+
+function ui_inventory.UIInventory:TMode_Buy()
+	self:Print(nil, "TMode_Buy")
+	
+	local npc = self:GetPartner()
+	if (not npc) then
+		return
+	end
+	
+	local cc = self.CC["npc_trade"]
+	if (not cc) then
+		return
+	end
+	
+	-- Calculate full price
+	local tot_cost = 0
+	for idx,ci in pairs(cc.cell) do
+		tot_cost = tot_cost + cc:GetCellCost(ci)
+	end
+	tot_cost = math.floor(tot_cost)
+	
+	-- Don't processed if player doesn't have enough money
+	if db.actor:money() < tot_cost then
+		self.message_box:InitMessageBox("message_box_ok")
+		self.message_box:SetText( game.translate_string("not_enough_money_actor") )
+		self.message_box:ShowDialog(true)
+		return
+	end
+	
+	-- Transfer items
+	for id,idx in pairs(cc.indx_id) do
+		local ci = cc:GetCell_ID(id)
+		if ci then
+			self:On_Item_Exchange(npc, db.actor, level.object_by_id(id))
+			SendScriptCallback("actor_on_trade",level.object_by_id(id),false,cc:GetCellCost(ci))
+		end
+	end
+	
+	-- Transfer money
+	npc:give_money(tot_cost)
+	db.actor:give_money(-tot_cost)
+	
+	-- Update UI
+	self.update_info = true
+end
+
