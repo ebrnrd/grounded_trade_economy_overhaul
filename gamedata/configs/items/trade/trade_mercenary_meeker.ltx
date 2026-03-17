@@ -1,15 +1,20 @@
 #include "presets\trade_discounts.ltx"
 
+;EDITED GROUNDED TRADER OVERHAUL
+
 [trader]
 buy_condition                            = trade_generic_buy
 sell_condition                           = trade_generic_sell
 buy_supplies                             = {+task_find_inf_inx_8_mlr_2} supplies_2, supplies_1
-buy_item_condition_factor                = 0.50
-buy_item_exponent = 2.25
-sell_item_exponent = 0.6
+buy_item_condition_factor                = 0.45
+buy_item_exponent = 2.0
+sell_item_exponent = 0.8
+
+sell_item_min_condition = 0.5
+sell_item_max_condition = 0.98
 
 price_profile                            = default
-discounts = discount_supplier
+discounts = discount_killer
 
 [trade_generic_sell]
 af_vyvert = 1, 2
@@ -403,73 +408,143 @@ wpn_rpg7_missile                         = 1, 2
 
 
 [supplies_1]
-af_vyvert = 1, 1
-af_gravi = 1, 1
-af_dummy_glassbeads = 1, 1
-af_soul = 1, 1
-af_glass = 1, 0.5
-af_dummy_battery = 1, 1
-af_ice = 1, 0.3
+; Baseline resupply for Griffin's operation.
+; Both ecosystems at mid-high tier from the start — this is not a rookie trader.
 
-ammo_5.56x45_ss190 = 5, 1
-ammo_5.56x45_ap = 3, 0.6
-ammo_5.45x39_fmj = 5, 1
-ammo_5.45x39_ap = 3, 0.7
-ammo_12x76_zhekan = 5, 0.7
-ammo_12x70_buck = 5, 1
-ammo_11.43x23_fmj = 5, 1
-ammo_11.43x23_hydro = 3, 0.5
-grenade_f1 = 5, 1
-ammo_9x39_pab9 = 5, 1
-ammo_9x39_ap = 3, 0.7
-ammo_pkm_100 = 3, 0.7
-ammo_vog-25 = 5, 1
-ammo_m209   = 5, 1
-ammo_og-7b = 3, 0.5
-ammo_7.62x54_7h1 = 6, 1
+; --- MEDICAL ---
+bandage                 = 6, 1.00
+jgut                    = 4, 0.88
+medkit                  = 4, 0.85
+medkit_army             = 3, 0.80
+medkit_ai1              = 2, 0.72
+medkit_ai2              = 2, 0.65
+antirad                 = 4, 0.88
+antirad_kalium          = 3, 0.80
+drug_booster            = 3, 0.85
+drug_coagulant          = 2, 0.80
+drug_antidot            = 2, 0.80
+drug_psy_blockade       = 2, 0.75
+drug_radioprotector     = 3, 0.82
+drug_anabiotic          = 2, 0.60
+salicidic_acid          = 2, 0.72
+morphine                = 2, 0.70
+cocaine                 = 2, 0.68
+adrenalin               = 2, 0.75
 
-wpn_abakan = 1, 1
-wpn_g36 = 1, 0.7
-wpn_groza = 1, 1
-wpn_lr300 = 1, 1
-wpn_pkm = 1, 0.6
-wpn_protecta = 1, 0.7
-wpn_spas12 = 1, 1
-wpn_svd = 1, 1
+; --- AMMO ---
+; Full spectrum — Griffin runs multi-platform operations
+ammo_5.56x45_ss190      = 12, 0.88
+ammo_5.56x45_ap         = 10, 0.82
+ammo_9x39_pab9          = 12, 0.88
+ammo_9x39_ap            = 8, 0.80
+ammo_5.45x39_fmj        = 12, 0.82
+ammo_5.45x39_ap         = 8, 0.75
+ammo_11.43x23_fmj       = 10, 0.80
+ammo_11.43x23_hydro     = 7, 0.72
+ammo_9x19_fmj           = 10, 0.80
+ammo_9x19_ap            = 7, 0.72
+ammo_12x70_buck         = 8, 0.75
+ammo_12x76_zhekan       = 6, 0.68
+ammo_7.62x54_7h1        = 6, 0.80
+ammo_7.62x54_ap         = 5, 0.75
+ammo_7.62x54_7h14       = 4, 0.68
+ammo_vog-25             = 6, 0.82
+ammo_m209               = 5, 0.80
+ammo_og-7b              = 3, 0.72
+grenade_f1              = 5, 0.88
+grenade_rgd5            = 4, 0.82
+grenade_smoke           = 5, 0.85
 
-itm_sleepbag = 1, 1
-itm_backpack = 3, 1
+; --- WEAPONS ---
+; Mid and high tier from both ecosystems
+wpn_abakan              = 1, 0.72
+wpn_groza               = 1, 0.72
+wpn_lr300               = 1, 0.72
+wpn_spas12              = 1, 0.70
+wpn_protecta            = 1, 0.68
+wpn_svd                 = 1, 0.75
+wpn_pkm                 = 1, 0.68
 
-bread = 3, 1
-kolbasa = 2, 1
-conserva = 2, 1
-vodka = 5, 1
-energy_drink = 3, 1
-bandage = 5, 1
-antirad = 4, 1
-medkit = 3, 1
-medkit_army = 2, 1
-medkit_scientic = 1, 1
-drug_booster = 2, 1
-drug_coagulant = 2, 1
-drug_psy_blockade = 1, 1
-drug_antidot = 2, 1
-drug_radioprotector = 3, 1
-drug_anabiotic = 2, 0.5
-military_outfit = 1, 1
-monolith_outfit = 1, 1
-;exo_outfit = 1, 1
-;monolith_exo_outfit = 1, 0.2
-helm_battle = 1, 1
-scientific_outfit = 1, 1
-monolith_scientific_outfit = 1, 0.2
+; --- GEAR ---
+itm_sleepbag            = 1, 0.75
+itm_backpack            = 3, 0.88
+detector_advanced       = 1, 0.65
+
+; --- OUTFIT ATTACHMENTS ---
+af_surge                = 1, 0.75
+af_grid                 = 2, 0.75
+af_frames               = 2, 0.75
+af_freon                = 1, 0.72
+af_cooler               = 1, 0.72
+af_kevlar               = 2, 0.78
+af_plates               = 2, 0.78
+af_camelbak             = 1, 0.72
+af_iam                  = 2, 0.75
+af_aac                  = 2, 0.70
+af_aam                  = 1, 0.68
+
+; --- OUTFITS ---
+; Military and exo-adjacent — what Griffin's team uses
+military_outfit         = 1, 0.72
+scientific_outfit       = 1, 0.65
+monolith_outfit         = 1, 0.58
+helm_battle             = 1, 0.75
+
+; --- REPAIR ---
+gun_oil                 = 3, 0.88
+gun_oil_ru              = 3, 0.85
+cleaning_kit_r5         = 2, 0.80
+cleaning_kit_r7         = 2, 0.75
+toolkit_p               = 2, 0.80
+toolkit_s               = 1, 0.72
+medium_repair_kit       = 2, 0.80
+heavy_repair_kit        = 1, 0.68
+glue_a                  = 2, 0.82
+sewing_kit_a            = 2, 0.78
+helmet_repair_kit       = 2, 0.78
+
 
 [supplies_2]:supplies_1
-detector_elite = 1, 0.25
-ammo_gauss = 3, 0.3
-wpn_desert_eagle = 1, 0.5
-wpn_fn2000 = 1, 0.5
-wpn_rpg7 = 1, 0.5
-wpn_svu = 1, 1
-wpn_val = 1, 0.7
-wpn_vintorez = 1, 0.7
+; Quest unlocked. The serious stock comes out.
+; Connection to Strider's group means a few unusual items surface.
+
+; --- MEDICAL ---
+medkit_ai3              = 2, 0.72
+medkit_scientic         = 1, 0.60
+drug_anabiotic          = 3, 0.72
+survival_kit            = 1, 0.60
+stimpack_army           = 2, 0.72
+stimpack_scientic       = 1, 0.60
+
+; --- AMMO ---
+ammo_338_lapua_match    = 3, 0.72
+ammo_12.7x55_fmj        = 4, 0.72
+ammo_12.7x55_ap         = 3, 0.65
+
+; --- WEAPONS ---
+; High tier, including unusual items via Strider connection
+wpn_desert_eagle        = 1, 0.60
+wpn_fn2000              = 1, 0.65
+wpn_rpg7                = 1, 0.65
+wpn_svu                 = 1, 0.72
+wpn_val                 = 1, 0.75
+wpn_vintorez            = 1, 0.70
+
+; --- GEAR ---
+detector_elite          = 1, 0.55
+device_pda_3            = 1, 0.55
+device_torch_nv_3       = 1, 0.60
+equ_military_pack       = 1, 0.72
+
+; --- OUTFIT ATTACHMENTS (UPGRADED) ---
+af_freon_up             = 1, 0.60
+af_frames_up            = 1, 0.60
+af_grid_up              = 1, 0.58
+af_surge_up             = 1, 0.58
+af_camelbak_up          = 1, 0.55
+af_cooler_up            = 1, 0.44
+
+; --- REPAIR ---
+toolkit_r5              = 1, 0.68
+toolkit_r7              = 1, 0.60
+exo_repair_kit          = 1, 0.55

@@ -1,114 +1,226 @@
 #include "presets\trade_discounts.ltx"
 #include "presets\trade_presets.ltx"
 
+;EDITED GROUNDED TRADER OVERHAUL
+
 [trader]
 buy_condition =  trade_generic_buy
 sell_condition = trade_generic_sell
 buy_supplies = {=actor_goodwill_ge(ecolog:1000)} supplies_5, {=heavy_pockets_functor()} supplies_5, {=actor_goodwill_ge(ecolog:800)} supplies_4, {=actor_goodwill_ge(ecolog:600)} supplies_3, {=actor_goodwill_ge(ecolog:400)} supplies_2,  supplies_1
-buy_item_condition_factor = 0.60
+buy_item_condition_factor = 0.70
 buy_item_exponent = 2.25
 sell_item_exponent = 0.7
 
-discounts = discount_scientist
+sell_item_min_condition = 0.7
+sell_item_max_condition = 0.98
+
+discounts = discount_ecolog
 
 [trade_generic_buy]:scientist,artefacts_h
 
 [trade_generic_sell]:scientist,artefacts_h
 
 [supplies_1]:common_stock
+; The lab baseline. What Sakharov keeps stocked for field teams at all times.
+; Medical at research-grade quantities — better than any other trader from tier 1.
+; No weapons beyond basics — field guards bring their own.
 
-detector_radio             = 1, 1
-detector_geiger             = 1, 1
-device_pda_1				= 1, 1
-device_torch_dummy 			= 1, 1
-device_torch_nv_1 		= 1, 1
-batteries_dead			= 6, 1
+; --- BASICS ---
+bolts_pack              = 3, 0.88
+batteries_dead          = 6, 0.80
+device_torch_dummy      = 1, 0.75
+akvatab                 = 4, 0.88
 
-bolts_pack				= 2, 1
-medkit					= 3, 1
-medkit_ai1				= 2, 1
-medkit_ai2				= 2, 1
-medkit_ai3				= 2, 1
-antirad_kalium			= 2, 1
-antirad_cystamine		= 2, 1
-antibio_sulfad			= 2, 1
-antiemetic				= 2, 1
-antibio_chlor			= 2, 1
-jgut					= 2, 1
-yadylin					= 2, 1
-analgetic				= 2, 1
-medkit_scientic			= 2, 1
-bandage					= 5, 1
-antirad					= 2, 1
-stimpack_army			= 3, 1
-stimpack_scientic		= 2, 1
-survival_kit			= 2, 1
-salicidic_acid			= 2, 1
-morphine				= 2, 1
-tetanus					= 3, 1
-adrenalin				= 3, 1
-drug_booster			= 3, 1
-drug_coagulant		= 3, 1
-drug_antidot			= 3, 1
-drug_radioprotector	= 3, 1
-drug_psy_blockade		= 3, 1
-drug_sleepingpills	= 3, 1
+; --- FOOD ---
+; Scientific rations — the lab is properly supplied
+ration_ru               = 4, 0.88
+mre                     = 3, 0.80
+conserva                = 3, 0.75
+water_drink             = 5, 1.00
+mineral_water           = 3, 0.80
+energy_drink            = 3, 0.75
+caffeine                = 3, 0.80
 
-;Предметы
-af_camelbak				= 1, 1
-af_cooler				= 1, 1
-af_surge				= 1, 1
-af_freon                = 1, 1
-af_frames               = 1, 1
-af_grid                 = 1, 1
-af_kevlar				= 2, 1
-af_plates				= 2, 1
-af_aac					= 2, 1
-af_aam					= 2, 1
-lead_box				= 3, 1
-ecolog_guard_outfit     = 1, 1
-ecolog_outfit_orange    = 1, 1
-helm_respirator         = 1, 1
-helm_m40                = 1, 1
-detector_simple         = 1, 1
-detector_advanced       = 1, 1
+; --- MEDICAL ---
+; The best medical stock in the Zone from tier 1 — this is their identity
+bandage                 = 6, 1.00
+jgut                    = 4, 0.88
+medkit                  = 4, 0.88
+medkit_ai1              = 3, 0.82
+medkit_ai2              = 3, 0.78
+medkit_ai3              = 2, 0.70
+medkit_scientic         = 2, 0.72
+antirad_kalium          = 4, 0.88
+antirad_cystamine       = 3, 0.80
+antirad                 = 3, 0.82
+antibio_chlor           = 4, 0.88
+antibio_sulfad          = 3, 0.80
+antiemetic              = 3, 0.75
+tetanus                 = 3, 0.80
+glucose                 = 3, 0.80
+glucose_s               = 2, 0.72
+yadylin                 = 3, 0.80
+analgetic               = 3, 0.80
+adrenalin               = 3, 0.80
+salicidic_acid          = 2, 0.72
+morphine                = 2, 0.70
+drug_booster            = 3, 0.85
+drug_coagulant          = 3, 0.82
+drug_antidot            = 3, 0.80
+drug_radioprotector     = 3, 0.85
+drug_psy_blockade       = 3, 0.82
+drug_sleepingpills      = 3, 0.78
+stimpack_army           = 3, 0.80
+stimpack_scientic       = 2, 0.72
+survival_kit            = 2, 0.68
+
+; --- WEAPONS ---
+; Minimal — basic sidearms and shotguns for field defense against mutants
+wpn_pm                  = 1, 0.50
+wpn_fort                = 1, 0.44
+wpn_pb                  = 1, 0.40
+wpn_bm16                = 1, 0.55
+wpn_toz34               = 1, 0.50
+wpn_mp133               = 1, 0.44
+wpn_knife               = 1, 0.75
+wpn_knife2              = 1, 0.60
+; Grenades — mutant clearing
+grenade_rgd5            = 2, 0.60
+grenade_smoke           = 3, 0.70
+
+; --- AMMO ---
+; What their guards shoot — basic calibers only
+ammo_9x18_fmj           = 8, 0.75
+ammo_9x18_ap            = 5, 0.60
+ammo_5.45x39_fmj        = 8, 0.72
+ammo_12x70_buck         = 8, 0.75
+ammo_12x76_zhekan       = 5, 0.62
+
+; --- OUTFITS ---
+ecolog_guard_outfit     = 1, 0.72
+ecolog_outfit_orange    = 1, 0.68
+helm_respirator         = 1, 0.70
+helm_m40                = 1, 0.65
+
+; --- GEAR ---
+; Scientists invest heavily in detection and measurement equipment
+detector_radio          = 1, 0.82
+detector_geiger         = 1, 0.82
+detector_simple         = 1, 0.78
+detector_advanced       = 1, 0.75
+device_torch_nv_1       = 1, 0.75
+device_pda_1            = 1, 0.72
+lead_box                = 3, 0.82
+
+; --- OUTFIT ATTACHMENTS ---
+; Field researchers need these — well stocked from tier 1
+af_camelbak             = 1, 0.78
+af_cooler               = 1, 0.75
+af_surge                = 1, 0.75
+af_freon                = 1, 0.72
+af_frames               = 1, 0.72
+af_grid                 = 1, 0.72
+af_kevlar               = 2, 0.80
+af_plates               = 2, 0.80
+af_aac                  = 2, 0.75
+af_aam                  = 2, 0.72
+
 
 [supplies_2]:supplies_1
-equ_small_pack          = 1, 1
+; Some goodwill. Better outfits, upgraded detection gear, slightly broader weapons.
 
-helm_protective         = 1, 1
-ecolog_outfit_green     = 1, 1
-detector_elite          = 2, 1
+; --- MEDICAL UPGRADE ---
+drug_anabiotic          = 2, 0.65
+
+; --- WEAPONS ---
+wpn_ak74u               = 1, 0.44
+wpn_aks74               = 1, 0.40
+wpn_ak74                = 1, 0.38
+wpn_knife3              = 1, 0.55
+
+; --- AMMO ---
+ammo_9x19_fmj           = 6, 0.60
+ammo_7.62x39_fmj        = 5, 0.55
+
+; --- OUTFITS ---
+ecolog_outfit_green     = 1, 0.68
+helm_protective         = 1, 0.65
+
+; --- GEAR ---
+detector_elite          = 2, 0.72
+equ_small_pack          = 1, 0.72
+
 
 [supplies_3]:supplies_2
-device_torch_nv_2		= 1, 1
-equ_small_military_pack = 1, 1
-device_pda_2			= 1, 1
+; Trusted. Scientific grade equipment opens up.
 
-drug_anabiotic			= 2, 1
-ecolog_outfit_white		= 1, 1
+; --- MEDICAL ---
+; Already at top — just better quantities
+medkit_ai3              = 3, 0.82
+stimpack_scientic       = 3, 0.78
+
+; --- WEAPONS ---
+; A VSS starts appearing — deep Zone fieldwork requires serious protection
+wpn_vss                 = 1, 0.25
+wpn_ak74m               = 1, 0.33
+wpn_knife4              = 1, 0.44
+
+; --- OUTFITS ---
+ecolog_outfit_white     = 1, 0.65
+
+; --- GEAR ---
+device_torch_nv_2       = 1, 0.70
+device_pda_2            = 1, 0.65
+equ_small_military_pack = 1, 0.72
+
+; --- ARTIFACTS ---
+; Junk surplus — catalogued and deemed scientifically uninteresting
+af_dummy_battery        = 1, 0.20
+af_dummy_glassbeads     = 1, 0.18
+af_dummy_spring         = 1, 0.18
+af_dummy_dummy          = 1, 0.15
+
 
 [supplies_4]:supplies_3
-device_torch_nv_3		= 1, 1
-equ_military_pack       = 1, 1
-device_pda_3			= 1, 1
+; Deep trust. The serious scientific inventory.
 
-ecolog_outfit_blue		= 1, 1
-ecolog_outfit_red		= 1, 1
-ecolog_outfit_yello		= 1, 1
-scientific_outfit		= 1, 1
-ecolog_proto_exo_outfit = 1, 1
+; --- WEAPONS ---
+wpn_val                 = 1, 0.20
+wpn_vintorez            = 1, 0.18
+wpn_knife5              = 1, 0.40
 
-af_cooler_up            = 1, 1
-af_camelbak_up          = 1, 1
-af_freon_up             = 1, 1
-af_frames_up            = 1, 1
-af_grid_up              = 1, 1
-af_surge_up             = 1, 1
+; --- OUTFITS ---
+ecolog_outfit_blue      = 1, 0.60
+ecolog_outfit_red       = 1, 0.58
+ecolog_outfit_yello     = 1, 0.55
+scientific_outfit       = 1, 0.62
+ecolog_proto_exo_outfit = 1, 0.50
+
+; --- GEAR ---
+device_torch_nv_3       = 1, 0.68
+device_pda_3            = 1, 0.62
+equ_military_pack       = 1, 0.68
+
+; --- OUTFIT ATTACHMENTS (UPGRADED) ---
+af_cooler_up            = 1, 0.55
+af_camelbak_up          = 1, 0.55
+af_freon_up             = 1, 0.52
+af_frames_up            = 1, 0.52
+af_grid_up              = 1, 0.50
+af_surge_up             = 1, 0.50
+
+; --- ARTIFACTS ---
+; A few basic ones — came in from contract stalkers, no scientific value
+af_electra_flash        = 1, 0.15
+af_ameba_slug           = 1, 0.12
+af_drops                = 1, 0.12
+af_dummy_dummy          = 1, 0.18
+af_dummy_spring         = 1, 0.18
+
 
 [supplies_5]:supplies_4
+; Maximum trust. What the institute can source.
 
-equ_tourist_pack      = 1, 1
-
-detector_scientific		= 1, 1
-ecolog_exo_outfit		= 1, 1
+ecolog_exo_outfit       = 1, 0.22
+equ_tourist_pack        = 1, 0.28
+detector_scientific     = 1, 0.35

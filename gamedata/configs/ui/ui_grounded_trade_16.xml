@@ -1,13 +1,13 @@
 <w>
 
-    <!-- Sell discounts: trader paying more for player items — left side, trader column -->
-    <grounded_sell_discounts x="80" y="30" width="220" height="300" check_mode="0">
+    <!-- Sell discounts -->
+    <grounded_sell_discounts x="100" y="30" width="220" height="300" check_mode="0">
         <text x="0" y="0" complex_mode="1" align="l" font="letterica16"></text>
         <texture r="0" g="0" b="0" a="0">none.dds</texture>
     </grounded_sell_discounts>
 
-    <!-- Buy discounts: player paying less for trader items — right side, player column -->
-    <grounded_buy_discounts x="715" y="30" width="220" height="300" check_mode="0">
+    <!-- Buy bonuses -->
+    <grounded_buy_discounts x="740" y="30" width="220" height="300" check_mode="0">
         <text x="0" y="0" complex_mode="1" align="l" font="letterica16"></text>
         <texture r="0" g="0" b="0" a="0">none.dds</texture>
     </grounded_buy_discounts>

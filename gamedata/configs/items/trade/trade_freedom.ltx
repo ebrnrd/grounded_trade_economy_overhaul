@@ -1,6 +1,8 @@
 #include "presets\trade_discounts.ltx"
 #include "presets\trade_presets.ltx"
 
+;EDITED GROUNDED TRADER OVERHAUL
+
 [trader]
 buy_condition =  trade_generic_buy
 sell_condition = trade_generic_sell
@@ -12,7 +14,7 @@ sell_item_exponent = 0.55
 sell_item_min_condition = 0.5
 sell_item_max_condition = 0.98
 
-discounts = discount_supplier
+discounts = discount_freedom
 
 [trade_generic_buy]:trasher
 itm_drugkit           = 5.0,5.0
@@ -21,364 +23,459 @@ itm_drugkit           = 5.0,5.0
 
 
 [supplies_1]:common_stock
-detector_radio             = 1, 1
-detector_geiger             = 1, 1
-device_pda_1				= 1, 1
-bolts_pack				= 2, 1
+; Freedom. The Zone is their home and they're comfortable in it.
+; NATO ecosystem from the start — this is their supply chain.
+; Russian kit present but lower probability — they use it but don't prioritize it.
+; Food, drugs, and consumables are generous — loose faction with a communal culture.
+; Real variance across weapons and gear — Freedom scrounges as much as it stocks.
 
-itm_tent                = 1, 1
+; --- BASICS ---
+bolts_pack              = 3, 0.88
+box_matches             = 4, 0.88
+batteries_dead          = 5, 0.75
+rope                    = 1, 0.66
+tarpaulin               = 1, 0.60
+synthrope               = 1, 0.55
+kit_hunt                = 1, 0.55
 
-;items
-batteries_dead			= 6, 1
-itm_sleepbag			= 1, 1
-compression_bag			= 1, 1
-itm_actor_backpack		= 1, 1
-itm_backpack			= 1, 1
+; --- FOOD ---
+; Freedom eats well and shares — wide variety from the start
+meat_tushkano           = 3, 0.80
+meat_dog                = 3, 0.75
+meat_boar               = 3, 0.75
+meat_flesh              = 2, 0.70
+meat_pseudodog          = 2, 0.65
+meat_snork              = 1, 0.55
+meat_chimera            = 1, 0.33
+bread                   = 3, 0.75
+breadold                = 3, 0.66
+kolbasa                 = 3, 0.70
+conserva                = 3, 0.70
+tomato                  = 2, 0.60
+sausage                 = 2, 0.60
+corn                    = 2, 0.55
+beans                   = 2, 0.55
+chili                   = 2, 0.55
+salmon                  = 2, 0.50
+raisins                 = 2, 0.50
+chocolate               = 2, 0.50
+nuts                    = 2, 0.55
+mint                    = 3, 0.70
+water_drink             = 4, 0.88
+mineral_water           = 3, 0.75
+beer                    = 4, 0.88
+vodka                   = 3, 0.75
+vodka2                  = 3, 0.70
+vodka_quality           = 2, 0.60
+energy_drink            = 3, 0.70
+flask                   = 3, 0.70
+caffeine                = 2, 0.60
+tobacco                 = 3, 0.75
+cigarettes              = 4, 0.80
+cigarettes_russian      = 3, 0.70
+cigarettes_lucky        = 2, 0.55
+hand_rolling_tobacco    = 2, 0.65
+cigar1                  = 2, 0.55
+cigar2                  = 2, 0.50
+cigar3                  = 1, 0.44
+cigar                   = 1, 0.40
+joint                   = 3, 0.80
+marijuana               = 3, 0.75
 
-device_flashlight		= 1, 1
-device_torch_dummy		= 1, 1
+; --- COOKING ---
+cooking                 = 3, 0.88
+fieldcooker             = 1, 0.60
+kerosene                = 2, 0.75
+charcoal                = 2, 0.75
+explo_balon_gas         = 1, 0.65
+explo_jerrycan_fuel     = 1, 0.60
 
-;misc
-porn					= 1, 1
-shovel_mili				= 1, 1
-grooming				= 1, 1
-beadspread				= 1, 1
-mirror					= 1, 1
-kit_hunt				= 1, 1
-tarpaulin				= 1, 1
-rope					= 1, 1
-synthrope				= 1, 1
-cutlery					= 1, 1
+; --- MEDICAL ---
+; Freedom keeps good medical stock — they take Zone risks seriously
+bandage                 = 5, 0.88
+jgut                    = 3, 0.75
+medkit                  = 3, 0.75
+medkit_ai1              = 2, 0.60
+tetanus                 = 2, 0.65
+glucose                 = 3, 0.70
+glucose_s               = 2, 0.60
+antirad_kalium          = 3, 0.80
+antirad_cystamine       = 2, 0.65
+antibio_chlor           = 3, 0.75
+antibio_sulfad          = 2, 0.65
+antiemetic              = 2, 0.60
+akvatab                 = 3, 0.75
+yadylin                 = 2, 0.65
+analgetic               = 2, 0.65
+drug_coagulant          = 2, 0.60
+drug_booster            = 2, 0.60
+drug_antidot            = 1, 0.55
+drug_psy_blockade       = 1, 0.50
+drug_sleepingpills      = 1, 0.50
+drug_radioprotector     = 1, 0.50
+; Freedom doesn't judge — chemical drugs available from tier 1
+cocaine                 = 2, 0.65
+salicidic_acid          = 2, 0.65
+morphine                = 2, 0.60
 
-;еда
-meat_tushkano			= 3, 1
-meat_dog				= 3, 1
-meat_pseudodog			= 3, 1
-meat_flesh				= 3, 1
-meat_boar				= 3, 1
-meat_snork				= 1, 1
-meat_bloodsucker		= 2, 1
-meat_chimera			= 1, 1
-bread					= 3, 1
-breadold				= 4, 1
-kolbasa					= 3, 1
-conserva				= 3, 1
-tomato					= 2, 1
-sausage					= 2, 1
-corn					= 2, 1
-beans					= 2, 1
-chili					= 2, 1
-salmon					= 2, 1
-raisins					= 2, 1
-chocolate				= 2, 1
-nuts					= 2, 1
-mint					= 3, 1
-energy_drink			= 3, 1
-water_drink				= 3, 1
-beer					= 3, 1
-vodka					= 3, 1
-vodka2					= 3, 1
-vodka_quality			= 3, 1
-cocaine					= 2, 1
-salicidic_acid			= 2, 1
-morphine				= 2, 1
-cigarettes 				= 3, 1
-cigar1 					= 2, 1
-cigar2 					= 2, 1
-cigar3 					= 2, 1
-joint					= 2, 1
-marijuana				= 2, 1
-tobacco					= 3, 1
-flask					= 3, 1
-mineral_water			= 3, 1
-caffeine				= 3, 1
-hand_rolling_tobacco	= 3, 1
-cigar					= 1, 1
-cigarettes_lucky		= 3, 1
-cigarettes_russian		= 3, 1
+; --- AMMO ---
+; NATO is primary — 5.56 and 7.62x51 at military quantities
+ammo_5.56x45_fmj        = 16, 0.88
+ammo_5.56x45_ss190      = 12, 0.80
+ammo_5.56x45_ap         = 10, 0.75
+ammo_9x19_fmj           = 12, 0.80
+ammo_9x19_ap            = 9, 0.72
+ammo_9x19_pbp           = 7, 0.65
+ammo_11.43x23_fmj       = 10, 0.75
+ammo_11.43x23_hydro     = 7, 0.65
+ammo_7.62x51_fmj        = 10, 0.80
+ammo_7.62x51_ap         = 7, 0.70
+ammo_12x70_buck         = 10, 0.75
+ammo_12x76_zhekan       = 7, 0.65
+ammo_357_hp_mag         = 4, 0.55
+ammo_magnum_300         = 4, 0.44
+ammo_5.7x28_ss190       = 5, 0.55
+ammo_5.7x28_ss195       = 4, 0.50
+; Russian ammo present but secondary
+ammo_9x18_fmj           = 8, 0.60
+ammo_9x18_ap            = 5, 0.50
+ammo_5.45x39_fmj        = 8, 0.60
+ammo_5.45x39_ep         = 5, 0.50
+ammo_7.62x39_fmj        = 6, 0.55
+ammo_7.62x39_ap         = 4, 0.44
+ammo_7.62x25_p          = 4, 0.44
+ammo_7.92x33_fmj        = 3, 0.40
+grenade_rgd5            = 3, 0.70
+grenade_f1              = 2, 0.60
+grenade_smoke           = 3, 0.72
+grenade_gd-05           = 2, 0.60
+ammo_vog-25             = 3, 0.60
+ammo_og-7b              = 2, 0.55
+ammo_m209               = 2, 0.55
 
-;ћедикаменты
-bandage					= 4, 1
-survival_kit			= 1, 1
-medkit					= 3, 1
-medkit_army				= 2, 1
-medkit_scientic			= 2, 1
-stimpack				= 2, 1
-stimpack_army			= 2, 1
-stimpack_scientic		= 2, 1
-antirad					= 2, 1
-salicidic_acid			= 2, 1
-morphine				= 2, 1
-box_matches			= 4, 1
+; --- WEAPONS ---
+; NATO low tier — the everyday Freedom sidearm
+wpn_beretta             = 1, 0.72
+wpn_walther             = 1, 0.65
+wpn_usp                 = 1, 0.65
+wpn_sig220              = 1, 0.60
+wpn_colt1911            = 1, 0.60
+wpn_hpsa                = 1, 0.60
+wpn_glock               = 1, 0.55
+wpn_desert_eagle        = 1, 0.44
+; Russian pistols — accepted, lower probability
+wpn_pm                  = 1, 0.50
+wpn_fort                = 1, 0.44
+; NATO rifles — low and mid tier from the start
+wpn_mp5                 = 1, 0.65
+wpn_mp5sd               = 1, 0.60
+wpn_vz61                = 1, 0.60
+wpn_ak74u               = 1, 0.55
+; NATO shotguns
+wpn_mossberg590         = 1, 0.65
+wpn_wincheaster1300     = 1, 0.60
+wpn_protecta            = 1, 0.55
+wpn_spas12              = 1, 0.50
+; Melee
+wpn_knife               = 1, 1.00
+wpn_knife2              = 1, 0.88
+; Explosives — Freedom stocks these liberally
+mine_new                = 4, 0.88
+ied_new                 = 4, 0.80
+ied_rpg_new             = 3, 0.70
 
-;Ѕустеры
-drug_booster			= 2, 1
-drug_coagulant		= 1, 1
-drug_antidot			= 1, 1
-drug_radioprotector	= 1, 1
-drug_psy_blockade		= 1, 1
-drug_sleepingpills	= 1, 1
+; --- OUTFITS ---
+svoboda_light_outfit    = 1, 0.70
+helm_rp_bala            = 1, 0.75
+helm_cloth_mask         = 1, 0.65
+helm_respirator_gp5     = 1, 0.60
+helm_ppm88              = 1, 0.55
+helm_ach7               = 1, 0.55
+lead_box                = 3, 0.75
 
-;ќружие                 
-wpn_beretta             = 1, 0.88
-wpn_colt1911            = 1, 0.88
-wpn_desert_eagle   = 1, 0.88
-wpn_hpsa                = 1, 0.88
-wpn_hpsa           = 1, 0.88
-wpn_sig220         = 1, 0.88
-wpn_usp            = 1, 0.88
-wpn_walther        = 1, 0.88
-wpn_aug                 = 1, 0.88
-wpn_mossberg590            = 1, 0.88
-wpn_protecta       = 1, 0.88
-wpn_spas12         = 1, 0.88
-wpn_wincheaster1300     = 1, 0.88
-wpn_mp5                 = 1, 0.88
-wpn_vz61            = 1, 0.88
-wpn_mp5sd               = 1, 0.88
-wpn_ak74u       = 1, 0.88
-;wpn_famas3             = 1, 0.5
+; --- GEAR ---
+detector_radio          = 1, 0.75
+detector_geiger         = 1, 0.70
+detector_simple         = 1, 0.65
+device_flashlight       = 1, 0.88
+device_pda_1            = 1, 0.65
+itm_sleepbag            = 1, 0.70
+compression_bag         = 1, 0.65
+itm_backpack            = 1, 0.65
+itm_tent                = 1, 0.55
+wpn_binoc_inv           = 1, 0.65
 
-;misc                   = 1, 1
-wpn_knife               = 1, 1
-wpn_knife2              = 1, 1
-mine_new                    = 5, 1
-ied_rpg_new                 = 5, 1
-ied_new                     = 5, 1
-wpn_binoc_inv           = 1, 1
+; --- SILENCERS ---
+wpn_sil_9mm             = 1, 0.70
+wpn_sil_45              = 1, 0.70
+wpn_sil_nato            = 1, 0.65
+wpn_sil_gemtech         = 1, 0.60
+wpn_sil_pbs1            = 1, 0.55
+wpn_sil_pbs4            = 1, 0.50
+wpn_sil_tgp-a           = 1, 0.50
+wpn_sil_aps             = 1, 0.44
+wpn_sil_6p9             = 1, 0.44
+wpn_sil_kzrzp           = 1, 0.44
+wpn_sil_atg             = 1, 0.40
 
-;Ѕроники
-helm_rp_bala            = 1, 1
-helm_cloth_mask			= 1, 1
-helm_respirator_old     = 1, 1
-helm_respirator_gp5     = 1, 1
-helm_ppm88				= 1, 1
-svoboda_light_outfit	= 1, 1
-lead_box				= 3, 1
-helm_ach7				= 1, 1
-
-;јммуници¤
-ammo_9x18_fmj			= 6, 0.66
-ammo_9x18_ap			= 6, 0.66
-ammo_9x18_pmm			= 6, 0.66
-ammo_9x19_fmj			= 12, 0.66
-ammo_9x19_ap			= 10, 0.66
-ammo_9x19_pbp			= 8, 0.66
-ammo_11.43x23_fmj		= 8, 0.66
-ammo_11.43x23_hydro		= 6, 0.66
-ammo_12x70_buck			= 12, 0.66
-ammo_12x76_zhekan		= 8, 0.66
-ammo_5.45x39_fmj		= 8, 0.66
-ammo_5.45x39_ep			= 6, 0.66
-ammo_5.45x39_ap			= 4, 0.66
-ammo_5.56x45_fmj		= 16, 0.66
-ammo_5.56x45_ss190		= 14, 0.66
-ammo_5.56x45_ap			= 12, 0.66
-ammo_7.62x39_fmj		= 5, 0.66
-ammo_7.62x39_ap			= 4, 0.66
-ammo_7.62x51_fmj		= 10, 0.66
-ammo_7.62x51_ap			= 8, 0.66
-ammo_7.62x25_p			= 4, 0.66
-ammo_7.62x25_ps			= 4, 0.66
-ammo_9x39_pab9			= 3, 0.66
-ammo_9x39_ap			= 3, 0.66
-ammo_7.62x54_ap			= 4, 0.66
-ammo_7.62x54_7h1		= 4, 0.66
-ammo_7.62x54_7h14		= 3, 0.66
-ammo_7.92x33_fmj		= 3, 0.66
-ammo_7.92x33_ap			= 3, 0.66
-ammo_357_hp_mag			= 4, 0.66
-ammo_magnum_300			= 6, 0.66
-ammo_5.7x28_ss190			= 5, 0.66
-ammo_5.7x28_ss195		= 5, 0.66
-grenade_rgd5			= 3, 0.66
-grenade_gd-05			= 2, 0.66
-grenade_smoke			= 3, 0.66
-grenade_f1				= 2, 0.66
-ammo_og-7b				= 1, 0.88
-ammo_vog-25				= 3, 0.66
-ammo_m209				= 3, 0.66
-
-;јддоны
-
-wpn_sil_9mm	= 1, 0.88
-wpn_sil_45	= 1, 0.88
-wpn_sil_pbs1	= 1, 0.88
-wpn_sil_pbs4	= 1, 0.88
-wpn_sil_tgp-a	= 1, 0.88
-wpn_sil_nato	= 1, 0.88
-wpn_sil_kzrzp	= 1, 0.88
-wpn_sil_atg	= 1, 0.88
-wpn_sil_aps	= 1, 0.88
-wpn_sil_6p9	= 1, 0.88
-wpn_sil_gemtech	= 1, 0.88
-
-;ѕредметы
-detector_simple			= 1, 1
-kit_hunt				= 1, 1
-fieldcooker				= 1, 1
-
-cooking					= 3, 1
-kerosene                = 2, 1
-charcoal                = 2, 1
-explo_balon_gas         = 1, 1
-explo_jerrycan_fuel     = 1, 1
 
 [supplies_2]:supplies_1
-device_torch_nv_1		= 1, 1
-equ_small_pack          = 1, 1
+; Trust established. The NATO inventory opens up.
+; Mid-tier NATO rifles appear. Outfit attachments — Freedom collects these.
+; Better medical, more outfit variety, scopes.
 
-wpn_g36k                 = 1, 0.88
-wpn_galil               = 1, 0.88
-wpn_l85                 = 1, 0.88
-wpn_lr300               = 1, 0.88
-wpn_m4a1                = 1, 0.88
-wpn_m4                = 1, 0.88
-wpn_m4a1                = 1, 0.88
-wpn_m16a2               = 1, 0.88
-wpn_sig550              = 1, 0.88
-wpn_protecta            = 1, 0.88
-wpn_fal					= 1, 0.88
+; --- FOOD ---
+mre                     = 2, 0.55
+ration_ru               = 1, 0.44
+cigar2                  = 1, 0.50
+cigar3                  = 1, 0.44
 
-wpn_addon_scope_galil	= 1, 0.88
-ac10632				= 1, 0.88
-eot					= 1, 0.88
-c-more	= 1, 0.88
-kobra	= 1, 0.88
-ps01	= 1, 0.88
-acog	= 1, 0.88
+; --- MEDICAL ---
+medkit_army             = 2, 0.65
+medkit_scientic         = 1, 0.44
+stimpack                = 2, 0.60
+stimpack_army           = 1, 0.50
+antirad                 = 2, 0.65
+adrenalin               = 2, 0.60
+survival_kit            = 1, 0.40
 
-wpn_knife3              = 1, 1
-wpn_axe                 = 1, 1
-wpn_axe2                = 1, 1
+; --- AMMO ---
+ammo_5.45x39_ap         = 5, 0.55
+ammo_7.62x51_ap         = 7, 0.72
+ammo_7.62x54_ap         = 4, 0.50
+ammo_7.62x54_7h1        = 3, 0.44
+ammo_9x39_pab9          = 3, 0.40
 
-af_surge				= 1, 1
-af_frames				= 2, 1
-af_grid					= 2, 1
-af_freon				= 1, 1
-af_cooler				= 1, 1
-af_kevlar				= 2, 1
-af_plates				= 2, 1
-af_camelbak				= 1, 1
-af_iam					= 2, 1
-af_aac					= 2, 1
-af_aam					= 1, 1
+; --- WEAPONS ---
+; NATO mid tier unlocks properly
+wpn_m4a1               = 1, 0.65
+wpn_m4                 = 1, 0.60
+wpn_m16a2              = 1, 0.60
+wpn_lr300              = 1, 0.65
+wpn_sig550             = 1, 0.60
+wpn_l85                = 1, 0.60
+wpn_g36k               = 1, 0.55
+wpn_galil              = 1, 0.55
+wpn_fal                = 1, 0.55
+wpn_protecta           = 1, 0.60
+; Melee
+wpn_knife3             = 1, 0.75
+wpn_axe                = 1, 0.65
+wpn_axe2               = 1, 0.60
 
-;Броня
-helm_m40				= 1, 1
-helm_hardhat			= 1, 1
-helm_m50				= 1, 1
-trenchcoat_freedom_brown_outfit = 1, 1
-nbc_freedom_outfit      = 1, 1
-helm_ach7ex				= 1, 1
+; --- SCOPES ---
+wpn_addon_scope_galil  = 1, 0.75
+ac10632                = 1, 0.72
+eot                    = 1, 0.70
+acog                   = 1, 0.68
+c-more                 = 1, 0.65
+kobra                  = 1, 0.60
+ps01                   = 1, 0.55
 
-detector_advanced		= 2, 1
-army_bowler             = 1, 1
+; --- OUTFITS ---
+trenchcoat_freedom_brown_outfit = 1, 0.60
+nbc_freedom_outfit     = 1, 0.50
+helm_ach7ex            = 1, 0.55
+helm_m40               = 1, 0.65
+helm_hardhat           = 1, 0.60
+helm_m50               = 1, 0.55
 
+; --- GEAR ---
+device_torch_nv_1      = 1, 0.65
+equ_small_pack         = 1, 0.75
+detector_advanced      = 1, 0.50
+army_bowler            = 1, 0.70
 
-;медикоменты
-medkit_ai1			    = 2, 1
-antirad_kalium			= 2, 1
-antirad_cystamine		= 1, 1
-antibio_sulfad			= 2, 1
-antiemetic				= 1, 1
-antibio_chlor			= 2, 1
-jgut					= 1, 1
-yadylin					= 2, 1
-analgetic				= 2, 1
+; --- OUTFIT ATTACHMENTS ---
+; Freedom members collect these — better selection than most traders
+af_surge               = 1, 0.60
+af_frames              = 2, 0.60
+af_grid                = 2, 0.60
+af_freon               = 1, 0.55
+af_cooler              = 1, 0.55
+af_kevlar              = 2, 0.65
+af_plates              = 2, 0.65
+af_camelbak            = 1, 0.55
+af_iam                 = 2, 0.60
+af_aac                 = 1, 0.50
+af_aam                 = 1, 0.44
+af_camelbak_up         = 1, 0.40
 
-af_camelbak_up          = 1, 1
+; --- MEDICAL ---
+medkit_ai1             = 2, 0.65
+antirad_kalium         = 2, 0.70
+antirad_cystamine      = 1, 0.55
+antibio_sulfad         = 2, 0.65
+antiemetic             = 1, 0.55
+antibio_chlor          = 2, 0.65
+yadylin                = 2, 0.65
+analgetic              = 2, 0.65
+
+; --- REPAIR ---
+gun_oil                = 2, 0.75
+cleaning_kit_p         = 1, 0.60
+cleaning_kit_s         = 1, 0.55
+light_repair_kit       = 1, 0.55
+glue_b                 = 1, 0.65
+sewing_kit_b           = 1, 0.60
+
 
 [supplies_3]:supplies_2
-device_torch_nv_2		= 1, 1
-equ_small_military_pack = 1, 1
-device_pda_2			= 1, 1
+; Trusted. The serious NATO hardware comes out.
+; Freedom heavy outfits, upgraded attachments, high-tier NATO rifles.
+; Chemical drugs in better quantity — Freedom doesn't hide this.
 
-wpn_beretta_alt             = 1, 0.88
-wpn_beretta_camo            = 1, 0.88
-wpn_beretta_modern          = 1, 0.88
-wpn_colt1911_alt           = 1, 0.88
-wpn_desert_eagle        = 1, 0.88
-wpn_hpsa_alt                = 1, 0.88
-wpn_sig220_custom           = 1, 0.88
-wpn_glock            = 1, 0.88
-wpn_usp_custom                = 1, 0.88
-wpn_protecta_custom         = 1, 0.88
-wpn_spas12              = 1, 0.88
-wpn_mp5sd_new                 = 1, 0.88
-wpn_vz61_freedom           = 1, 0.88
-wpn_l85a2                = 1, 0.88
-wpn_l85_alt              = 1, 0.88
-wpn_l85a2_alt               = 1, 0.88
-wpn_lr300_custom            = 1, 0.88
-wpn_m16            = 1, 0.88
-wpn_ak101            = 1, 0.88
-wpn_ak102            = 1, 0.88
-wpn_pp2000            = 1, 0.88
-wpn_ak74u_custom            = 1, 0.88
-wpn_ak74u_camo            = 1, 0.88
-wpn_rg-6                    = 1, 0.88
-wpn_rpg7                    = 1, 0.88
-wpn_svd_custom                     = 1, 0.88
-wpn_mk14				= 1, 0.88
-;wpn_hk417				= 1, 0.88
+; --- FOOD ---
+salmon                 = 1, 0.44
+ration_ukr             = 1, 0.44
+cigar                  = 1, 0.44
 
-wpn_knife4              = 2, 1
-wpn_addon_grenade_launcher_m203	= 1, 0.88
+; --- MEDICAL ---
+medkit_ai2             = 2, 0.65
+stimpack_scientic      = 1, 0.44
+drug_psy_blockade      = 2, 0.55
+drug_radioprotector    = 2, 0.55
+drug_anabiotic         = 1, 0.40
 
-af_freon_up             = 1, 1
-af_frames_up            = 1, 1
+; --- AMMO ---
+ammo_7.62x54_7h14      = 3, 0.50
+ammo_9x39_ap           = 3, 0.44
+ammo_338_lapua_match   = 2, 0.40
+ammo_7.92x33_ap        = 3, 0.44
 
-;Броня
-light_freedom_outfit        = 1, 1
-svoboda_heavy_outfit		= 1, 1
-svoboda_heavy_outfit_2		= 1, 1
-helm_metro                  = 1, 1
-helm_tactic					= 1, 1
-helm_ranger					= 1, 1
+; --- WEAPONS ---
+; Better NATO rifles and pistols
+wpn_beretta_modern     = 1, 0.60
+wpn_beretta_alt        = 1, 0.55
+wpn_beretta_camo       = 1, 0.50
+wpn_colt1911_alt       = 1, 0.55
+wpn_sig220_custom      = 1, 0.55
+wpn_usp_custom         = 1, 0.55
+wpn_hpsa_alt           = 1, 0.50
+wpn_glock              = 1, 0.60
+wpn_l85a2              = 1, 0.55
+wpn_l85_alt            = 1, 0.55
+wpn_lr300_custom       = 1, 0.55
+wpn_m16                = 1, 0.55
+wpn_mp5sd_new          = 1, 0.55
+wpn_vz61_freedom       = 1, 0.55
+wpn_spas12             = 1, 0.55
+wpn_protecta_custom    = 1, 0.50
+; Russian high tier — occasional
+wpn_ak101              = 1, 0.35
+wpn_ak102              = 1, 0.33
+wpn_ak74u_camo         = 1, 0.40
+wpn_ak74u_custom       = 1, 0.40
+wpn_pp2000             = 1, 0.40
+; Snipers
+wpn_svd_custom         = 1, 0.44
+wpn_mk14               = 1, 0.44
+; Heavy
+wpn_rg-6               = 1, 0.55
+wpn_rpg7               = 1, 0.50
+; Melee
+wpn_knife4             = 1, 0.75
+; GL
+wpn_addon_grenade_launcher_m203 = 1, 0.55
+
+; --- OUTFITS ---
+light_freedom_outfit   = 1, 0.60
+svoboda_heavy_outfit   = 1, 0.55
+svoboda_heavy_outfit_2 = 1, 0.50
+helm_metro             = 1, 0.60
+helm_tactic            = 1, 0.55
+helm_ranger            = 1, 0.55
+
+; --- GEAR ---
+device_pda_2           = 1, 0.50
+device_torch_nv_2      = 1, 0.55
+equ_small_military_pack = 1, 0.65
+
+; --- OUTFIT ATTACHMENTS (UPGRADED) ---
+af_freon_up            = 1, 0.44
+af_frames_up           = 1, 0.44
+af_surge_up            = 1, 0.40
+af_grid_up             = 1, 0.40
+
+; --- REPAIR ---
+cleaning_kit_r5        = 1, 0.60
+toolkit_p              = 1, 0.55
+medium_repair_kit      = 1, 0.50
+glue_a                 = 1, 0.60
+sewing_kit_a           = 1, 0.55
+
 
 [supplies_4]:supplies_3
-device_torch_nv_3		= 1, 1
-equ_military_pack           = 1, 1
-device_pda_3			= 1, 1
+; Deep trust. The best Freedom has access to.
+; High-tier NATO, specialist weapons, exo-adjacent outfits.
 
-wpn_rg-6                    = 1, 0.88
-wpn_rpg7                    = 1, 0.88
-wpn_svd_custom                     = 1, 0.88
-wpn_aug            = 1, 0.88
-;wpn_aug_a3			= 1, 0.88
-wpn_fnc				= 1, 0.88
-wpn_m4a1_freedom            = 1, 0.88
-wpn_remington700		= 1, 0.88
+; --- MEDICAL ---
+medkit_ai3             = 2, 0.60
+medkit_scientic        = 2, 0.55
+stimpack_army          = 2, 0.60
+stimpack_scientic      = 1, 0.44
+survival_kit           = 1, 0.44
 
-wpn_knife5              = 2, 1
+; --- AMMO ---
+ammo_magnum_300        = 5, 0.55
+ammo_357_hp_mag        = 4, 0.60
+ammo_7.62x51_ap        = 8, 0.75
 
-af_grid_up              = 1, 1
-af_surge_up             = 1, 1
+; --- WEAPONS ---
+wpn_aug                = 1, 0.55
+wpn_fnc                = 1, 0.50
+wpn_m4a1_freedom       = 1, 0.50
+wpn_remington700       = 1, 0.44
+wpn_svd_custom         = 1, 0.50
+wpn_rg-6               = 1, 0.60
+wpn_rpg7               = 1, 0.55
+wpn_knife5             = 1, 0.75
 
-;Броня
-svoboda_scientific_outfit	= 1, 1
-svoboda_light_proto_exo_outfit	= 1, 1
-military_freedom_outfit     = 1, 1
-svoboda_exolight_outfit		= 1, 1
-freedom_exo_vineleaf_outfit = 1, 1
-helm_exo                    = 1, 1
-helm_protective				= 1, 1
+; --- OUTFITS ---
+svoboda_scientific_outfit    = 1, 0.44
+svoboda_light_proto_exo_outfit = 1, 0.40
+military_freedom_outfit      = 1, 0.44
+svoboda_exolight_outfit      = 1, 0.40
+freedom_exo_vineleaf_outfit  = 1, 0.33
+helm_exo               = 1, 0.33
+helm_protective        = 1, 0.40
 
+; --- GEAR ---
+device_pda_3           = 1, 0.44
+device_torch_nv_3      = 1, 0.50
+equ_military_pack      = 1, 0.55
+detector_elite         = 1, 0.44
 
-detector_elite				= 2, 1
-test_container              = 1, 1
+; --- OUTFIT ATTACHMENTS ---
+af_cooler_up           = 1, 0.33
+af_surge_up            = 1, 0.35
+af_grid_up             = 1, 0.35
+
+; --- REPAIR ---
+heavy_repair_kit       = 1, 0.44
+toolkit_s              = 1, 0.44
+exo_repair_kit         = 1, 0.30
+
 
 [supplies_5]:supplies_4
+; Maximum trust. Freedom's best — things that almost never come through.
 
-equ_tourist_pack      = 1, 1
+; Freedom exo — exceptional
+svoboda_exo_outfit     = 1, 0.18
+freedom_nosorog_outfit = 1, 0.15
+ghillie_outfit         = 1, 0.18
+helm_spartan           = 1, 0.15
 
-wpn_m249                = 1, 0.88
+; Top NATO hardware
+wpn_m249               = 1, 0.20
+wpn_aug                = 1, 0.22
+wpn_m4a1_freedom       = 1, 0.22
+wpn_svd_custom         = 1, 0.22
 
-af_cooler_up            = 1, 1
+; Outfit attachments (exceptional)
+af_cooler_up           = 1, 0.18
+af_aac                 = 1, 0.22
+af_aam                 = 1, 0.18
 
-;Броня
-svoboda_exo_outfit		= 1, 1
-ghillie_outfit          = 1, 1
-freedom_nosorog_outfit = 1, 1
-helm_spartan			= 1, 1
+; Tourist pack
+equ_tourist_pack       = 1, 0.20

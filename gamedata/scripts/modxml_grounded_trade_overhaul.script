@@ -1,0 +1,9 @@
+-- Script that simply sets all the traders money to not infinite
+
+function on_game_start()
+    RegisterScriptCallback("on_specific_character_init", function(character_id, data)
+        data.money_infinitive = false
+        data.money_min = 999999
+        data.money_max = 999999
+    end)
+end

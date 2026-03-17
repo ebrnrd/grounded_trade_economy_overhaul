@@ -1,24 +1,10 @@
-#include "presets\trade_discounts.ltx"
-#include "presets\trade_presets.ltx"
-
-;EDITED GROUNDED TRADER OVERHAUL
-
-[trader]
-buy_condition =  trade_generic_buy
-sell_condition = trade_generic_sell
-buy_supplies = {=actor_goodwill_ge(stalker:1000)} supplies_5, {=heavy_pockets_functor()} supplies_5, {=actor_goodwill_ge(stalker:800)} supplies_4, {=actor_goodwill_ge(stalker:600)} supplies_3, {=actor_goodwill_ge(stalker:400)} supplies_2,  supplies_1
-buy_item_condition_factor = 0.50
-buy_item_exponent = 2.25
-sell_item_exponent = 0.8
-
-sell_item_min_condition = 0.4
-sell_item_max_condition = 0.98
-
-discounts = discount_stalker
-
-[trade_generic_buy]:supplier
-
-[trade_generic_sell]:supplier
+; =============================================================================
+; OWL — zat_b30_owl_stalker_trader
+; Skadovsk, Zaton. Blackmarket trader, former bandit ties, information broker.
+; Rich assortment of weapons and ammo — the encyclopedia says so explicitly.
+; Both ecosystems, no loyalty. Zone items, chemical drugs, wide acceptance.
+; High variance — blackmarket stock is unpredictable.
+; =============================================================================
 
 [supplies_1]:common_stock
 ; Owl's floor. Whatever he has on hand from recent dealings.
@@ -374,3 +360,50 @@ exo_wood_outfit         = 1, 0.22
 ghillie_outfit          = 1, 0.28
 equ_tourist_pack        = 1, 0.30
 af_cooler_up            = 1, 0.32
+
+
+; =============================================================================
+; NIMBLE — zat_a2_stalker_nimble
+; Skadovsk, Zaton. Smuggler, specialist in rare and unique items.
+; One tier only. Doesn't buy anything. Stock is rare unique variants.
+; "Never knows what he'll get next" — real probability variance on everything.
+; Gear comes from failed UN expeditions and Clear Sky smuggling routes.
+; =============================================================================
+
+[supplies_1]:common_stock
+; Nimble's entire inventory. Unique and rare items only.
+; No item guaranteed — the probability IS the character.
+; Low probabilities reflect his unpredictable supply chain.
+
+; --- UNIQUE WEAPONS ---
+; Custom and rare variants from his smuggling network
+wpn_toz34_mark4                 = 1, 0.55
+wpn_pm_actor                    = 1, 0.60
+wpn_sig550_luckygun             = 1, 0.50
+wpn_wincheaster1300_trapper     = 1, 0.50
+wpn_desert_eagle_nimble         = 1, 0.44
+wpn_groza_nimble                = 1, 0.42
+wpn_mp5_nimble                  = 1, 0.44
+wpn_sig220_nimble               = 1, 0.44
+wpn_spas12_nimble               = 1, 0.44
+wpn_svd_nimble                  = 1, 0.40
+wpn_svu_nimble                  = 1, 0.38
+wpn_usp_nimble                  = 1, 0.44
+wpn_vintorez_nimble             = 1, 0.38
+wpn_g36_nimble                  = 1, 0.42
+wpn_fn2000_nimble               = 1, 0.40
+wpn_protecta_nimble             = 1, 0.44
+wpn_ak74u_snag                  = 1, 0.50
+wpn_fort_snag                   = 1, 0.52
+; The WA2000 — extremely rare even for Nimble
+wpn_wa2000                      = 1, 0.25
+
+; --- OUTFITS ---
+; Clear Sky connection makes these available
+cs_light_outfit                 = 1, 0.55
+cs_medium_outfit                = 1, 0.50
+cs_heavy_outfit                 = 1, 0.44
+cs_light_novice_outfit          = 1, 0.58
+; Rare civilian/tourist gear from UN expedition remnants
+novice_outfit_tourist           = 1, 0.52
+ghillie_outfit                  = 1, 0.35

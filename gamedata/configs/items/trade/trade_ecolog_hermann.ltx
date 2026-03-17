@@ -1,114 +1,179 @@
 #include "presets\trade_discounts.ltx"
 #include "presets\trade_presets.ltx"
 
+;EDITED GROUNDED TRADER OVERHAUL
+
 [trader]
 buy_condition =  trade_generic_buy
 sell_condition = trade_generic_sell
 buy_supplies = {=actor_goodwill_ge(ecolog:1000)} supplies_5, {=heavy_pockets_functor()} supplies_5, {=actor_goodwill_ge(ecolog:800)} supplies_4, {=actor_goodwill_ge(ecolog:600)} supplies_3, {=actor_goodwill_ge(ecolog:400)} supplies_2,  supplies_1
-buy_item_condition_factor = 0.50
+buy_item_condition_factor = 0.65
 buy_item_exponent = 2.25
 sell_item_exponent = 0.7
 
-discounts = discount_scientist
+sell_item_min_condition = 0.7
+sell_item_max_condition = 0.98
+
+discounts = discount_ecolog
 
 [trade_generic_buy]:scientist,artefacts_h
 
 [trade_generic_sell]:scientist,artefacts_h
 
 [supplies_1]:common_stock
+; Same as Sakharov's baseline but with slightly lower probabilities —
+; Jupiter is more remote and the supply chain less reliable.
 
-detector_radio             = 1, 1
-detector_geiger             = 1, 1
-device_pda_1				= 1, 1
-bolts_pack				= 2, 1
-device_torch_dummy 			= 1, 1
-device_torch_nv_1		= 1, 1
-batteries_dead			= 6, 1
+; --- BASICS ---
+bolts_pack              = 3, 0.82
+batteries_dead          = 6, 0.75
+device_torch_dummy      = 1, 0.70
+akvatab                 = 4, 0.82
 
-medkit					= 3, 1
-medkit_ai1				= 2, 1
-medkit_ai2				= 2, 1
-medkit_ai3				= 2, 1
-antirad_kalium			= 2, 1
-antirad_cystamine		= 2, 1
-antibio_sulfad			= 2, 1
-antiemetic				= 2, 1
-antibio_chlor			= 2, 1
-jgut					= 2, 1
-yadylin					= 2, 1
-analgetic				= 2, 1
-medkit_scientic			= 2, 1
-bandage					= 5, 1
-antirad					= 2, 1
-stimpack_army			= 3, 1
-stimpack_scientic		= 2, 1
-survival_kit			= 2, 1
-salicidic_acid			= 2, 1
-morphine				= 2, 1
-tetanus					= 3, 1
-adrenalin				= 3, 1
-drug_booster			= 3, 1
-drug_coagulant		= 3, 1
-drug_antidot			= 3, 1
-drug_radioprotector	= 3, 1
-drug_psy_blockade		= 3, 1
-drug_sleepingpills	= 3, 1
+; --- FOOD ---
+ration_ru               = 3, 0.82
+mre                     = 3, 0.75
+conserva                = 3, 0.70
+water_drink             = 5, 0.95
+mineral_water           = 3, 0.75
+energy_drink            = 3, 0.70
+caffeine                = 3, 0.75
 
-;Предметы
-af_camelbak				= 1, 1
-af_cooler				= 1, 1
-af_surge				= 1, 1
-af_freon                = 1, 1
-af_frames               = 1, 1
-af_grid                 = 1, 1
-af_kevlar				= 2, 1
-af_plates				= 2, 1
-af_aac					= 2, 1
-af_aam					= 2, 1
-lead_box				= 3, 1
-ecolog_guard_outfit     = 1, 1
-ecolog_outfit_orange    = 1, 1
-helm_respirator         = 1, 1
-helm_m40                = 1, 1
-detector_simple         = 1, 1
-detector_advanced       = 1, 1
+; --- MEDICAL ---
+bandage                 = 6, 0.95
+jgut                    = 4, 0.85
+medkit                  = 4, 0.85
+medkit_ai1              = 3, 0.78
+medkit_ai2              = 3, 0.72
+medkit_ai3              = 2, 0.65
+medkit_scientic         = 2, 0.68
+antirad_kalium          = 4, 0.85
+antirad_cystamine       = 3, 0.75
+antirad                 = 3, 0.78
+antibio_chlor           = 4, 0.85
+antibio_sulfad          = 3, 0.75
+antiemetic              = 3, 0.70
+tetanus                 = 3, 0.75
+glucose                 = 3, 0.75
+glucose_s               = 2, 0.68
+yadylin                 = 3, 0.75
+analgetic               = 3, 0.75
+adrenalin               = 3, 0.75
+salicidic_acid          = 2, 0.68
+morphine                = 2, 0.65
+drug_booster            = 3, 0.80
+drug_coagulant          = 3, 0.78
+drug_antidot            = 3, 0.75
+drug_radioprotector     = 3, 0.80
+drug_psy_blockade       = 3, 0.78
+drug_sleepingpills      = 3, 0.72
+stimpack_army           = 3, 0.75
+stimpack_scientic       = 2, 0.68
+survival_kit            = 2, 0.62
+
+; --- WEAPONS ---
+wpn_pm                  = 1, 0.44
+wpn_fort                = 1, 0.40
+wpn_pb                  = 1, 0.35
+wpn_bm16                = 1, 0.50
+wpn_toz34               = 1, 0.44
+wpn_mp133               = 1, 0.38
+wpn_knife               = 1, 0.72
+wpn_knife2              = 1, 0.55
+grenade_rgd5            = 2, 0.55
+grenade_smoke           = 3, 0.65
+
+; --- AMMO ---
+ammo_9x18_fmj           = 8, 0.70
+ammo_9x18_ap            = 5, 0.55
+ammo_5.45x39_fmj        = 8, 0.68
+ammo_12x70_buck         = 8, 0.70
+ammo_12x76_zhekan       = 5, 0.58
+
+; --- OUTFITS ---
+ecolog_guard_outfit     = 1, 0.68
+ecolog_outfit_orange    = 1, 0.62
+helm_respirator         = 1, 0.65
+helm_m40                = 1, 0.60
+
+; --- GEAR ---
+detector_radio          = 1, 0.78
+detector_geiger         = 1, 0.78
+detector_simple         = 1, 0.72
+detector_advanced       = 1, 0.70
+device_torch_nv_1       = 1, 0.70
+device_pda_1            = 1, 0.68
+lead_box                = 3, 0.78
+
+; --- OUTFIT ATTACHMENTS ---
+af_camelbak             = 1, 0.72
+af_cooler               = 1, 0.70
+af_surge                = 1, 0.70
+af_freon                = 1, 0.68
+af_frames               = 1, 0.68
+af_grid                 = 1, 0.68
+af_kevlar               = 2, 0.75
+af_plates               = 2, 0.75
+af_aac                  = 2, 0.70
+af_aam                  = 2, 0.68
+
 
 [supplies_2]:supplies_1
-equ_small_pack          = 1, 1
+drug_anabiotic          = 2, 0.60
+wpn_ak74u               = 1, 0.40
+wpn_aks74               = 1, 0.35
+wpn_ak74                = 1, 0.33
+wpn_knife3              = 1, 0.50
+ammo_9x19_fmj           = 6, 0.55
+ammo_7.62x39_fmj        = 5, 0.50
+ecolog_outfit_green     = 1, 0.62
+helm_protective         = 1, 0.60
+detector_elite          = 2, 0.68
+equ_small_pack          = 1, 0.68
 
-helm_protective         = 1, 1
-ecolog_outfit_green     = 1, 1
-detector_elite          = 2, 1
 
 [supplies_3]:supplies_2
-device_torch_nv_2		= 1, 1
-equ_small_military_pack = 1, 1
-device_pda_2			= 1, 1
+medkit_ai3              = 3, 0.78
+stimpack_scientic       = 3, 0.72
+wpn_vss                 = 1, 0.22
+wpn_ak74m               = 1, 0.28
+wpn_knife4              = 1, 0.40
+ecolog_outfit_white     = 1, 0.60
+device_torch_nv_2       = 1, 0.65
+device_pda_2            = 1, 0.60
+equ_small_military_pack = 1, 0.68
+af_dummy_battery        = 1, 0.18
+af_dummy_glassbeads     = 1, 0.15
+af_dummy_spring         = 1, 0.15
+af_dummy_dummy          = 1, 0.12
 
-drug_anabiotic			= 2, 1
-ecolog_outfit_white		= 1, 1
 
 [supplies_4]:supplies_3
-device_torch_nv_3		= 1, 1
-equ_military_pack       = 1, 1
-device_pda_3			= 1, 1
+wpn_val                 = 1, 0.18
+wpn_vintorez            = 1, 0.15
+wpn_knife5              = 1, 0.35
+ecolog_outfit_blue      = 1, 0.55
+ecolog_outfit_red       = 1, 0.52
+ecolog_outfit_yello     = 1, 0.50
+scientific_outfit       = 1, 0.58
+ecolog_proto_exo_outfit = 1, 0.44
+device_torch_nv_3       = 1, 0.62
+device_pda_3            = 1, 0.58
+equ_military_pack       = 1, 0.62
+af_cooler_up            = 1, 0.50
+af_camelbak_up          = 1, 0.50
+af_freon_up             = 1, 0.48
+af_frames_up            = 1, 0.48
+af_grid_up              = 1, 0.45
+af_surge_up             = 1, 0.45
+af_electra_flash        = 1, 0.12
+af_ameba_slug           = 1, 0.10
+af_drops                = 1, 0.10
+af_dummy_dummy          = 1, 0.15
+af_dummy_spring         = 1, 0.15
 
-ecolog_outfit_blue		= 1, 1
-ecolog_outfit_red		= 1, 1
-ecolog_outfit_yello		= 1, 1
-scientific_outfit		= 1, 1
-ecolog_proto_exo_outfit = 1, 1
-
-af_cooler_up            = 1, 1
-af_camelbak_up          = 1, 1
-af_freon_up             = 1, 1
-af_frames_up            = 1, 1
-af_grid_up              = 1, 1
-af_surge_up             = 1, 1
 
 [supplies_5]:supplies_4
-
-equ_tourist_pack        = 1, 1
-
-detector_scientific		= 1, 1
-ecolog_exo_outfit		= 1, 1
+ecolog_exo_outfit       = 1, 0.20
+equ_tourist_pack        = 1, 0.25
+detector_scientific     = 1, 0.30

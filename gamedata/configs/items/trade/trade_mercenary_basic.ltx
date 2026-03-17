@@ -1,15 +1,20 @@
 #include "presets\trade_discounts.ltx"
 #include "presets\trade_presets.ltx"
 
+;EDITED GROUNDED TRADER OVERHAUL
+
 [trader]
 buy_condition =  trade_generic_buy
 sell_condition = trade_generic_sell
 buy_supplies = {=actor_goodwill_ge(killer:700)} supplies_3,  {=heavy_pockets_functor()} supplies_3, {=actor_goodwill_ge(killer:400)} supplies_2,  supplies_1
-buy_item_condition_factor = 0.60
-buy_item_exponent = 2.25
-sell_item_exponent = 0.6
+buy_item_condition_factor = 0.45
+buy_item_exponent = 2.0
+sell_item_exponent = 0.9
 
-discounts = discount_supplier
+sell_item_min_condition = 0.5
+sell_item_max_condition = 0.98
+
+discounts = discount_killer
 
 [trade_generic_buy]:merchant
 
@@ -17,209 +22,272 @@ discounts = discount_supplier
 
 
 [supplies_1]:common_stock
-swiss_knife			= 2, 1
-detector_radio             = 1, 1
-detector_geiger             = 1, 1
-device_pda_1				= 1, 1
-bolts_pack				= 1, 1
-cooking                 = 2, 1
-charcoal                = 1, 1
-kerosene                = 1, 1
-explo_balon_gas         = 1, 1
-explo_jerrycan_fuel     = 1, 1
-itm_actor_backpack = 1, 1
-itm_sleepbag = 1, 1
-itm_backpack = 2, 1
-compression_bag         = 1, 1
-batteries_dead			= 4, 1
-device_flashlight		= 1, 1
-device_torch_dummy		= 1, 1               
-wpn_aps                 = 1, 0.75
-wpn_fort                = 1, 0.75
-wpn_oc33                = 1, 0.75
-wpn_pm                  = 1, 0.75
-wpn_pb                  = 1, 0.75
-wpn_mp412               = 1, 0.75
-wpn_beretta             = 1, 0.75
-wpn_colt1911            = 1, 0.75
-wpn_sig220              = 1, 0.75
-wpn_usp                 = 1, 0.75
-wpn_fnp45               = 1, 0.75
-wpn_cz75                = 1, 0.75
-wpn_glock               = 1, 0.75
-wpn_walther             = 1, 0.75
-wpn_mp443            	= 1, 0.75
-wpn_ak74u               = 1, 0.75
-wpn_abakan              = 1, 0.75
-wpn_aek              	= 1, 0.75
-wpn_akm               	= 1, 0.75
-wpn_ak74                = 1, 0.75
-wpn_ak105               = 1, 0.75
-wpn_protecta            = 1, 0.75
-wpn_spas12         		= 1, 0.75
-wpn_mp5                 = 1, 0.75                
-wpn_knife               = 1, 1
-wpn_knife2              = 1, 0.7
-wpn_binoc_inv           = 1, 1
-helm_rp_bala            = 1, 0.88
-helm_cloth_mask			= 1, 0.88
-helm_respirator_gp5     = 1, 0.88
-helm_respirator_old     = 1, 0.88
-helm_respirator 		= 1, 0.88
-helm_ppm88				= 1, 0.88
-merc_outfit				= 1, 0.88
-merc_fighter_outfit		= 1, 0.88
-merc_scout_outfit		= 1, 0.88
-lead_box				= 2, 1
-ammo_9x18_fmj                   = 8, 0.66
-ammo_9x18_pmm                   = 6, 0.66
-ammo_9x19_fmj                   = 8, 0.66
-ammo_9x19_pbp                   = 6, 0.66
-ammo_11.43x23_fmj               = 6, 0.66
-ammo_12x70_buck                 = 5, 0.66
-ammo_12x76_zhekan               = 8, 0.66
-ammo_5.45x39_fmj                = 7, 0.66
-ammo_5.45x39_ep					= 5, 0.66
-ammo_5.56x45_fmj				= 7, 0.66	
-ammo_5.56x45_ss190              = 4, 0.66
-ammo_7.62x39_fmj                = 5, 0.66
-ammo_7.62x51_fmj                = 6, 0.66
-ammo_7.62x25_p                  = 8, 0.66
-ammo_9x39_pab9                  = 7, 0.66
-ammo_7.62x54_7h1                = 4, 0.66
-ammo_7.62x54_7h14               = 3, 0.66
-ammo_357_hp_mag                 = 4, 0.66
-ammo_magnum_300                 = 6, 0.66
-ammo_5.7x28_ss190               = 7, 0.66
-ammo_5.7x28_ss195               = 3, 0.66
-ammo_12.7x55_fmj                = 3, 0.66
-grenade_rgd5                    = 2, 0.66
-grenade_gd-05                   = 2, 0.66
-grenade_smoke                   = 2, 0.66
-detector_simple			= 1, 1
-;bread					= 3, 1
-breadold				= 4, 1
-kolbasa					= 2, 1
-conserva				= 2, 1
-;tomato					= 2, 1
-;sausage					= 2, 1
-corn					= 2, 1
-beans					= 2, 1
-;chili					= 2, 1
-;salmon					= 2, 1
-raisins					= 2, 1
-;chocolate				= 2, 1
-nuts					= 2, 1
-;mint					= 3, 1
-energy_drink			= 3, 1
-water_drink				= 2, 1
-beer					= 2, 1
-vodka					= 3, 1
-vodka2					= 1, 1
-;vodka_quality			= 3, 1
-cocaine					= 2, 1
-;salicidic_acid			= 2, 1
-morphine				= 2, 1
-cigarettes 				= 3, 1
-cigarettes_russian		= 2, 1
-bandage					= 4, 1
-medkit					= 2, 1
-morphine				= 2, 1
-drug_booster			= 2, 1
-drug_coagulant		= 1, 1
-drug_antidot			= 1, 1
-drug_psy_blockade		= 1, 1
+; Vector's baseline. Zaton is a scavenging map — his stock reflects what passes through.
+; Both ecosystems, quality bias but not exclusive. Zone items present unlike Dushman.
+; Higher variance than Dushman — the Waste Processing Station sees mixed clientele.
+
+; --- BASICS ---
+bolts_pack              = 2, 0.80
+batteries_dead          = 4, 0.75
+swiss_knife             = 1, 0.70
+compression_bag         = 1, 0.68
+itm_sleepbag            = 1, 0.72
+itm_backpack            = 2, 0.78
+
+; --- FOOD ---
+; Zaton hunters bring meat through — Vector takes it
+meat_tushkano           = 2, 0.65
+meat_dog                = 2, 0.65
+meat_boar               = 2, 0.60
+meat_flesh              = 1, 0.55
+water_drink             = 4, 0.88
+energy_drink            = 2, 0.65
+vodka                   = 2, 0.66
+vodka2                  = 1, 0.55
+cigarettes              = 3, 0.70
+cigarettes_russian      = 2, 0.62
+breadold                = 3, 0.60
+conserva                = 2, 0.55
+beans                   = 2, 0.50
+
+; --- COOKING ---
+cooking                 = 2, 0.80
+kerosene                = 1, 0.68
+charcoal                = 1, 0.68
+explo_balon_gas         = 1, 0.58
+explo_jerrycan_fuel     = 1, 0.55
+
+; --- MEDICAL ---
+bandage                 = 5, 0.88
+jgut                    = 3, 0.78
+medkit                  = 3, 0.75
+medkit_army             = 2, 0.68
+medkit_ai1              = 2, 0.62
+antirad                 = 2, 0.72
+antirad_kalium          = 2, 0.70
+drug_booster            = 2, 0.72
+drug_coagulant          = 2, 0.68
+drug_antidot            = 1, 0.65
+drug_psy_blockade       = 1, 0.60
+drug_radioprotector     = 1, 0.58
+cocaine                 = 2, 0.68
+morphine                = 2, 0.65
+salicidic_acid          = 2, 0.65
+
+; --- AMMO ---
+ammo_5.56x45_fmj        = 14, 0.82
+ammo_5.56x45_ss190      = 10, 0.75
+ammo_5.56x45_ap         = 8, 0.68
+ammo_9x19_fmj           = 12, 0.80
+ammo_9x19_ap            = 8, 0.70
+ammo_11.43x23_fmj       = 10, 0.75
+ammo_11.43x23_hydro     = 7, 0.65
+ammo_7.62x51_fmj        = 10, 0.75
+ammo_7.62x51_ap         = 7, 0.65
+ammo_5.45x39_fmj        = 12, 0.78
+ammo_5.45x39_ep         = 8, 0.68
+ammo_5.45x39_ap         = 6, 0.60
+ammo_9x18_fmj           = 8, 0.65
+ammo_9x18_pmm           = 5, 0.55
+ammo_9x39_pab9          = 10, 0.78
+ammo_9x39_ap            = 7, 0.68
+ammo_7.62x39_fmj        = 8, 0.68
+ammo_7.62x39_ap         = 5, 0.58
+ammo_7.62x25_p          = 6, 0.58
+ammo_12x70_buck         = 8, 0.72
+ammo_12x76_zhekan       = 6, 0.62
+ammo_357_hp_mag         = 4, 0.58
+ammo_magnum_300         = 4, 0.52
+ammo_5.7x28_ss190       = 8, 0.65
+ammo_5.7x28_ss195       = 4, 0.55
+ammo_7.62x54_ap         = 5, 0.65
+ammo_7.62x54_7h1        = 4, 0.60
+ammo_12.7x55_fmj        = 3, 0.58
+grenade_rgd5            = 4, 0.80
+grenade_f1              = 3, 0.72
+grenade_smoke           = 4, 0.78
+grenade_gd-05           = 3, 0.68
+ammo_vog-25             = 4, 0.72
+ammo_og-7b              = 2, 0.65
+ammo_m209               = 3, 0.65
+
+; --- WEAPONS ---
+; Both low and mid tier from the start — Vector sees all kinds
+wpn_pm                  = 1, 0.55
+wpn_fort                = 1, 0.52
+wpn_aps                 = 1, 0.52
+wpn_oc33                = 1, 0.50
+wpn_beretta             = 1, 0.60
+wpn_colt1911            = 1, 0.62
+wpn_sig220              = 1, 0.62
+wpn_usp                 = 1, 0.60
+wpn_fnp45               = 1, 0.58
+wpn_cz75                = 1, 0.58
+wpn_glock               = 1, 0.62
+wpn_mp412               = 1, 0.50
+wpn_mp443               = 1, 0.55
+wpn_ak74u               = 1, 0.60
+wpn_ak74                = 1, 0.62
+wpn_akm                 = 1, 0.62
+wpn_ak105               = 1, 0.62
+wpn_abakan              = 1, 0.58
+wpn_aek                 = 1, 0.58
+wpn_protecta            = 1, 0.60
+wpn_spas12              = 1, 0.62
+wpn_mp5                 = 1, 0.65
+wpn_knife               = 1, 0.88
+wpn_knife2              = 1, 0.75
+mine_new                = 4, 0.82
+ied_new                 = 3, 0.75
+
+; --- OUTFITS ---
+merc_outfit             = 1, 0.72
+merc_fighter_outfit     = 1, 0.68
+merc_scout_outfit       = 1, 0.68
+helm_rp_bala            = 1, 0.62
+helm_cloth_mask         = 1, 0.58
+helm_ppm88              = 1, 0.55
+lead_box                = 2, 0.72
+
+; --- GEAR ---
+detector_radio          = 1, 0.75
+detector_geiger         = 1, 0.70
+detector_simple         = 1, 0.65
+device_flashlight       = 1, 0.82
+device_pda_1            = 1, 0.65
+wpn_binoc_inv           = 1, 0.68
+
+; --- SILENCERS ---
+wpn_sil_9mm             = 1, 0.72
+wpn_sil_45              = 1, 0.72
+wpn_sil_nato            = 1, 0.70
+wpn_sil_pbs1            = 1, 0.65
+wpn_sil_pbs4            = 1, 0.62
+wpn_sil_aps             = 1, 0.60
+wpn_sil_9a91            = 1, 0.60
+wpn_sil_gemtech         = 1, 0.68
+
+; --- REPAIR ---
+gun_oil                 = 2, 0.82
+gun_oil_ru              = 2, 0.80
+cleaning_kit_p          = 1, 0.70
+cleaning_kit_s          = 1, 0.65
+light_repair_kit        = 1, 0.68
+glue_b                  = 1, 0.72
+sewing_kit_b            = 1, 0.68
 
 
 [supplies_2]:supplies_1
-device_torch_nv_1		= 1, 1
-equ_small_pack          = 1, 1
-wpn_g36                 = 1, 0.75
-wpn_galil               = 1, 0.75
-wpn_l85                 = 1, 0.75
-wpn_lr300               = 1, 0.75
-wpn_m4                	= 1, 0.75
-wpn_sig550              = 1, 0.75
-wpn_g3                 	= 1, 0.75
-wpn_g3sg1               = 1, 0.75
-wpn_sv98              	= 1, 0.75
-wpn_l96a1              	= 1, 0.75
-wpn_knife3              = 1, 1
-wpn_axe                 = 1, 1
-;helm_m40				= 1, 1
-helm_hardhat			= 1, 1
-;specops_merc_outfit     = 1, 1
-;helm_m50				= 1, 1
-merc_sun_outfit		    = 1, 1
-merc_wolven_outfit		= 1, 1
-;merc_nighthunter_outfit = 1, 1
-af_surge				= 1, 1
-;af_frames				= 2, 1
-;af_grid					= 2, 1
-af_freon				= 1, 1
-af_cooler				= 1, 1
-af_kevlar				= 1, 1
-af_plates				= 1, 1
-;af_camelbak				= 1, 1
-af_iam					= 1, 1
-af_aac					= 1, 1
-af_aam					= 1, 1
-detector_advanced		= 1, 1
-army_bowler             = 1, 1
+; Some goodwill. Vector shows more of the merc inventory.
+; NATO mid fills out, outfit attachments, better medical.
+
+; --- MEDICAL ---
+medkit_ai2              = 2, 0.68
+stimpack                = 2, 0.68
+stimpack_army           = 1, 0.60
+adrenalin               = 2, 0.68
+
+; --- AMMO ---
+ammo_7.62x54_7h14       = 3, 0.62
+ammo_338_lapua_match    = 2, 0.52
+ammo_12.7x55_ap         = 2, 0.52
+
+; --- WEAPONS ---
+wpn_g36                 = 1, 0.65
+wpn_galil               = 1, 0.62
+wpn_l85                 = 1, 0.62
+wpn_lr300               = 1, 0.65
+wpn_m4                  = 1, 0.65
+wpn_sig550              = 1, 0.62
+wpn_g3                  = 1, 0.60
+wpn_g3sg1               = 1, 0.55
+wpn_sv98                = 1, 0.55
+wpn_l96a1               = 1, 0.52
+wpn_knife3              = 1, 0.72
+wpn_axe                 = 1, 0.65
+
+; --- SCOPES ---
+ac10632                 = 1, 0.72
+eot                     = 1, 0.72
+c-more                  = 1, 0.68
+kobra                   = 1, 0.65
+acog                    = 1, 0.75
+
+; --- OUTFITS ---
+merc_sun_outfit         = 1, 0.60
+merc_wolven_outfit      = 1, 0.60
+helm_hardhat            = 1, 0.62
+
+; --- GEAR ---
+device_torch_nv_1       = 1, 0.62
+equ_small_pack          = 1, 0.72
+detector_advanced       = 1, 0.55
+army_bowler             = 1, 0.68
+
+; --- OUTFIT ATTACHMENTS ---
+af_surge                = 1, 0.68
+af_frames               = 1, 0.68
+af_grid                 = 1, 0.68
+af_freon                = 1, 0.65
+af_cooler               = 1, 0.65
+af_kevlar               = 1, 0.70
+af_plates               = 1, 0.70
+af_camelbak             = 1, 0.65
+af_iam                  = 1, 0.68
+af_aac                  = 1, 0.62
+af_aam                  = 1, 0.58
+
+; --- REPAIR ---
+cleaning_kit_r5         = 1, 0.65
+toolkit_p               = 1, 0.68
+medium_repair_kit       = 1, 0.65
+glue_a                  = 1, 0.72
+sewing_kit_a            = 1, 0.68
 
 
 [supplies_3]:supplies_2
-device_torch_nv_2		= 1, 1
-equ_small_military_pack = 1, 1
-;device_pda_2			= 1, 1
-;1p29		= 1, 0.88
-kobra		= 1, 0.88
-;ps01		= 1, 0.88
-;pso1m21		= 1, 0.88
-ac10632		= 1, 0.88
-;acog		= 1, 0.88
-eot			= 1, 0.88
-c-more		= 1, 0.88
-wpn_pmm           	= 1, 0.75
-;wpn_walther_custom               = 1, 0.75
-;wpn_beretta_camo            = 1, 0.75
-;wpn_beretta_modern          = 1, 0.75
-;wpn_colt1911_custom           = 1, 0.75
-;wpn_colt1911_modern           = 1, 0.75
-wpn_colt1911_camo           = 1, 0.75
-;wpn_desert_eagle_modern        = 1, 0.75
-wpn_sig220_custom           = 1, 0.75
-wpn_usp_custom                = 1, 0.75
-wpn_usp_match                = 1, 0.75
-;wpn_fnp45_custom              = 1, 0.75
-;wpn_fnx45_alt            = 1, 0.75
-wpn_fnx45            = 1, 0.75
-wpn_cz75_auto          = 1, 0.75
-wpn_mp443          = 1, 0.75
-wpn_glock_custom          = 1, 0.75
-;wpn_gsh18_custom          = 1, 0.75
-wpn_saiga12s               	= 1, 0.75
-wpn_ak101_camo          	= 1, 0.75
-wpn_ak103_camo       		= 1, 0.75
-wpn_abakan_camo          	= 1, 0.75
-wpn_val                 	= 1, 0.75
-;wpn_vintorez            	= 1, 0.75
-;wpn_9a91                 	= 1, 0.75
-;wpn_vihr            	= 1, 0.75
-wpn_svd                 	= 1, 0.75
-;wpn_svd_custom             	= 1, 0.75
-;wpn_svu                 	= 1, 0.75
-wpn_rpk74               	= 1, 0.75
-wpn_pkm                 	= 1, 0.75
-wpn_protecta_camo           = 1, 0.75
-;wpn_protecta_custom         = 1, 0.75
-;wpn_spas12_custom              = 1, 0.75
-;wpn_sig550_custom             = 1, 0.75
-wpn_mp153           = 1, 0.75
-wpn_knife4              = 1, 1
-af_freon_up             = 1, 1
-af_frames_up            = 1, 1
-nbc_merc_outfit         = 1, 1
-light_merc_outfit       = 1, 1
-helm_tactic			    = 1, 1
-helm_ranger				= 1, 1
+; Real trust. Vector's full range.
+; High tier weapons, upgraded attachments, exo-adjacent outfits.
+
+; --- MEDICAL ---
+medkit_ai3              = 1, 0.60
+survival_kit            = 1, 0.50
+drug_anabiotic          = 1, 0.55
+stimpack_scientic       = 1, 0.50
+
+; --- WEAPONS ---
+wpn_val                 = 1, 0.62
+wpn_svd                 = 1, 0.62
+wpn_rpk74               = 1, 0.60
+wpn_pkm                 = 1, 0.58
+wpn_abakan_camo         = 1, 0.55
+wpn_ak101_camo          = 1, 0.52
+wpn_sig550_custom       = 1, 0.55
+wpn_mp5_custom          = 1, 0.58
+wpn_protecta_camo       = 1, 0.55
+wpn_mp153               = 1, 0.58
+wpn_saiga12s            = 1, 0.55
+wpn_knife4              = 1, 0.72
+
+; --- OUTFITS ---
+nbc_merc_outfit         = 1, 0.60
+light_merc_outfit       = 1, 0.58
+helm_tactic             = 1, 0.65
+helm_ranger             = 1, 0.62
+
+; --- GEAR ---
+device_pda_2            = 1, 0.55
+device_torch_nv_2       = 1, 0.60
+equ_small_military_pack = 1, 0.68
+
+; --- OUTFIT ATTACHMENTS (UPGRADED) ---
+af_freon_up             = 1, 0.52
+af_frames_up            = 1, 0.52
+af_surge_up             = 1, 0.50
+af_grid_up              = 1, 0.50
+af_camelbak_up          = 1, 0.48
+
+; --- REPAIR ---
+heavy_repair_kit        = 1, 0.62
+toolkit_s               = 1, 0.60
+exo_repair_kit          = 1, 0.44

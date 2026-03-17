@@ -44,6 +44,15 @@ init_min       = 15000
 init_max       = 25000
 reserve_threshold = 4000
 
+[bandit_poor]
+bracket_min    = 15000
+bracket_max    = 35000
+drift_median   = 3000
+drift_variance = 0.80
+init_min       = 18000
+init_max       = 28000
+reserve_threshold = 5000
+
 ; ========== CORDON ==========
 
 ; Sidorovich
@@ -76,7 +85,6 @@ init_min       = 50000
 init_max       = 60000
 reserve_threshold = 15000
 
-; ===============================================
 
 ; ========== GARBAGE ==========
 
@@ -110,7 +118,18 @@ init_min       = 50000
 init_max       = 70000
 reserve_threshold = 20000
 
-; ===============================================
+
+; ========== AGROPROM ==========
+
+; Sergeant Spooner
+[agr_smart_terrain_1_6_army_trader_stalker]
+bracket_min    = 35000
+bracket_max    = 65000
+drift_median   = 6000
+drift_variance = 0.65
+init_min       = 45000
+init_max       = 58000
+reserve_threshold = 12000
 
 ; ========== DARK VALLEY ==========
 
@@ -124,10 +143,23 @@ init_min       = 40000
 init_max       = 50000
 reserve_threshold = 10000
 
-; ===============================================
+
+; ========== DARKSCAPE ==========
+
+;stalker trader
+[dasc_trade_mlr]
+bracket_min    = 12000
+bracket_max    = 30000
+drift_median   = 2500
+drift_variance = 0.85
+init_min       = 15000
+init_max       = 24000
+reserve_threshold = 4000
+
 
 ; ========== ROSTOK ==========
 
+;petrenko (duty trader)
 [bar_dolg_general_petrenko_stalker]
 bracket_min    = 40000
 bracket_max    = 70000
@@ -137,10 +169,10 @@ init_min       = 50000
 init_max       = 60000
 reserve_threshold = 15000
 
-; ===============================================
 
 ; ========== GREAT SWAMPS ==========
 
+;spore (clear sky trader)
 [mar_base_owl_stalker_trader]
 bracket_min    = 30000
 bracket_max    = 60000
@@ -149,6 +181,57 @@ drift_variance = 0.6
 init_min       = 40000
 init_max       = 50000
 reserve_threshold = 10000
+
+
+; ========== TRUCKS CEMETERY ==========
+
+;bandit trader (poor)
+[trucks_cemetery_bandit_trader]:bandit_poor
+
+
+; ========== JUPITER ==========
+
+;bandit trader (poor)
+[jup_cont_trader_bandit]:bandit_poor
+
+
+; ========== ARMY WAREHOUSES ==========
+
+; Freedom trader — Army Warehouses
+[mil_smart_terrain_7_10_freedom_trader_stalker]
+bracket_min    = 32000
+bracket_max    = 62000
+drift_median   = 5500
+drift_variance = 0.65
+init_min       = 42000
+init_max       = 55000
+reserve_threshold = 10000
+
+; ========== JUPITER ==========
+
+; Freedom trader — Jupiter
+[jup_a6_freedom_trader_ashot]
+bracket_min    = 38000
+bracket_max    = 75000
+drift_median   = 7000
+drift_variance = 0.75
+init_min       = 50000
+init_max       = 65000
+reserve_threshold = 14000
+
+
+; ========== DEAD CITY ==========
+
+; Dushman
+[cit_killers_merc_trader_stalker]
+bracket_min    = 50000
+bracket_max    = 90000
+drift_median   = 7000
+drift_variance = 0.55
+init_min       = 60000
+init_max       = 80000
+reserve_threshold = 18000
+
 
 ; ================ BARMEN =================
 
@@ -212,27 +295,72 @@ reserve_threshold = 10000
 
 [red_greh_tech]:default_mechanic
 
-; ========== DARKSCAPE ==========
+; ========== PRIPYAT OUTSKIRTS ==========
 
-; Darkscape loner trader — extremely isolated, almost no foot traffic
-[dasc_trade_mlr]
-bracket_min    = 12000
-bracket_max    = 30000
-drift_median   = 2500
-drift_variance = 0.85
-init_min       = 15000
-init_max       = 24000
-reserve_threshold = 4000
+; Meeker — Griffin task force resupply, funded military operation
+[pri_special_trader_mlr]
+bracket_min    = 55000
+bracket_max    = 95000
+drift_median   = 7000
+drift_variance = 0.45
+init_min       = 65000
+init_max       = 85000
+reserve_threshold = 20000
 
-; ========== AGROPROM ==========
+; ========== ZATON ==========
 
-; Sergeant Spooner — army trader, personal business under military cover
-; Reliable military bracket, slightly higher variance from personal dealings
-[agr_smart_terrain_1_6_army_trader_stalker]
+; Vector — scout and supplier, Waste Processing Station
+[zat_stancia_trader_merc]
 bracket_min    = 35000
 bracket_max    = 65000
-drift_median   = 6000
+drift_median   = 5500
 drift_variance = 0.65
 init_min       = 45000
 init_max       = 58000
 reserve_threshold = 12000
+
+; ========== YANTAR ==========
+
+; Sakharov — veteran researcher, well-funded institute, reliable supply
+[yan_stalker_sakharov]
+bracket_min    = 40000
+bracket_max    = 75000
+drift_median   = 6000
+drift_variance = 0.50
+init_min       = 52000
+init_max       = 65000
+reserve_threshold = 14000
+
+; ========== JUPITER ==========
+
+; Hermann — nuclear physicist, Jupiter research station, more isolated
+[jup_b6_scientist_nuclear_physicist]
+bracket_min    = 35000
+bracket_max    = 70000
+drift_median   = 5500
+drift_variance = 0.60
+init_min       = 45000
+init_max       = 60000
+reserve_threshold = 12000
+
+; ========== ZATON ==========
+
+; Owl — blackmarket trader, Skadovsk, volatile supply chain
+[zat_b30_owl_stalker_trader]
+bracket_min    = 28000
+bracket_max    = 58000
+drift_median   = 5000
+drift_variance = 0.75
+init_min       = 35000
+init_max       = 50000
+reserve_threshold = 8000
+
+; Nimble — specialist smuggler, one-way vendor, small money pool
+[zat_a2_stalker_nimble]
+bracket_min    = 20000
+bracket_max    = 45000
+drift_median   = 4000
+drift_variance = 0.60
+init_min       = 28000
+init_max       = 38000
+reserve_threshold = 6000

@@ -179,25 +179,61 @@ local traders_t = {
         buy  = { "wpn_all", "ammo_all", "outfit_all", "supplies_all", "meds_all", "artefacts", "mutant_parts" },
     },
 
-    -- Darkscape
+    --[[ Darkscape
     ["dasc_trade_mlr"] = { -- Darkscape loner trader
         sell = { "wpn_all", "ammo_all", "outfit_all", "supplies_all", "meds_all", "mutant_parts" },
         buy  = { "wpn_all", "ammo_all", "outfit_all", "supplies_all", "meds_all", "mutant_parts" },
-    },
+    },]]
 
     -- Agroprom
     ["agr_smart_terrain_1_6_army_trader_stalker"] = { -- Spooner
         sell = { "wpn_all", "ammo_all", "outfit_all", "supplies_all", "meds_all", "artefacts" },
         buy  = { "wpn_all", "ammo_all", "outfit_all", "supplies_all", "meds_all", "artefacts" },
     },
+
+    -- Army Warehouses
+    ["mil_smart_terrain_7_10_freedom_trader_stalker"] = { -- Freedom trader
+        sell = { "wpn_all", "ammo_all", "outfit_all", "supplies_all", "meds_all", "artefacts", "mutant_parts", "drug_chem" },
+        buy  = { "wpn_all", "ammo_all", "outfit_all", "supplies_all", "meds_all", "artefacts", "mutant_parts", "drug_chem" },
+    },
+
+    -- Jupiter
+    ["jup_a6_freedom_trader_ashot"] = { -- Freedom trader
+        sell = { "wpn_all", "ammo_all", "outfit_all", "supplies_all", "meds_all", "artefacts", "mutant_parts", "drug_chem" },
+        buy  = { "wpn_all", "ammo_all", "outfit_all", "supplies_all", "meds_all", "artefacts", "mutant_parts", "drug_chem" },
+    },
+
+    ["jup_b6_scientist_nuclear_physicist"] = { -- Hermann
+        sell = { "artefacts", "mutant_parts", "meds_all", "devices_advanced" },
+        buy  = { "artefacts", "mutant_parts", "meds_all", "devices_advanced" },
+    },
+
+	-- Dead City
+    ["cit_killers_merc_trader_stalker"] = { -- Dushman
+        sell = { "wpn_all", "ammo_all", "outfit_all", "meds_all", "repair_all", "drug_chem" },
+        buy  = { "wpn_all", "ammo_all", "outfit_all", "meds_all", "repair_all", "drug_chem" },
+    },
+
+	-- Yantar
+    ["yan_stalker_sakharov"] = { -- Sakharov
+        sell = { "artefacts", "mutant_parts", "meds_all", "devices_advanced" },
+        buy  = { "artefacts", "mutant_parts", "meds_all", "devices_advanced" },
+    },
+	
+    -- Zaton
+    ["zat_b30_owl_stalker_trader"] = { -- Owl
+        sell = { "wpn_all", "ammo_all", "outfit_all", "supplies_all", "meds_all", "artefacts", "mutant_parts", "drug_chem" },
+        buy  = { "wpn_all", "ammo_all", "outfit_all", "supplies_all", "meds_all", "artefacts", "mutant_parts", "drug_chem" },
+    },
+
 }
 
 local function get_trader_table(npc_sec)
 	if traders_t[npc_sec] then
 		return traders_t[npc_sec]
 	end
-	-- group fallback via grounded_trader_groups.ltx if present
-	local ltx = ini_file("plugins\\grounded_trader_groups.ltx")
+	-- group fallback via grounded_discount_trader_groups.ltx if present
+	local ltx = ini_file("plugins\\grounded_discount_trader_groups.ltx")
 	if not ltx then return nil end
 	local ret
 	ltx:section_for_each(function(sec)
