@@ -8,8 +8,8 @@ buy_condition =  trade_generic_buy
 sell_condition = trade_generic_sell
 buy_supplies = {=actor_goodwill_ge(bandit:700)} supplies_3, {=heavy_pockets_functor()} supplies_3, {=actor_goodwill_ge(bandit:400)} supplies_2,  supplies_1
 buy_item_condition_factor = 0.10		;0.40
-buy_item_exponent = 2.25
-sell_item_exponent = 1.0
+buy_item_exponent = 2.4
+sell_item_exponent = 1.3
 
 sell_item_min_condition = 0.1
 sell_item_max_condition = 0.8
@@ -22,9 +22,6 @@ discounts = discount_bandit
 
 
 [supplies_1]:common_stock
-; Truck cemetery and Jupiter. Remote, dangerous, and undersupplied for bandits.
-; What he has changes week to week. Don't expect much.
-; High variance on everything — sometimes there's almost nothing worth buying.
 
 ; --- BASICS ---
 bolts_pack              = 2, 0.75
@@ -68,7 +65,6 @@ explo_balon_gas         = 1, 0.44
 explo_jerrycan_fuel     = 1, 0.40
 
 ; --- MEDICAL ---
-; Bare minimum — a bandit who gets shot out here is in trouble
 bandage                 = 4, 0.75
 jgut                    = 2, 0.60
 medkit                  = 2, 0.55
@@ -81,7 +77,6 @@ drug_booster            = 1, 0.40
 drug_coagulant          = 1, 0.33
 
 ; --- AMMO ---
-; Limited selection, lower quantities, higher variance than main bandit
 ammo_9x18_fmj           = 8, 0.75
 ammo_9x18_ap            = 5, 0.55
 ammo_9x18_pmm           = 4, 0.44
@@ -103,16 +98,13 @@ grenade_f1              = 2, 0.44
 grenade_gd-05           = 2, 0.44
 
 ; --- WEAPONS ---
-; Russian low tier — his bread and butter
 wpn_pm                  = 1, 0.66
 wpn_fort                = 1, 0.55
 wpn_pb                  = 1, 0.50
 wpn_tt33                = 1, 0.44
-; NATO low — accepts them, lower probability
 wpn_beretta             = 1, 0.44
 wpn_walther             = 1, 0.40
 wpn_usp                 = 1, 0.33
-; Shotguns
 wpn_bm16                = 1, 0.66
 wpn_toz34               = 1, 0.60
 wpn_mp133               = 1, 0.50
@@ -120,16 +112,13 @@ wpn_toz34_obrez         = 1, 0.44
 wpn_wincheaster1300     = 1, 0.40
 wpn_mossberg590         = 1, 0.35
 wpn_protecta            = 1, 0.33
-; Russian rifles
 wpn_ak74u_old           = 1, 0.66
 wpn_ak74u               = 1, 0.55
 wpn_ak74_old            = 1, 0.50
 wpn_sks                 = 1, 0.44
 wpn_bizon               = 1, 0.40
-; NATO rifles
 wpn_mp5                 = 1, 0.40
 wpn_vz61                = 1, 0.35
-; Melee — knives always around
 wpn_knife               = 1, 0.88
 wpn_knife2              = 1, 0.75
 
@@ -157,9 +146,6 @@ wpn_sil_pbs1            = 1, 0.40
 
 
 [supplies_2]:supplies_1
-; Some trust. He digs out what he's been sitting on.
-; Better weapons, a few outfit attachments, some NATO options improve.
-; Still sparse — this isn't a proper trading post.
 
 ; --- FOOD ---
 meat_snork              = 1, 0.40
@@ -228,9 +214,6 @@ kobra                   = 1, 0.30
 
 
 [supplies_3]:supplies_2
-; Real trust. The back of the truck.
-; A few mid-tier weapons, slightly better medical, the best of what passes through here.
-; Still nothing that would embarrass a proper trader — this is the ceiling.
 
 ; --- MEDICAL ---
 medkit_army             = 1, 0.35

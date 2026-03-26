@@ -13,8 +13,8 @@ bracket_min    = 30000
 bracket_max    = 60000
 drift_median   = 5000
 drift_variance = 0.6
-init_min       = 40000
-init_max       = 50000
+init_min       = 4000
+init_max       = 12000
 reserve_threshold = 10000
 
 [default_barman]
@@ -299,6 +299,48 @@ init_max       = 65000
 reserve_threshold = 14000
 
 
+; ========== MONOLITH ==========
+
+; Krolik — Monolith HQ, Pripyat, well-resourced cult operation
+[pri_monolith_monolith_trader_stalker]
+bracket_min    = 45000
+bracket_max    = 80000
+drift_median   = 6500
+drift_variance = 0.50
+init_min       = 55000
+init_max       = 72000
+reserve_threshold = 16000
+
+; Jupiter depot — forward position, less resourced, higher variance
+[trader_monolith_jup_depo]
+bracket_min    = 30000
+bracket_max    = 60000
+drift_median   = 5000
+drift_variance = 0.70
+init_min       = 38000
+init_max       = 52000
+reserve_threshold = 10000
+
+; Olivar — outlying Monolith position
+[trader_monolith_kbo]
+bracket_min    = 25000
+bracket_max    = 50000
+drift_median   = 4000
+drift_variance = 0.75
+init_min       = 30000
+init_max       = 44000
+reserve_threshold = 8000
+
+; Bridge trader — most remote Monolith position, very irregular supply
+[monolith_bridge_trader_mlr]
+bracket_min    = 20000
+bracket_max    = 42000
+drift_median   = 3500
+drift_variance = 0.85
+init_min       = 25000
+init_max       = 36000
+reserve_threshold = 6000
+
 ; ================ BARMEN =================
 
 [mar_base_stalker_barmen]:default_barman
@@ -360,3 +402,78 @@ reserve_threshold = 14000
 [pri_monolith_monolith_mechanic_stalker]:default_mechanic
 
 [red_greh_tech]:default_mechanic
+
+
+; DYNAMIC STALKERS
+
+[stalker_novice]
+bracket_min    = 1000
+bracket_max    = 8000
+drift_median   = 500
+drift_variance = 0.4
+init_min       = 3000
+init_max       = 5000
+reserve_threshold = 1000
+
+[stalker_trainee]
+bracket_min    = 2000
+bracket_max    = 9000
+drift_median   = 600
+drift_variance = 0.4
+init_min       = 4000
+init_max       = 6000
+reserve_threshold = 1500
+
+[stalker_experienced]
+bracket_min    = 3000
+bracket_max    = 10000
+drift_median   = 650
+drift_variance = 0.4
+init_min       = 5000
+init_max       = 7000
+reserve_threshold = 1500
+
+[stalker_professional]
+bracket_min    = 4000
+bracket_max    = 11000
+drift_median   = 650
+drift_variance = 0.4
+init_min       = 6000
+init_max       = 8000
+reserve_threshold = 2000
+
+[stalker_veteran]
+bracket_min    = 5000
+bracket_max    = 12000
+drift_median   = 700
+drift_variance = 0.5
+init_min       = 7000
+init_max       = 9000
+reserve_threshold = 2000
+
+[stalker_expert]
+bracket_min    = 6000
+bracket_max    = 13000
+drift_median   = 700
+drift_variance = 0.5
+init_min       = 8000
+init_max       = 10000
+reserve_threshold = 3000
+
+[stalker_master]
+bracket_min    = 7000
+bracket_max    = 14000
+drift_median   = 700
+drift_variance = 0.5
+init_min       = 9000
+init_max       = 11000
+reserve_threshold = 3000
+
+[stalker_legend]
+bracket_min    = 8000
+bracket_max    = 15000
+drift_median   = 800
+drift_variance = 0.5
+init_min       = 10000
+init_max       = 12000
+reserve_threshold = 3000

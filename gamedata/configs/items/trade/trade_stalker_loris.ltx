@@ -8,8 +8,8 @@ buy_condition =  trade_generic_buy
 sell_condition = trade_generic_sell
 buy_supplies = {=actor_goodwill_ge(stalker:1000)} supplies_5, {=heavy_pockets_functor()} supplies_5, {=actor_goodwill_ge(stalker:800)} supplies_4, {=actor_goodwill_ge(stalker:600)} supplies_3, {=actor_goodwill_ge(stalker:400)} supplies_2,  supplies_1
 buy_item_condition_factor = 0.3
-buy_item_exponent = 2.0
-sell_item_exponent = 1
+buy_item_exponent = 2.5
+sell_item_exponent = 1.6
 
 discounts = discount_stalker
 
@@ -21,10 +21,6 @@ sell_item_max_condition = 0.98
 [trade_generic_sell]:trasher
 
 [supplies_1]:common_stock
-; Early game floor — Loris has just set up shop.
-; Combat-oriented from the start: ammo first, supplies second.
-; 9x19 is available immediately — his edge over Sidorovich.
-; Probabilities are lower than Loris's vanilla file — stock is real, not guaranteed.
 
 ; Absolute basics
 bolts_pack              = 3, 1
@@ -53,7 +49,7 @@ charcoal                = 1, 0.66
 explo_balon_gas         = 1, 0.66
 explo_jerrycan_fuel     = 1, 0.66
 
-; Medical — solid baseline, this is where Loris invests
+; Medical
 bandage                 = 5, 1
 jgut                    = 3, 0.88
 medkit                  = 3, 0.88
@@ -95,17 +91,17 @@ wpn_beretta             = 1, 0.66
 wpn_walther             = 1, 0.50
 
 ; Shotguns
-wpn_bm16                = 1, 0.88
-wpn_bm16_full           = 1, 0.75
-wpn_toz34               = 1, 0.75
-wpn_mp133               = 1, 0.50
+wpn_bm16                = 1, 0.66
+wpn_bm16_full           = 1, 0.40
+wpn_toz34               = 1, 0.40
+wpn_mp133               = 1, 0.20
 
 ; Russian rifles — low tier
 wpn_ak74u               = 1, 0.60
 wpn_ak74u_old           = 1, 0.75
 wpn_aks74               = 1, 0.40
-wpn_sks                 = 1, 0.35
-wpn_ppsh41              = 1, 0.50
+wpn_sks                 = 1, 0.24
+wpn_ppsh41              = 1, 0.30
 
 ; NATO rifles — low tier (vz61, mp5 accessible early)
 wpn_vz61                = 1, 0.50
@@ -129,8 +125,8 @@ wpn_sil_pbs4            = 1, 0.66
 ; Outfits — Stalker-affiliated, better variety than Sidorovich
 novice_outfit           = 1, 0.88
 stalker_outfit          = 1, 0.75
-nomad_outfit            = 1, 0.66
-stalker_drought_outfit  = 1, 0.50
+nomad_outfit            = 1, 0.20
+stalker_drought_outfit  = 1, 0.30
 
 ; Headgear
 helm_bandana            = 1, 0.88

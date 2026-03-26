@@ -1,12 +1,10 @@
 local cur_npc_id = nil
+local cur_profile_mode -- Used to build the item footer info
+local item_profile_modes = {}
 
--- [npc_id] = { pending, last_funds }
--- pending:    funds to apply on next trade open (nil if nothing queued)
--- last_funds: last known funds after applying pending, used as drift baseline
--- price_roll: the roll used to apply the min/max category multiplier
 local trader_state = {}
 
-local FUNDS_LOW_FLOOR = 0.5  -- minimum price multiplier when trader is out of money
+local FUNDS_LOW_FLOOR = 0.5
 
 
 local function print_dbg(...)
@@ -25,9 +23,19 @@ local function get_liquidity_cfg()
 	return liquidity_cfg
 end
 
-local function get_trader_config(npc_sec)
+local function get_trader_liquidity_config(npc_id, npc_sec)
 	local cfg = get_liquidity_cfg()
-	local sec = (cfg and cfg:section_exist(npc_sec)) and npc_sec or "default"
+	local sec
+	if get_object_story_id(npc_id) then
+		sec = (cfg and cfg:section_exist(npc_sec)) and npc_sec or "default"
+		print_dbg("Loading liquidity config of story npc")
+	else
+		local npc = level.object_by_id(npc_id)
+		local rank_name = ranks.get_obj_rank_name(npc)
+		local rank_sec = "stalker_" .. rank_name
+		sec = (cfg and cfg:section_exist(rank_sec)) and rank_sec or "stalker_experienced"
+		print_dbg("Loading liquidity config of non story npc: %s", rank_sec)
+	end
 	local function r(key, fallback)
 		return (cfg and cfg:r_float_ex(sec, key)) or fallback
 	end
@@ -43,10 +51,10 @@ end
 
 ---------------- items category multipliers ----------------
 
-local category_items  = {}   -- item_section  -> category_name
-local multipliers_cfg = nil  -- ini_file, loaded once at game start
+local item_categories  = {}
+local multipliers_cfg = nil
 
-local function build_category_items()
+local function build_item_categories()
     local cfg = ini_file("plugins\\grounded_trade_categories.ltx")
     if not cfg then
         print_dbg("ERROR: could not load trade_categories.ltx")
@@ -56,10 +64,11 @@ local function build_category_items()
         local n = cfg:line_count(category)
         for i = 0, n - 1 do
             local result, item, _ = cfg:r_line(category, i, "", "")
-            if result and item and item ~= "" then
-                category_items[item] = category
-				print_dbg("Added item %s with category %s", item, category)
-            end
+			if not item_categories[item] then
+				item_categories[item] = {}
+			end
+			table.insert(item_categories[item], category)
+			print_dbg("Added item %s with category %s", item, category)
         end
     end)
 end
@@ -79,7 +88,7 @@ end
 -- Returns 1 if category is not found.
 local function get_category_multiplier(trader_section, item_section, mode)
     if not multipliers_cfg then
-		return 1
+		return 0
 	end
 
     local section_name = trader_section .. (mode == 1 and "_buy" or "_sell")
@@ -87,7 +96,18 @@ local function get_category_multiplier(trader_section, item_section, mode)
 		return 1
 	end
 
-    local category = category_items[item_section]
+	local category
+	local categories = item_categories[item_section]
+	if not categories then
+		return 1
+	end
+	for _, cat in ipairs(categories) do
+		if multipliers_cfg:line_exist(section_name, cat) then
+			category = cat
+			break
+		end
+	end
+
     if not category then
 		return 1
 	end
@@ -98,7 +118,7 @@ local function get_category_multiplier(trader_section, item_section, mode)
 
     local value = multipliers_cfg:r_string_ex(section_name, category)
     if not value or value == "" then
-        return 1
+        return 0
     end
 
     local max_v, min_v = value:match("([%d%.]+)%s*,%s*([%d%.]+)")
@@ -107,7 +127,6 @@ local function get_category_multiplier(trader_section, item_section, mode)
     local max_n = tonumber(max_v)
     local min_n = tonumber(min_v)
 
-    -- get the stored roll for this trader, fall back to midpoint if not found
     local roll = 0.5
     if cur_npc_id and trader_state[cur_npc_id] then
         roll = trader_state[cur_npc_id].price_roll or 0.5
@@ -121,25 +140,19 @@ local function calc_drift(current, cfg)
 	local center   = (cfg.bracket_min + cfg.bracket_max) / 2
 	local range    = cfg.bracket_max - cfg.bracket_min
 
-	-- how far from center as a ratio: -1 = at floor, 0 = center, +1 = at ceiling
 	local deviation = (current - center) / (range / 2)
 	deviation = math.max(-1, math.min(1, deviation))
 
-	-- base magnitude randomized around drift_median with drift_variance
 	local variance  = cfg.drift_variance
 	local magnitude = cfg.drift_median * (1 + (math.random() * 2 - 1) * variance)
 
-	-- direction: negative deviation (below center) pulls positive, and vice versa
-	-- the further from center, the stronger the pull
-	-- at center: small random delta in either direction
 	local direction
 	if deviation > 0.8 then
     	direction = math.random() < 0.05 and 1 or -1    -- 5% chance of bucking the trend
 	elseif deviation < -0.8 then
     	direction = math.random() < 0.05 and -1 or 1    -- 5% chance of bucking the trend
 	else
-		-- in the middle zone: bias toward center with some randomness
-		local center_pull = -deviation	-- positive when below center, negative when above
+		local center_pull = -deviation
 		direction = center_pull + (math.random() * 0.4 - 0.2)
 		direction = direction > 0 and 1 or -1
 	end
@@ -148,7 +161,7 @@ local function calc_drift(current, cfg)
 end
 
 local function apply_drift(npc_id, npc_sec, current_funds)
-	local cfg   = get_trader_config(npc_sec)
+	local cfg   = get_trader_liquidity_config(npc_id, npc_sec)
 	local delta = calc_drift(current_funds, cfg)
 	local new_funds = math.max(cfg.bracket_min, current_funds + delta)
 
@@ -162,7 +175,7 @@ local function apply_drift(npc_id, npc_sec, current_funds)
 end
 
 local function init_trader(npc_id, npc_sec)
-	local cfg       = get_trader_config(npc_sec)
+	local cfg       = get_trader_liquidity_config(npc_id, npc_sec)
 	local new_funds = math.floor(cfg.init_min + math.random() * (cfg.init_max - cfg.init_min))
 	trader_state[npc_id] = { pending = new_funds, last_funds = new_funds, price_roll = math.random() }
 	print_dbg("[grounded liquidity] init %s: %s RU", npc_sec, new_funds)
@@ -170,11 +183,16 @@ end
 
 local player_sold_items = {}  -- [npc_id] = { [item_id] = true }
 
--- called from actor_on_trade callback
 function actor_on_trade(item, sell_bye, money)
-	print("Actor on trade callback: item_id=%s, sell_bye=%s, money=%s", tostring(item:id()), tostring(sell_bye), tostring(money))
-    if not sell_bye then return end           -- player is buying, not selling
-    if not cur_npc_id then return end
+	if not cur_npc_id then return end
+	print_dbg("Actor on trade callback: item_id=%s, sell_bye=%s, money=%s", tostring(item:id()), tostring(sell_bye), tostring(money))
+	local id = item:id()
+	local mode = item_profile_modes[id]
+	if mode then
+    	item_profile_modes[id] = (mode == 1) and 2 or 1
+		print_dbg("switched item %s profile mode from %s to %s", item:section(), mode, item_profile_modes[id])
+	end
+	if not sell_bye then return end -- player is buying, not selling
     if not player_sold_items[cur_npc_id] then
         player_sold_items[cur_npc_id] = {}
     end
@@ -182,7 +200,7 @@ function actor_on_trade(item, sell_bye, money)
 	print_dbg("Added sold items to %s, item_id = %s", cur_npc_id, item:id())
 end
 
-local function degrade_trader_inventory(npc)
+local function degrade_trader_inventory(npc) -- STOLEN FROM GROK'S Craft and Repair Overhaul addon
 
 	local cfg_name = trade_manager.get_trade_profile(npc:id(), "cfg_ltx")
 	local cfg = cfg_name and trade_manager.get_trade_cfg(cfg_name)
@@ -255,8 +273,61 @@ local function patch_trade_manager()
 	end
 end
 
+local function patch_get_item_trade_status()
+    local original = utils_item.get_item_trade_status
+
+    utils_item.get_item_trade_status = function(obj, profile)
+		print_dbg("Firing get_item_trade_status")
+        -- Only intercept sell-to-trader mode (mode 1 = player selling)
+        if profile and profile.mode == 1 and cur_npc_id and obj then
+            local npc = mob_trade.GetTalkingNpc()
+            if npc then
+				print_dbg("get_item_trade_status npc is valid")
+                local mult = get_category_multiplier(npc:section(), obj:section(), 1)
+				print_dbg("get_item_trade_status found mult=%s", mult)
+                if mult == 0 then
+					print_dbg("should have returned 1, so item untradeable")
+                    -- Category is listed but no value: explicitly untradeable
+                    return 1  -- "item can't be traded"
+                end
+            end
+        end
+        return original(obj, profile)
+    end
+end
+
+
+BuildFooter = ui_item.build_desc_footer
+function ui_item.build_desc_footer(obj, sec, str)
+	str = str or gt(ini_sys:r_string_ex(sec, "description"))
+	if (not str) then return "" end
+
+	local npc = mob_trade.GetTalkingNpc()
+	local item_mode = obj and item_profile_modes[obj:id()]
+
+	local p_clr = utils_xml.get_color("d_purple")
+	local g_clr = utils_xml.get_color("ui_green")
+	local w_clr = utils_xml.get_color("pda_white")
+	local def_clr = utils_xml.get_color("ui_gray_1")
+	if npc and item_mode then
+		local cat_multiplier = get_category_multiplier(npc:section(), obj:section(), item_mode)
+		local d_multiplier = grounded_trade_discounts.get_discount_multiplier(cur_npc_id, obj:section(), item_mode)
+		local cat_mult_str = "\\n" .. w_clr .. "Trader's interest: " .. math.floor(cat_multiplier * 100) .. "%"
+		local d_mult_str = ""
+		if d_multiplier ~= 1 then
+			d_mult_str = "\\n" .. g_clr .. "Discount: " .. math.floor((1 - d_multiplier) * 100) .. "%"
+		end
+		local footer_str = cat_mult_str .. d_mult_str
+		return BuildFooter(obj, sec, str) .. footer_str
+	end
+
+	return BuildFooter(obj, sec, str)
+end
+
 ---------------- open/close trade ----------------
 function open_trade(mode)
+
+	item_profile_modes = {}
 
 	if mode ~= 2 then return end
 
@@ -268,7 +339,6 @@ function open_trade(mode)
 
 	degrade_trader_inventory(npc)
 
-	-- notify discount module so it can initialize event state for this trader
 	grounded_trade_discounts.on_trade_opened(npc, mode)
 
 	local state = trader_state[cur_npc_id]
@@ -278,14 +348,13 @@ function open_trade(mode)
 		npc:give_money(new_funds - current)
 		state.last_funds = new_funds
 		state.pending    = nil
-		print_dbg("[grounded liquidity] applied funds to %s: %s RU", npc:section(), new_funds)
+		print_dbg("applied funds to %s: %s RU", npc:section(), new_funds)
 	end
 end
 
 function close_trade(mode)
+	item_profile_modes = {}
 	if cur_npc_id and mode ~= 2 then
-		-- snapshot actual funds on close so drift has an accurate baseline
-		-- (accounts for what the player sold during this session)
 		local npc = level.object_by_id(cur_npc_id)
 		if npc and trader_state[cur_npc_id] then
 			trader_state[cur_npc_id].last_funds = npc:money()
@@ -297,7 +366,7 @@ end
 ---------------- cost scaling ----------------
 local function get_liquidity_multiplier(npc, npc_sec, item_cost)
 	local current = npc:money()
-	local cfg = get_trader_config(npc_sec)
+	local cfg = get_trader_liquidity_config(npc:id(), npc_sec)
 	local money_after = current - item_cost
 	if money_after >= cfg.bracket_min then
 		return 1.0
@@ -313,8 +382,14 @@ local function get_liquidity_multiplier(npc, npc_sec, item_cost)
 end
 
 function on_get_item_cost(kind, obj, profile, vanilla_cost, ret)
+	
+	if not item_profile_modes[obj:id()] then
+		item_profile_modes[obj:id()] = profile.mode
+		print_dbg("Item %s with id %s added to item_profile_modes with mode %s", obj:section(), obj:id(), profile.mode)
+	end
+
 	if profile.mode == 1 then --items sold by player
-		if not cur_npc_id then return end
+		if not cur_npc_id then return end		
 
 		local npc = mob_trade.GetTalkingNpc()
 		if not npc then return end
@@ -326,12 +401,8 @@ function on_get_item_cost(kind, obj, profile, vanilla_cost, ret)
 		local d_multiplier = grounded_trade_discounts.get_discount_multiplier(cur_npc_id, obj:section(), profile.mode)
 		
 		local cat_multiplier = get_category_multiplier(npc:section(), obj:section(), profile.mode) or 1
-
 		ret.new_cost = math.floor(base * l_multiplier * d_multiplier * cat_multiplier)
 
-		--print_dbg("[grounded discount player selling] %s: Old price = %s, Inflated price = %s", obj:section(), base, base * d_multiplier * cat_multiplier)
-
-		--print_dbg("[grounded liquidity] %s: %s -> %s (x%.2f, funds: %s)", obj:section(), base, ret.new_cost, l_multiplier, npc:money())
 		
 	elseif profile.mode == 2 then --items sold by trader
 		if not cur_npc_id then return end
@@ -347,7 +418,6 @@ function on_get_item_cost(kind, obj, profile, vanilla_cost, ret)
 
 		ret.new_cost = math.floor(base * d_multiplier * cat_multiplier)
 
-		--print_dbg("[grounded discount trader selling] %s: Old price = %s, Discounted price = %s", obj:section(), base, base * d_multiplier * cat_multiplier)
 	end
 end
 
@@ -364,8 +434,9 @@ end
 ---------------- init ----------------
 function on_game_start()
 	patch_trade_manager()
-	build_category_items()
+	build_item_categories()
 	load_multipliers_cfg()
+	--patch_get_item_trade_status()
 	RegisterScriptCallback("ActorMenu_on_mode_changed", open_trade)
 	RegisterScriptCallback("ActorMenu_on_mode_changed", close_trade)
 	RegisterScriptCallback("on_get_item_cost", on_get_item_cost)

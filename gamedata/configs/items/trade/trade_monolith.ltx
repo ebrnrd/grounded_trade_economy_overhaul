@@ -1,394 +1,399 @@
 #include "presets\trade_discounts.ltx"
 #include "presets\trade_presets.ltx"
 
+;EDITED GROUNDED TRADER OVERHAUL
+
 [trader]
 buy_condition =  trade_generic_buy
 sell_condition = trade_generic_sell
 buy_supplies = {=actor_goodwill_ge(monolith:1000)} supplies_5, {=heavy_pockets_functor()} supplies_5, {=actor_goodwill_ge(monolith:800)} supplies_4, {=actor_goodwill_ge(monolith:600)} supplies_3, {=actor_goodwill_ge(monolith:400)} supplies_2,  supplies_1
 buy_item_condition_factor = 0.50
-buy_item_exponent = 2.25
-sell_item_exponent = 0.4
+buy_item_exponent = 2.6
+sell_item_exponent = 1.4
 
-discounts = discount_mechanic
+sell_item_min_condition = 0.5
+sell_item_max_condition = 0.98
+
+discounts = discount_monolith
 
 [trade_generic_buy]:merchant
 
 [trade_generic_sell]:merchant
 
 [supplies_1]:common_stock
-swiss_knife			= 2, 1
-detector_radio             = 1, 1
-detector_geiger             = 1, 1
-device_pda_1				= 1, 1
-bolts_pack				= 2, 1
-itm_tent                = 1, 1
+; Baseline. What Monolith keeps available even to new contacts.
+; High variance throughout — cult supply chain is irregular and scavenged.
 
-;items
-batteries_dead			= 6, 1
-itm_sleepbag			= 1, 1
-compression_bag			= 1, 1
-itm_actor_backpack		= 1, 1
-itm_backpack			= 1, 1
-device_flashlight		= 1, 1
-device_torch_dummy		= 1, 1
+; --- BASICS ---
+bolts_pack              = 3, 0.80
+batteries_dead          = 5, 0.72
+device_torch_dummy      = 1, 0.70
+box_matches             = 4, 0.80
+swiss_knife             = 1, 0.65
 
-;еда
-bread					= 4, 1
-breadold				= 4, 1
-conserva				= 3, 1
-tomato					= 3, 1
-sausage					= 2, 1
-corn					= 4, 1
-beans					= 4, 1
-chili					= 4, 1
-salmon					= 2, 1
-raisins					= 3, 1
-chocolate				= 1, 1
-nuts					= 2, 1
-ration_ukr			= 3, 1
-ration_ru				= 2, 1
-mint					= 3, 1
-mineral_water			= 3, 1
-caffeine				= 1, 1
-energy_drink			= 4, 1
-water_drink				= 4, 1
-vodka2	             	= 3, 1
+; --- FOOD ---
+; Zone food and rations — Monolith doesn't forage for luxury
+bread                   = 3, 0.68
+breadold                = 3, 0.65
+conserva                = 3, 0.68
+corn                    = 3, 0.65
+beans                   = 3, 0.65
+chili                   = 2, 0.62
+tomato                  = 2, 0.58
+ration_ru               = 3, 0.72
+ration_ukr              = 2, 0.65
+water_drink             = 4, 0.85
+mineral_water           = 3, 0.72
+energy_drink            = 3, 0.72
+vodka2                  = 3, 0.70
+caffeine                = 2, 0.65
+mint                    = 2, 0.60
 
-;ћедикаменты
-bandage					= 4, 1
-survival_kit			= 1, 1
-medkit					= 3, 1
-medkit_army				= 2, 1
-medkit_scientic			= 2, 1
-stimpack				= 2, 1
-stimpack_army			= 2, 1
-stimpack_scientic		= 2, 1
-antirad					= 2, 1
-salicidic_acid			= 2, 1
-morphine				= 2, 1
-box_matches			= 4, 1
+; --- COOKING ---
+cooking                 = 3, 0.78
+fieldcooker             = 1, 0.62
+kerosene                = 2, 0.70
+charcoal                = 2, 0.72
+explo_balon_gas         = 1, 0.62
+explo_jerrycan_fuel     = 1, 0.60
+kit_hunt                = 1, 0.58
 
-;Ѕустеры
-drug_booster			= 2, 1
-drug_coagulant		= 1, 1
-drug_antidot			= 1, 1
-drug_radioprotector	= 1, 1
-drug_psy_blockade		= 1, 1
-drug_sleepingpills	= 1, 1
-medkit_ai1					= 4, 1
-medkit_ai2					= 4, 1
-medkit_ai3					= 4, 1
-antirad_kalium					= 4, 1
-antirad_cystamine					= 4, 1
-antibio_sulfad					= 4, 1
-antiemetic					= 4, 1
-antibio_chlor					= 4, 1
-jgut					= 4, 1
-yadylin					= 4, 1
-analgetic					= 4, 1
+; --- MEDICAL ---
+; Well-stocked — Monolith operations in Pripyat are brutal
+bandage                 = 5, 0.88
+jgut                    = 4, 0.82
+medkit                  = 4, 0.80
+medkit_ai1              = 4, 0.78
+medkit_ai2              = 3, 0.72
+medkit_ai3              = 2, 0.65
+medkit_army             = 2, 0.68
+medkit_scientic         = 2, 0.65
+antirad_kalium          = 4, 0.82
+antirad_cystamine       = 4, 0.78
+antirad                 = 3, 0.78
+antibio_chlor           = 4, 0.82
+antibio_sulfad          = 4, 0.78
+antiemetic              = 3, 0.75
+tetanus                 = 3, 0.72
+yadylin                 = 4, 0.80
+analgetic               = 4, 0.78
+jgut                    = 4, 0.82
+stimpack                = 2, 0.68
+stimpack_army           = 2, 0.65
+stimpack_scientic       = 2, 0.60
+survival_kit            = 1, 0.60
+salicidic_acid          = 2, 0.70
+morphine                = 2, 0.68
+drug_booster            = 2, 0.72
+drug_coagulant          = 2, 0.68
+drug_antidot            = 2, 0.65
+drug_radioprotector     = 2, 0.68
+; Psy blockers — Monolith members consume these to function near anomalies
+drug_psy_blockade       = 3, 0.82
+drug_sleepingpills      = 2, 0.65
 
-;ќружие
-wpn_mp412               = 1, 0.88
-wpn_beretta             = 1, 0.88
-wpn_colt1911            = 1, 0.88
-wpn_desert_eagle        = 1, 0.88
-wpn_hpsa                = 1, 0.88
-wpn_sig220              = 1, 0.88
-wpn_usp                 = 1, 0.88
-wpn_walther             = 1, 0.88
-wpn_usp                 = 1, 0.88
-wpn_usp            = 1, 0.88
-wpn_fnp45                 = 1, 0.88
-wpn_fnp45            = 1, 0.88
-wpn_cz75                 = 1, 0.88
-wpn_cz75            = 1, 0.88
-wpn_glock                 = 1, 0.88
-wpn_glock            = 1, 0.88
-wpn_mp443            = 1, 0.88
-wpn_aug                 = 1, 0.88
-wpn_aug                 = 1, 0.88
-wpn_protecta            = 1, 0.88
-wpn_spas12              = 1, 0.88
-wpn_wincheaster1300     = 1, 0.88
-wpn_mp5                 = 1, 0.88
-wpn_vz61            = 1, 0.88
-wpn_mp5sd                 = 1, 0.88
-wpn_ump45               = 1, 0.88
-wpn_fn2000              = 1, 0.88
-wpn_g36                 = 1, 0.88
-wpn_bizon       = 1, 0.88
+; --- AMMO ---
+; Both ecosystems equal — looted from every faction in the Zone
+ammo_9x18_fmj           = 10, 0.75
+ammo_9x18_ap            = 7, 0.65
+ammo_9x18_pmm           = 6, 0.58
+ammo_9x19_fmj           = 10, 0.78
+ammo_9x19_ap            = 7, 0.68
+ammo_9x19_pbp           = 5, 0.60
+ammo_5.45x39_fmj        = 12, 0.78
+ammo_5.45x39_ep         = 8, 0.68
+ammo_5.45x39_ap         = 6, 0.62
+ammo_5.56x45_fmj        = 12, 0.78
+ammo_5.56x45_ss190      = 8, 0.68
+ammo_5.56x45_ap         = 6, 0.62
+ammo_7.62x39_fmj        = 10, 0.75
+ammo_7.62x39_ap         = 7, 0.65
+ammo_7.62x51_fmj        = 10, 0.75
+ammo_7.62x51_ap         = 7, 0.65
+ammo_11.43x23_fmj       = 8, 0.70
+ammo_11.43x23_hydro     = 6, 0.62
+ammo_7.62x25_p          = 8, 0.68
+ammo_7.62x25_ps         = 7, 0.62
+ammo_7.92x33_fmj        = 6, 0.65
+ammo_7.92x33_ap         = 5, 0.58
+ammo_9x39_pab9          = 10, 0.75
+ammo_9x39_ap            = 7, 0.65
+ammo_7.62x54_ap         = 7, 0.68
+ammo_7.62x54_7h1        = 5, 0.62
+ammo_7.62x54_7h14       = 4, 0.58
+ammo_12x70_buck         = 8, 0.72
+ammo_12x76_zhekan       = 6, 0.65
+ammo_357_hp_mag         = 4, 0.55
+ammo_5.7x28_ss190       = 5, 0.60
+ammo_5.7x28_ss195       = 3, 0.52
+ammo_12.7x55_fmj        = 4, 0.60
+ammo_12.7x55_ap         = 3, 0.55
+grenade_rgd5            = 4, 0.80
+grenade_f1              = 3, 0.72
+grenade_smoke           = 4, 0.78
+grenade_gd-05           = 3, 0.68
+ammo_vog-25             = 4, 0.70
+ammo_og-7b              = 2, 0.65
+ammo_m209               = 3, 0.62
 
-;misc
-wpn_knife               = 2, 1
-mine_new                    = 5, 1
-ied_rpg_new                 = 5, 1
-ied_new                     = 5, 1
-wpn_binoc_inv           = 2, 1
+; --- WEAPONS ---
+; Low and mid tier from both ecosystems — accumulated from enemies
+wpn_mp412               = 1, 0.58
+wpn_beretta             = 1, 0.62
+wpn_colt1911            = 1, 0.62
+wpn_desert_eagle        = 1, 0.55
+wpn_hpsa                = 1, 0.58
+wpn_sig220              = 1, 0.60
+wpn_usp                 = 1, 0.60
+wpn_walther             = 1, 0.58
+wpn_fnp45               = 1, 0.58
+wpn_cz75                = 1, 0.58
+wpn_glock               = 1, 0.62
+wpn_mp443               = 1, 0.60
+wpn_aug                 = 1, 0.62
+wpn_protecta            = 1, 0.62
+wpn_spas12              = 1, 0.62
+wpn_wincheaster1300     = 1, 0.60
+wpn_mp5                 = 1, 0.65
+wpn_mp5sd               = 1, 0.62
+wpn_vz61                = 1, 0.60
+wpn_ump45               = 1, 0.60
+wpn_fn2000              = 1, 0.62
+wpn_g36                 = 1, 0.62
+wpn_bizon               = 1, 0.60
+wpn_knife               = 2, 0.88
+mine_new                = 5, 0.82
+ied_new                 = 4, 0.75
+ied_rpg_new             = 3, 0.68
 
-;Ѕроники
-helm_rp_bala            = 1, 1
-helm_cloth_mask			= 1, 1
-helm_respirator_gp5     = 1, 1
-helm_respirator_old     = 1, 1
-helm_respirator 		= 1, 1
-helm_ppm88				= 1, 1
-monolith_outfit			= 1, 1
-monolith_trenchcoat_outfit = 1, 1
-lead_box				= 3, 1
+; --- OUTFITS ---
+monolith_outfit         = 1, 0.75
+monolith_trenchcoat_outfit = 1, 0.70
+helm_rp_bala            = 1, 0.65
+helm_cloth_mask         = 1, 0.62
+helm_respirator_gp5     = 1, 0.60
+helm_ppm88              = 1, 0.58
+lead_box                = 3, 0.75
 
-;јммуници¤
-ammo_9x18_fmj                   = 8, 0.66
-ammo_9x18_ap                    = 6, 0.66
-ammo_9x18_pmm                   = 6, 0.66
-ammo_9x19_fmj                   = 8, 0.66
-ammo_9x19_ap                    = 6, 0.66
-ammo_9x19_pbp                   = 6, 0.66
-ammo_11.43x23_fmj               = 8, 0.66
-ammo_11.43x23_hydro             = 6, 0.66
-ammo_12x70_buck                 = 8, 0.66
-ammo_12x76_zhekan               = 6, 0.66
-ammo_5.45x39_fmj                = 8, 0.66
-ammo_5.45x39_ep					= 6, 0.66
-ammo_5.45x39_ap                 = 6, 0.66
-ammo_5.56x45_fmj				= 10, 0.66	
-ammo_5.56x45_ss190              = 8, 0.66
-ammo_5.56x45_ap                 = 6, 0.66
-ammo_7.62x39_fmj                = 8, 0.66
-ammo_7.62x39_ap                 = 6, 0.66
-ammo_7.62x51_fmj                = 8, 0.66
-ammo_7.62x51_ap                 = 6, 0.66
-ammo_7.62x25_p                  = 8, 0.66
-ammo_7.62x25_ps                 = 8, 0.66
-ammo_7.92x33_fmj                = 8, 0.66
-ammo_7.92x33_ap                 = 6, 0.66
-ammo_9x39_pab9                  = 8, 0.66
-ammo_9x39_ap                    = 6, 0.66
-ammo_7.62x54_ap                 = 6, 0.66
-ammo_7.62x54_7h1                = 4, 0.66
-ammo_7.62x54_7h14               = 3, 0.66
-ammo_357_hp_mag                 = 4, 0.66
-ammo_magnum_300                 = 6, 0.66
-ammo_5.7x28_ss190                       = 5, 0.66
-ammo_5.7x28_ss195               = 3, 0.66
-ammo_12.7x55_fmj                        = 3, 0.66
-ammo_12.7x55_ap         = 2, 0.66
-grenade_rgd5                    = 3, 0.66
-grenade_gd-05                   = 2, 0.66
-grenade_smoke                   = 3, 0.66
-grenade_f1                              = 2, 0.66
-ammo_og-7b                              = 1, 0.88
-ammo_vog-25                             = 3, 0.66
-ammo_m209                               = 3, 0.66
+; --- GEAR ---
+detector_radio          = 1, 0.78
+detector_geiger         = 1, 0.75
+detector_simple         = 1, 0.72
+device_flashlight       = 1, 0.82
+device_pda_1            = 1, 0.68
+itm_sleepbag            = 1, 0.68
+compression_bag         = 1, 0.62
+itm_backpack            = 1, 0.65
+itm_tent                = 1, 0.55
+wpn_binoc_inv           = 2, 0.70
 
-;јддоны
-wpn_sil_9mm		= 1, 0.88
-wpn_sil_45		= 1, 0.88
-wpn_sil_pbs1		= 1, 0.88
-wpn_sil_pbs4		= 1, 0.88
-wpn_sil_tgp-a		= 1, 0.88
-wpn_sil_nato		= 1, 0.88
-wpn_sil_kzrzp		= 1, 0.88
-wpn_sil_atg		= 1, 0.88
-wpn_sil_aps		= 1, 0.88
-wpn_sil_9a91		= 1, 0.88
-wpn_sil_6p9		= 1, 0.88
-wpn_sil_vihr		= 1, 0.88
-wpn_sil_gemtech		= 1, 0.88
+; --- SILENCERS ---
+wpn_sil_9mm             = 1, 0.70
+wpn_sil_45              = 1, 0.70
+wpn_sil_pbs1            = 1, 0.68
+wpn_sil_pbs4            = 1, 0.65
+wpn_sil_tgp-a           = 1, 0.62
+wpn_sil_nato            = 1, 0.65
+wpn_sil_kzrzp           = 1, 0.60
+wpn_sil_atg             = 1, 0.60
+wpn_sil_aps             = 1, 0.58
+wpn_sil_9a91            = 1, 0.58
+wpn_sil_6p9             = 1, 0.55
+wpn_sil_vihr            = 1, 0.55
+wpn_sil_gemtech         = 1, 0.62
 
-;ѕредметы
-detector_simple			= 1, 1
-kit_hunt				= 1, 1
-fieldcooker				= 1, 1
-
-cooking					= 3, 1
-kerosene                = 2, 1
-charcoal                = 2, 1
-explo_balon_gas         = 1, 1
-explo_jerrycan_fuel     = 1, 1
 
 [supplies_2]:supplies_1
-device_torch_nv_1		= 1, 1
-equ_small_pack          = 1, 1
+; More trust. Mid-tier weapons appear more consistently.
+; Outfit attachments — deep Zone Monolith units equip these for anomaly survival.
 
-wpn_g36k                 = 1, 0.88
-wpn_galil               = 1, 0.88
-wpn_l85                 = 1, 0.88
-wpn_l85a2                 = 1, 0.88
-wpn_lr300               = 1, 0.88
-wpn_m4a1                = 1, 0.88
-wpn_m16a2               = 1, 0.88
-wpn_sig550              = 1, 0.88
-wpn_g3                 = 1, 0.88
-wpn_g3sg1                 = 1, 0.88
-wpn_fn2000              = 1, 0.88
+; --- MEDICAL ---
+drug_anabiotic          = 2, 0.65
 
-wpn_knife2              = 2, 1
-wpn_axe                 = 1, 1
-wpn_axe2                = 1, 1
+; --- WEAPONS ---
+wpn_g36k                = 1, 0.60
+wpn_galil               = 1, 0.60
+wpn_l85                 = 1, 0.62
+wpn_l85a2               = 1, 0.58
+wpn_lr300               = 1, 0.62
+wpn_m4a1                = 1, 0.62
+wpn_m16a2               = 1, 0.60
+wpn_sig550              = 1, 0.60
+wpn_g3                  = 1, 0.58
+wpn_g3sg1               = 1, 0.55
+wpn_fn2000              = 1, 0.62
+wpn_knife2              = 2, 0.75
+wpn_axe                 = 1, 0.65
+wpn_axe2                = 1, 0.62
+wpn_sil_sr25            = 1, 0.60
+wpn_sil_57              = 1, 0.58
 
-wpn_addon_scope_po4x34		= 1, 0.88
-wpn_addon_scope_galil		= 1, 0.88
-1p29		= 1, 0.88
-kobra		= 1, 0.88
-ps01		= 1, 0.88
-pso1m21		= 1, 0.88
-ac10632		= 1, 0.88
-acog		= 1, 0.88
-eot		= 1, 0.88
-c-more	= 1, 0.88
+; --- SCOPES ---
+wpn_addon_scope_po4x34  = 1, 0.72
+wpn_addon_scope_galil   = 1, 0.70
+1p29                    = 1, 0.72
+kobra                   = 1, 0.70
+ps01                    = 1, 0.68
+pso1m21                 = 1, 0.68
+ac10632                 = 1, 0.72
+acog                    = 1, 0.72
+eot                     = 1, 0.70
+c-more                  = 1, 0.68
 
-wpn_sil_sr25		= 1, 0.88
-wpn_sil_57		= 1, 0.88
+; --- OUTFITS ---
+monolith_nbc_outfit     = 1, 0.65
+helm_m40                = 1, 0.68
+helm_hardhat            = 1, 0.65
+helm_m50                = 1, 0.62
 
-detector_advanced		= 2, 1
-army_bowler             = 1, 1
+; --- GEAR ---
+device_torch_nv_1       = 1, 0.68
+equ_small_pack          = 1, 0.75
+detector_advanced       = 2, 0.68
+army_bowler             = 1, 0.70
 
-;Броня
-monolith_nbc_outfit     = 1, 1
-helm_m40				= 1, 1
-helm_hardhat			= 1, 1
-helm_m50				= 1, 1
-
-af_surge				= 1, 1
-af_frames				= 2, 1
-af_grid					= 2, 1
-af_freon				= 1, 1
-af_cooler				= 1, 1
-af_kevlar				= 2, 1
-af_plates				= 2, 1
-af_camelbak				= 1, 1
-af_iam					= 2, 1
-af_aac					= 2, 1
-af_aam					= 1, 1
+; --- OUTFIT ATTACHMENTS ---
+af_surge                = 1, 0.72
+af_frames               = 2, 0.72
+af_grid                 = 2, 0.72
+af_freon                = 1, 0.68
+af_cooler               = 1, 0.68
+af_kevlar               = 2, 0.75
+af_plates               = 2, 0.75
+af_camelbak             = 1, 0.68
+af_iam                  = 2, 0.70
+af_aac                  = 2, 0.68
+af_aam                  = 1, 0.65
 
 
 [supplies_3]:supplies_2
-device_torch_nv_2		= 1, 1
-equ_small_military_pack = 1, 1
-device_pda_2			= 1, 1
+; Trusted. Russian high tier appears, specialist NATO weapons.
+; Monolith outfits — the cult's own gear for committed members.
 
-wpn_beretta_camo            = 1, 0.88
-wpn_beretta_modern          = 1, 0.88
-wpn_colt1911_modern           = 1, 0.88
-wpn_desert_eagle_custom        = 1, 0.88
-wpn_sig220_custom           = 1, 0.88
-wpn_fnp45_custom              = 1, 0.88
-wpn_fnx45_alt            = 1, 0.88
-wpn_glock_custom          = 1, 0.88
-wpn_gsh18_custom          = 1, 0.88
-wpn_axe3                = 1, 1
+; --- WEAPONS ---
+wpn_beretta_camo        = 1, 0.58
+wpn_beretta_modern      = 1, 0.58
+wpn_colt1911_modern     = 1, 0.58
+wpn_desert_eagle_custom = 1, 0.55
+wpn_sig220_custom       = 1, 0.58
+wpn_fnp45_custom        = 1, 0.55
+wpn_fnx45_alt           = 1, 0.55
+wpn_glock_custom        = 1, 0.58
+wpn_gsh18_custom        = 1, 0.55
+wpn_fn2000_camo         = 1, 0.58
+wpn_fn2000_custom       = 1, 0.58
+wpn_pp2000              = 1, 0.58
+wpn_val                 = 1, 0.65
+wpn_vintorez            = 1, 0.62
+wpn_9a91                = 1, 0.62
+wpn_vihr                = 1, 0.58
+wpn_svd                 = 1, 0.65
+wpn_svd_custom          = 1, 0.60
+wpn_svu                 = 1, 0.62
+wpn_rpk74               = 1, 0.62
+wpn_pkm                 = 1, 0.60
+wpn_saiga12s            = 1, 0.60
+wpn_protecta_camo       = 1, 0.58
+wpn_protecta_custom     = 1, 0.58
+wpn_spas12_custom       = 1, 0.58
+wpn_sig550_custom       = 1, 0.58
+wpn_mp5sd_custom        = 1, 0.58
+wpn_vz61_camo           = 1, 0.55
+wpn_aug_modern          = 1, 0.58
+wpn_scar                = 1, 0.58
+wpn_l85a2_alt           = 1, 0.58
+wpn_l85a2_modern        = 1, 0.55
+wpn_l85_alt             = 1, 0.55
+wpn_knife3              = 2, 0.70
+wpn_axe3                = 1, 0.62
+wpn_addon_grenade_launcher      = 1, 0.65
+wpn_addon_grenade_launcher_m203 = 1, 0.62
 
-wpn_fn2000_camo              = 1, 0.88
-wpn_fn2000_custom              = 1, 0.88
-wpn_pp2000               	= 1, 0.88
-wpn_val                 	= 1, 0.88
-wpn_vintorez            	= 1, 0.88
-wpn_9a91                 	= 1, 0.88
-wpn_vihr            	= 1, 0.88
-wpn_svd                 	= 1, 0.88
-wpn_svd_custom             	= 1, 0.88
-wpn_svu                 	= 1, 0.88
-wpn_rpk74               	= 1, 0.88
-wpn_pkm                 	= 1, 0.88
-wpn_saiga12s              = 1, 0.88
-wpn_protecta_camo           = 1, 0.88
-wpn_protecta_custom         = 1, 0.88
-wpn_spas12_custom              = 1, 0.88
-wpn_sig550_custom             = 1, 0.88
-wpn_mp5sd_custom                 = 1, 0.88
-wpn_vz61_camo           = 1, 0.88
-wpn_aug_modern                = 1, 0.88
-wpn_scar                = 1, 0.88
-wpn_scar                = 1, 0.88
-wpn_l85a2_alt                = 1, 0.88
-wpn_l85a2_modern              = 1, 0.88
-wpn_l85_alt                = 1, 0.88
+; --- OUTFITS ---
+light_monolit_outfit    = 1, 0.65
+helm_metro              = 1, 0.65
+helm_tactic             = 1, 0.62
 
-wpn_knife3              = 2, 1
+; --- GEAR ---
+device_torch_nv_2       = 1, 0.68
+device_pda_2            = 1, 0.62
+equ_small_military_pack = 1, 0.72
 
-wpn_addon_grenade_launcher		= 1, 0.88
-wpn_addon_grenade_launcher_m203		= 1, 0.88
-
-
-
-;Броня
-light_monolit_outfit        = 1, 1
-helm_metro                  = 1, 1
-helm_tactic					= 1, 1
-
-af_freon_up             = 1, 1
-af_frames_up            = 1, 1
-af_camelbak_up              = 1, 1
+; --- OUTFIT ATTACHMENTS (UPGRADED) ---
+af_freon_up             = 1, 0.55
+af_frames_up            = 1, 0.55
+af_camelbak_up          = 1, 0.52
 
 
 [supplies_4]:supplies_3
-device_torch_nv_3		= 1, 1
-equ_military_pack           = 1, 1
-device_pda_3			= 1, 1
+; Deep trust. The best Monolith can field.
+; High-tier weapons from both ecosystems, exo-adjacent outfits.
 
-wpn_l85_modern              = 1, 0.88
-wpn_m4a1_camo               = 1, 0.88
-wpn_g36           = 1, 0.88
-wpn_sig552               = 1, 0.88
-wpn_rg-6                    = 1, 0.88
-wpn_rpg7                    = 1, 0.88
-wpn_l96a1                     = 1, 0.88
-wpn_sv98                = 1, 0.88
+; --- WEAPONS ---
+wpn_l85_modern          = 1, 0.55
+wpn_m4a1_camo           = 1, 0.55
+wpn_sig552              = 1, 0.55
+wpn_rg-6                = 1, 0.62
+wpn_rpg7                = 1, 0.58
+wpn_l96a1               = 1, 0.55
+wpn_sv98                = 1, 0.55
+wpn_knife4              = 2, 0.68
 
-wpn_knife4              = 2, 1
+; --- OUTFITS ---
+monolith_scientific_outfit      = 1, 0.60
+monolith_scientific_light_outfit = 1, 0.58
+monolith_proto_exo_outfit       = 1, 0.55
+monolith_exolight_outfit        = 1, 0.52
+military_monolit_outfit         = 1, 0.58
+helm_battle             = 1, 0.60
+helm_protective         = 1, 0.58
+helm_exo                = 1, 0.52
 
-test_container          = 1, 1
-detector_elite			= 2, 1
+; --- GEAR ---
+device_torch_nv_3       = 1, 0.65
+device_pda_3            = 1, 0.60
+equ_military_pack       = 1, 0.68
+detector_elite          = 2, 0.65
 
-af_grid_up              = 1, 1
-af_surge_up             = 1, 1
+; --- OUTFIT ATTACHMENTS ---
+af_grid_up              = 1, 0.52
+af_surge_up             = 1, 0.52
 
-;Броня
-monolith_scientific_outfit	= 1, 1
-monolith_scientific_light_outfit = 1, 1
-monolith_proto_exo_outfit	= 1, 1
-monolith_exolight_outfit	= 1, 1
-military_monolit_outfit     = 1, 1
-helm_battle					= 1, 1
-helm_protective				= 1, 1
-helm_exo                    = 1, 1
 
 [supplies_5]:supplies_4
+; Maximum trust. The rarest things in Monolith hands.
+; The gauss rifle appears — iconic but genuinely rare even here.
 
-equ_tourist_pack       = 1, 1
-
-wpn_colt1911_camo           = 1, 0.88
-wpn_fnx45_custom            = 1, 0.88
-wpn_glock_modern          = 1, 0.88
-wpn_l96a1m          	= 1, 0.88
-wpn_sv98_custom                 	= 1, 0.88
-wpn_sr25            	= 1, 0.88
-wpn_vintorez_alt                 	= 1, 0.88
-wpn_svu_alt                 	= 1, 0.88
-wpn_m249               	= 1, 0.88
-wpn_pkp                 	= 1, 0.88
-wpn_sig550_camo             = 1, 0.88
-wpn_mp153                 = 1, 0.88
-wpn_vepr                 = 1, 0.88
-wpn_g36_camo           = 1, 0.88
-wpn_aug_custom                = 1, 0.88
-wpn_scar_new                = 1, 0.88
-wpn_ak12                = 1, 0.88
-wpn_hk416                = 1, 0.88
-wpn_ace21              = 1, 0.88
-wpn_vityaz                = 1, 0.88
-wpn_saiga12s              = 1, 0.88
-wpn_usas12               = 1, 0.88
-wpn_p90           = 1, 0.88
-wpn_gauss				= 1, 1
-ammo_gauss				= 5, 1
-
-wpn_knife5              = 2, 1
-
-;Броня
-monolith_exo_outfit		= 1, 1
-monolith_nosorog_outfit	= 1, 1
-ghillie_outfit          = 1, 1
-helm_spartan			= 1, 1
-
-af_cooler_up            = 1, 1
+wpn_l96a1m              = 1, 0.30
+wpn_sv98_custom         = 1, 0.28
+wpn_sr25                = 1, 0.32
+wpn_vintorez_alt        = 1, 0.28
+wpn_svu_alt             = 1, 0.28
+wpn_m249                = 1, 0.30
+wpn_pkp                 = 1, 0.28
+wpn_sig550_camo         = 1, 0.32
+wpn_mp153               = 1, 0.35
+wpn_vepr                = 1, 0.30
+wpn_g36_camo            = 1, 0.30
+wpn_aug_custom          = 1, 0.30
+wpn_scar_new            = 1, 0.30
+wpn_ak12                = 1, 0.30
+wpn_hk416               = 1, 0.28
+wpn_ace21               = 1, 0.30
+wpn_vityaz              = 1, 0.32
+wpn_saiga12s            = 1, 0.32
+wpn_usas12              = 1, 0.28
+wpn_p90                 = 1, 0.28
+wpn_colt1911_camo       = 1, 0.32
+wpn_fnx45_custom        = 1, 0.30
+wpn_glock_modern        = 1, 0.32
+; The gauss — Monolith's most iconic weapon, genuinely rare
+wpn_gauss               = 1, 0.18
+ammo_gauss              = 5, 0.30
+wpn_knife5              = 2, 0.65
+monolith_exo_outfit     = 1, 0.22
+monolith_nosorog_outfit = 1, 0.18
+ghillie_outfit          = 1, 0.25
+helm_spartan            = 1, 0.22
+equ_tourist_pack        = 1, 0.28
+af_cooler_up            = 1, 0.42

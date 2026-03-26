@@ -1,6 +1,3 @@
--- Grounded Trade - MCM config
--- If MCM is not installed, defaults below are used directly.
-
 local defaults = {
 	["min_event_duration"] = 1,    -- minimum event duration in in-game days
 	["max_event_duration"] = 3,    -- maximum event duration in in-game days
