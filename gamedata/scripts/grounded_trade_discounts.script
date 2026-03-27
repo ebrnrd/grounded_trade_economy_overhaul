@@ -413,7 +413,7 @@ function get_discount_multiplier(npc_id, item_section, mode)
 	local group = item_to_group[item_section]
 	if not group then return 1.0 end
 
-	local event_key = (mode == 1) and "sell_event" or "buy_event"
+	local event_key = (mode == 1) and "buy_event" or "sell_event"
 	local event     = trader_events[npc_id][event_key]
 	if not event then return 1.0 end
 

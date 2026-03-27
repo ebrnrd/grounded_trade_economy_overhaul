@@ -1,11 +1,19 @@
 local cur_npc_id = nil
-local cur_profile_mode -- Used to build the item footer info
-local item_profile_modes = {}
+local item_profile_modes = {} -- Used to build the item footer info
 
 local trader_state = {}
 
 local FUNDS_LOW_FLOOR = 0.5
 
+local trader_mult_intervals = {
+    { key = "lowest",    threshold = 0.2 },
+    { key = "very_low",  threshold = 0.4 },
+    { key = "low",       threshold = 0.6 },
+    { key = "medium",    threshold = 0.7 },
+    { key = "high",      threshold = 0.8 },
+    { key = "very_high", threshold = 0.9 },
+    { key = "highest",   threshold = 1.0 },
+}
 
 local function print_dbg(...)
 	local header = "[grounded_trade_overhaul]"
@@ -91,7 +99,8 @@ local function get_category_multiplier(trader_section, item_section, mode)
 		return 0
 	end
 
-    local section_name = trader_section .. (mode == 1 and "_buy" or "_sell")
+    --local section_name = trader_section .. (mode == 1 and "_buy" or "_sell")
+	local section_name = trader_section
     if not multipliers_cfg:section_exist(section_name) then
 		return 1
 	end
@@ -132,7 +141,21 @@ local function get_category_multiplier(trader_section, item_section, mode)
         roll = trader_state[cur_npc_id].price_roll or 0.5
     end
 
-    return min_n + roll * (max_n - min_n)
+	local cfg_name = trade_manager.get_trade_profile(cur_npc_id, "cfg_ltx")
+	local cfg = cfg_name and trade_manager.get_trade_cfg(cfg_name)
+	local sell_influence = 1
+	local buy_influence = 1
+	if cfg and cfg:line_exist("trader", "sell_mult_influence") then
+		sell_influence = cfg:r_float("trader", "sell_mult_influence")
+	end
+	if cfg and cfg:line_exist("trader", "buy_mult_influence") then
+		buy_influence = cfg:r_float("trader", "buy_mult_influence")
+	end
+	
+	local rolled = min_n + roll * (max_n - min_n)
+	local influence = mode == 1 and buy_influence or sell_influence
+
+    return 1 + (rolled - 1) * influence
 end
 
 ---------------- drift ----------------
@@ -296,26 +319,56 @@ local function patch_get_item_trade_status()
     end
 end
 
+local interest_colors_buy = {
+    ["lowest"]    = "%c[255,255,0,0]",
+    ["very_low"]  = "%c[255,204,0,51]",
+    ["low"]       = "%c[255,255,77,121]",
+    ["medium"]    = "%c[255,255,255,255]",
+    ["high"]      = "%c[255,128,255,159]",
+    ["very_high"] = "%c[255,51,255,102]",
+    ["highest"]   = "%c[255,0,255,0]",
+}
+
+local interest_colors_sell = {
+    ["highest"]    = "%c[255,255,0,0]",
+    ["very_high"]  = "%c[255,204,0,51]",
+    ["high"]       = "%c[255,255,77,121]",
+    ["medium"]    = "%c[255,255,255,255]",
+    ["low"]      = "%c[255,128,255,159]",
+    ["very_low"] = "%c[255,51,255,102]",
+    ["lowest"]   = "%c[255,0,255,0]",
+}
 
 BuildFooter = ui_item.build_desc_footer
 function ui_item.build_desc_footer(obj, sec, str)
-	str = str or gt(ini_sys:r_string_ex(sec, "description"))
+	str = str or game.translate_string(ini_sys:r_string_ex(sec, "description"))
 	if (not str) then return "" end
 
 	local npc = mob_trade.GetTalkingNpc()
 	local item_mode = obj and item_profile_modes[obj:id()]
 
 	local p_clr = utils_xml.get_color("d_purple")
-	local g_clr = utils_xml.get_color("ui_green")
+	local g_clr = "%c[d_green]"
 	local w_clr = utils_xml.get_color("pda_white")
 	local def_clr = utils_xml.get_color("ui_gray_1")
 	if npc and item_mode then
 		local cat_multiplier = get_category_multiplier(npc:section(), obj:section(), item_mode)
+		local cat_desc_key
+		for _, v in ipairs(trader_mult_intervals) do
+			if cat_multiplier <= v.threshold then
+				cat_desc_key = v.key
+				break
+			end
+		end
+		local i_clr = (item_mode == 1 and interest_colors_buy[cat_desc_key]) or interest_colors_sell[cat_desc_key] or w_clr
+		local cat_mult_str = "\\n" .. def_clr .. game.translate_string("st_gteo_trader_interest") .. " " .. i_clr .. game.translate_string("st_gteo_trader_interest_" .. cat_desc_key)
+		
 		local d_multiplier = grounded_trade_discounts.get_discount_multiplier(cur_npc_id, obj:section(), item_mode)
-		local cat_mult_str = "\\n" .. w_clr .. "Trader's interest: " .. math.floor(cat_multiplier * 100) .. "%"
 		local d_mult_str = ""
 		if d_multiplier ~= 1 then
-			d_mult_str = "\\n" .. g_clr .. "Discount: " .. math.floor((1 - d_multiplier) * 100) .. "%"
+			local num = string.format("%.0f", ((-1 + d_multiplier) * 100))
+    		local sign = ((-1 + d_multiplier) * 100) > 0 and "+" or ""
+    		d_mult_str = "\\n" .. def_clr .. string.format(game.translate_string("st_gteo_trader_discount_" .. item_mode), g_clr .. sign .. num) .. def_clr
 		end
 		local footer_str = cat_mult_str .. d_mult_str
 		return BuildFooter(obj, sec, str) .. footer_str

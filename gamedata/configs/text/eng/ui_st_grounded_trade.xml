@@ -53,4 +53,40 @@
     <string id="grounded_disc_days">
         <text>days</text>
     </string>
+
+    <string id="st_gteo_trader_interest">
+        <text>Market Value:</text>
+    </string>
+
+    <string id="st_gteo_trader_interest_lowest">
+        <text>Minimal</text>
+    </string>
+    <string id="st_gteo_trader_interest_very_low">
+        <text>Very Low</text>
+    </string>
+    <string id="st_gteo_trader_interest_low">
+        <text>Low</text>
+    </string>
+    <string id="st_gteo_trader_interest_medium">
+        <text>Standard</text>
+    </string>
+    <string id="st_gteo_trader_interest_high">
+        <text>High</text>
+    </string>
+    <string id="st_gteo_trader_interest_very_high">
+        <text>Very High</text>
+    </string>
+    <string id="st_gteo_trader_interest_highest">
+        <text>Maximal</text>
+    </string>
+
+    <string id="st_gteo_trader_discount_1">
+        <text>Premium: %s%%</text>
+    </string>
+
+    <string id="st_gteo_trader_discount_2">
+        <text>Discount: %s%%</text>
+    </string>
+
+
 </string_table>
