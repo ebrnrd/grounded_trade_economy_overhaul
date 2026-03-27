@@ -61,6 +61,7 @@ end
 
 local item_categories  = {}
 local multipliers_cfg = nil
+local multiplier_categories = {} -- this is where i store all the category multipliers for each trader to allow for overwrites when multiple categories contain the same item
 
 local function build_item_categories()
     local cfg = ini_file("plugins\\grounded_trade_categories.ltx")
@@ -85,9 +86,25 @@ local function load_multipliers_cfg()
     multipliers_cfg = ini_file("plugins\\grounded_trader_multipliers.ltx")
     if not multipliers_cfg then
         print_dbg("ERROR: could not load grounded_trader_multipliers.ltx")
-    else
-        print_dbg("grounded_trader_multipliers loaded")
+        return
     end
+    
+    -- Build an ordered list of categories for each trader section.
+    -- The order matches how categories appear in grounded_trader_multipliers.ltx.
+    -- This preserves user-defined priority (last category wins for matching items).
+    multipliers_cfg:section_for_each(function(section)
+        local ordered_cats = {}
+        local n = multipliers_cfg:line_count(section)
+        for i = 0, n - 1 do
+            local result, key, value = multipliers_cfg:r_line(section, i, "", "")
+            if key and key ~= "" then
+                table.insert(ordered_cats, key)
+				print_dbg("Added %s category to %s multiplier_categories", key, section)
+            end
+        end
+        multiplier_categories[section] = ordered_cats
+    end)
+    print_dbg("grounded_trader_multipliers loaded")
 end
 
 -- Returns a float multiplier to apply to the price, or 1 if vanilla should handle it.
@@ -105,23 +122,46 @@ local function get_category_multiplier(trader_section, item_section, mode)
 		return 1
 	end
 
-	local category
 	local categories = item_categories[item_section]
 	if not categories then
 		return 1
 	end
-	for _, cat in ipairs(categories) do
-		if multipliers_cfg:line_exist(section_name, cat) then
-			category = cat
-			break
-		end
-	end
+
+    -- item_categories stores ALL categories an item belongs to (from grounded_trade_categories.ltx).
+    -- An item can belong to multiple categories (e.g., "outfit_stalker" and "outfit_all").
+    -- We convert this list to a set for O(1) lookup.
+    local category_set = {}
+    for _, cat in ipairs(categories) do
+        category_set[cat] = true
+    end
+
+    -- multiplier_categories stores categories in the ORDER they appear in grounded_trader_multipliers.ltx.
+    -- This allows us to respect the user's priority order - categories written LAST take precedence.
+    local ordered_cats = multiplier_categories[section_name]
+    if not ordered_cats then
+        return 1
+    end
+
+    -- Iterate through categories in multipliers file order.
+    -- Last category that the item belongs to wins (overwrites previous matches).
+    -- This lets you put general categories first and specific overrides last.
+    -- Example: outfit_all=0.70 first, outfit_stalker=0.50 last -> stalker items use 0.50
+    local category = nil
+    for _, cat in ipairs(ordered_cats) do
+		local clean = cat:gsub("^[z_]+", "")
+        if category_set[clean] then
+            category = cat
+        end
+    end
 
     if not category then
 		return 1
 	end
 
+	print_dbg("Category %s won for %s item", category, item_section)
+
     if not multipliers_cfg:line_exist(section_name, category) then
+		print_dbg("Category %s doesn't exist for this trader %s", category, section_name)
 		return 1
 	end
 
@@ -141,7 +181,7 @@ local function get_category_multiplier(trader_section, item_section, mode)
         roll = trader_state[cur_npc_id].price_roll or 0.5
     end
 
-	local cfg_name = trade_manager.get_trade_profile(cur_npc_id, "cfg_ltx")
+	local cfg_name = trade_manager.get_trade_profile(cur_npc_id, "cfg_ltx") -- THIS THING NEEDS TO BE OPTIMIZED, MOVE IT TO INIT TRADER (THE WHOLE SELL AND BUY INFLUENCE)
 	local cfg = cfg_name and trade_manager.get_trade_cfg(cfg_name)
 	local sell_influence = 1
 	local buy_influence = 1
@@ -245,7 +285,7 @@ local function degrade_trader_inventory(npc) -- STOLEN FROM GROK'S Craft and Rep
 			or IsOutfit(itm) or IsHeadgear(itm) or IsItem("device", sec) then
 				if itm:condition() >= 0.99 then
 					itm:set_condition(random_float(min_cond, max_cond))
-					print_dbg("Set condition of item %s with item_id = %s", sec, itm:id())
+					--print_dbg("Set condition of item %s with item_id = %s", sec, itm:id())
 				end
 			end
 		end
