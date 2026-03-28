@@ -6,10 +6,10 @@ local trader_state = {}
 local FUNDS_LOW_FLOOR = 0.5
 
 local trader_mult_intervals = {
-    { key = "lowest",    threshold = 0.2 },
-    { key = "very_low",  threshold = 0.4 },
-    { key = "low",       threshold = 0.6 },
-    { key = "medium",    threshold = 0.7 },
+    { key = "lowest",    threshold = 0.1 },
+    { key = "very_low",  threshold = 0.3 },
+    { key = "low",       threshold = 0.5 },
+    { key = "medium",    threshold = 0.6 },
     { key = "high",      threshold = 0.8 },
     { key = "very_high", threshold = 0.9 },
     { key = "highest",   threshold = 1.0 },

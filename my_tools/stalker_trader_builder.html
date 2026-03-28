@@ -1,0 +1,1506 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>S.T.A.L.K.E.R. Trader Builder</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani:wght@400;500;600;700&display=swap');
+
+  :root {
+    --bg: #0d0f0b;
+    --bg2: #121510;
+    --bg3: #181c14;
+    --bg4: #1e241a;
+    --panel: #141812;
+    --border: #2a3424;
+    --border2: #3a4832;
+    --accent: #6daa3f;
+    --accent2: #4e7d2c;
+    --accent-dim: #3a5a1f;
+    --text: #c8d4b8;
+    --text2: #8fa07a;
+    --text3: #556645;
+    --danger: #c04040;
+    --warn: #c08830;
+    --mono: 'Share Tech Mono', monospace;
+    --sans: 'Rajdhani', sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 15px;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  /* ── HEADER ── */
+  header {
+    background: var(--bg2);
+    border-bottom: 1px solid var(--border);
+    padding: 10px 18px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-shrink: 0;
+    position: relative;
+  }
+  header::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--accent-dim), transparent);
+  }
+  .logo {
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--accent);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+  .logo span { color: var(--text3); }
+  .header-title {
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    color: var(--text);
+    text-transform: uppercase;
+  }
+  .header-actions { margin-left: auto; display: flex; gap: 8px; align-items: center; }
+
+  /* ── LAYOUT ── */
+  .app {
+    flex: 1;
+    display: grid;
+    grid-template-columns: var(--left-w, 300px) 5px 1fr 340px;
+    overflow: hidden;
+    gap: 0;
+  }
+
+  /* ── RESIZE HANDLE ── */
+  .resize-handle {
+    width: 5px;
+    background: transparent;
+    cursor: col-resize;
+    flex-shrink: 0;
+    position: relative;
+    z-index: 10;
+    transition: background 0.15s;
+    border-right: 1px solid var(--border);
+  }
+  .resize-handle:hover, .resize-handle.dragging {
+    background: var(--accent-dim);
+    border-right-color: var(--accent);
+  }
+
+  /* ── PANELS ── */
+  .panel {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    border-right: 1px solid var(--border);
+  }
+  .panel:last-child { border-right: none; }
+  .panel-header {
+    background: var(--bg3);
+    border-bottom: 1px solid var(--border);
+    padding: 8px 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+  }
+  .panel-title {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    flex: 1;
+  }
+  .panel-body { flex: 1; overflow-y: auto; padding: 0; }
+  .panel-body::-webkit-scrollbar { width: 4px; }
+  .panel-body::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
+  .panel-body::-webkit-scrollbar-track { background: transparent; }
+
+  /* ── BUTTONS ── */
+  .btn {
+    font-family: var(--sans);
+    font-weight: 600;
+    font-size: 13px;
+    letter-spacing: 0.5px;
+    padding: 5px 12px;
+    border: 1px solid var(--border2);
+    border-radius: 3px;
+    background: var(--bg4);
+    color: var(--text);
+    cursor: pointer;
+    transition: all 0.15s;
+    white-space: nowrap;
+  }
+  .btn:hover { background: var(--accent-dim); border-color: var(--accent); color: #fff; }
+  .btn.primary { background: var(--accent-dim); border-color: var(--accent); color: #fff; }
+  .btn.primary:hover { background: var(--accent2); }
+  .btn.danger { border-color: var(--danger); color: var(--danger); }
+  .btn.danger:hover { background: #3a1010; }
+  .btn.small { font-size: 11px; padding: 3px 8px; }
+
+  /* ── INPUTS ── */
+  input[type=text], input[type=number], select {
+    font-family: var(--mono);
+    font-size: 12px;
+    background: var(--bg);
+    border: 1px solid var(--border2);
+    border-radius: 3px;
+    color: var(--text);
+    padding: 5px 8px;
+    outline: none;
+    transition: border-color 0.15s;
+  }
+  input[type=text]:focus, input[type=number]:focus, select:focus {
+    border-color: var(--accent);
+  }
+  select option { background: var(--bg3); }
+
+  /* ── SEARCH ── */
+  .search-wrap { padding: 8px; }
+  .search-wrap input { width: 100%; }
+
+  /* ── CATEGORY LIST ── */
+  .cat-group { border-bottom: 1px solid var(--border); }
+  .cat-header {
+    padding: 7px 12px;
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    color: var(--accent);
+    background: var(--bg3);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    user-select: none;
+    text-transform: uppercase;
+    border-bottom: 1px solid var(--border);
+  }
+  .cat-header:hover { background: var(--bg4); }
+  .cat-chevron { font-size: 8px; color: var(--text3); transition: transform 0.15s; }
+  .cat-chevron.open { transform: rotate(90deg); }
+  .cat-items { display: none; }
+  .cat-items.open { display: block; }
+  .item-row {
+    padding: 4px 12px 4px 20px;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text2);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    transition: background 0.1s;
+    border-bottom: 1px solid #1a1f16;
+  }
+  .item-row > span:first-child { flex-shrink: 0; }
+  .item-row:hover { background: var(--bg4); color: var(--text); }
+  .item-row .add-icon {
+    font-size: 14px;
+    color: var(--accent);
+    opacity: 0;
+    transition: opacity 0.1s;
+    line-height: 1;
+    flex-shrink: 0;
+  }
+  .item-row:hover .add-icon { opacity: 1; }
+  .item-disp-name {
+    font-family: var(--sans);
+    font-size: 11px;
+    color: var(--text3);
+    flex: 1;
+    text-align: right;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    padding: 0 6px 0 8px;
+    font-style: italic;
+  }
+  .item-row:hover .item-disp-name { color: var(--text2); }
+
+  /* tier item display name */
+  .tier-item-disp-name {
+    font-family: var(--sans);
+    font-size: 11px;
+    color: var(--text3);
+    flex: 1;
+    text-align: right;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    padding: 0 6px;
+    font-style: italic;
+    min-width: 0;
+  }
+  .tier-item:hover .tier-item-disp-name { color: var(--text2); }
+
+  /* ── MIDDLE: TRADERS ── */
+  .traders-wrap { padding: 8px; }
+  .trader-bar {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 8px;
+    align-items: center;
+  }
+  .trader-bar input { flex: 1; }
+
+  .trader-card {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    margin-bottom: 10px;
+    overflow: hidden;
+    transition: border-color 0.15s;
+  }
+  .trader-card.active { border-color: var(--accent-dim); }
+  .trader-card-header {
+    padding: 8px 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--bg4);
+    cursor: pointer;
+    border-bottom: 1px solid var(--border);
+  }
+  .trader-card-header:hover { background: #222c1a; }
+  .trader-name {
+    font-weight: 700;
+    font-size: 14px;
+    letter-spacing: 0.5px;
+    flex: 1;
+    text-transform: uppercase;
+  }
+  .trader-meta { font-size: 11px; color: var(--text3); font-family: var(--mono); }
+
+  .tier-list { padding: 8px; display: flex; flex-direction: column; gap: 6px; }
+
+  .tier-card {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+  .tier-card.selected { border-color: var(--accent); }
+  .tier-header {
+    padding: 6px 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    background: var(--bg2);
+    border-bottom: 1px solid var(--border);
+  }
+  .tier-header:hover { background: var(--bg3); }
+  .tier-label {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent);
+    flex: 1;
+  }
+  .tier-parent {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--text3);
+  }
+  .tier-count {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--text3);
+    background: var(--bg3);
+    padding: 1px 6px;
+    border-radius: 2px;
+    border: 1px solid var(--border);
+  }
+
+  .tier-items-list { padding: 4px 0; }
+  .tier-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 3px 8px;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text2);
+    border-bottom: 1px solid #161a12;
+    transition: background 0.1s;
+  }
+  .tier-item:hover { background: var(--bg2); }
+  .tier-item-name { flex-shrink: 0; max-width: 140px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .tier-item-spacer { flex: 1; } /* pushes inputs right when no display name is present */
+  .tier-item input[type=number] {
+    width: 46px;
+    padding: 2px 5px;
+    font-size: 11px;
+    text-align: center;
+  }
+  .tier-item-sep { color: var(--text3); font-size: 10px; }
+  .tier-item .rm { cursor: pointer; color: var(--text3); font-size: 13px; transition: color 0.1s; padding: 0 2px; }
+  .tier-item .rm:hover { color: var(--danger); }
+
+  .add-tier-wrap { padding: 6px 8px 8px; }
+  .add-tier-row { display: flex; gap: 6px; align-items: center; }
+  .add-tier-row input { flex: 1; }
+
+  /* ── RIGHT: EXPORT ── */
+  .export-panel { display: flex; flex-direction: column; gap: 0; }
+  .export-options { padding: 10px; display: flex; flex-direction: column; gap: 8px; border-bottom: 1px solid var(--border); }
+  .export-option { display: flex; flex-direction: column; gap: 4px; }
+  .export-label { font-size: 11px; color: var(--text3); font-family: var(--mono); letter-spacing: 0.5px; }
+  .export-textarea {
+    flex: 1;
+    background: var(--bg);
+    border: none;
+    border-top: 1px solid var(--border);
+    color: var(--text2);
+    font-family: var(--mono);
+    font-size: 11px;
+    padding: 10px 12px;
+    resize: none;
+    outline: none;
+    line-height: 1.7;
+  }
+  .export-actions { padding: 8px; display: flex; gap: 6px; border-top: 1px solid var(--border); flex-shrink: 0; }
+
+  /* ── SELECTED TIER INDICATOR ── */
+  .sel-indicator {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--accent);
+    padding: 4px 12px;
+    background: var(--bg3);
+    border-bottom: 1px solid var(--border);
+    display: none;
+  }
+  .sel-indicator.show { display: block; }
+
+  /* ── UPLOAD BUTTON ── */
+  .file-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-family: var(--sans);
+    font-weight: 600;
+    font-size: 13px;
+    letter-spacing: 0.5px;
+    padding: 5px 12px;
+    border: 1px solid var(--border2);
+    border-radius: 3px;
+    background: var(--bg4);
+    color: var(--text);
+    cursor: pointer;
+    transition: all 0.15s;
+    white-space: nowrap;
+  }
+  .file-label:hover { background: var(--accent-dim); border-color: var(--accent); color: #fff; }
+  input[type=file] { display: none; }
+
+  /* ── EMPTY STATES ── */
+  .empty {
+    text-align: center;
+    padding: 24px 12px;
+    color: var(--text3);
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.5px;
+  }
+
+  /* ── SCROLLBAR GENERAL ── */
+  * { scrollbar-width: thin; scrollbar-color: var(--border2) transparent; }
+
+  /* ── CONTEXT BADGE ── */
+  .badge {
+    font-family: var(--mono);
+    font-size: 9px;
+    padding: 2px 5px;
+    border-radius: 2px;
+    background: var(--accent-dim);
+    color: var(--accent);
+    letter-spacing: 0.5px;
+    border: 1px solid var(--accent-dim);
+  }
+
+  /* ── OVERWRITE FLAGS ── */
+  .ow-badge {
+    font-family: var(--mono);
+    font-size: 9px;
+    padding: 1px 5px;
+    border-radius: 2px;
+    white-space: nowrap;
+    flex-shrink: 0;
+    cursor: help;
+  }
+  .ow-badge-dead {
+    background: #2a1010;
+    color: var(--danger);
+    border: 1px solid #5a2020;
+  }
+  .ow-badge-active {
+    background: #0e2010;
+    color: #5aaa5a;
+    border: 1px solid #1e5a1e;
+  }
+  .ow-badge-both {
+    background: #2a2010;
+    color: var(--warn);
+    border: 1px solid #5a4010;
+  }
+  .tier-item.ow-dead { background: #120d0d; }
+  .tier-item.ow-dead .tier-item-name { color: #6a4040; text-decoration: line-through; }
+  .tier-item.ow-active { background: #0a140a; }
+  .tier-item.ow-both { background: #130f08; }
+
+  /* ── GRID helpers ── */
+  .row { display: flex; gap: 8px; align-items: center; }
+  .flex1 { flex: 1; }
+
+  /* ── Notifications ── */
+  #notif {
+    position: fixed;
+    bottom: 16px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--accent-dim);
+    border: 1px solid var(--accent);
+    color: #fff;
+    font-family: var(--mono);
+    font-size: 12px;
+    padding: 7px 18px;
+    border-radius: 3px;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.2s;
+    z-index: 999;
+    white-space: nowrap;
+  }
+  #notif.show { opacity: 1; }
+
+  .export-select-wrap { padding: 8px; border-bottom: 1px solid var(--border); }
+
+  .highlight { color: var(--accent); }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">S.T.A.L.K.E.R. <span>// </span>ANOMALY</div>
+  <div class="header-title">Trader Builder</div>
+  <div class="header-actions">
+    <label class="file-label">
+      ⬆ Load Categories
+      <input type="file" id="catFile" accept=".ltx,.txt">
+    </label>
+    <label class="file-label">
+      ⬆ Load Names (.xml)
+      <input type="file" id="namesFiles" accept=".xml" multiple>
+    </label>
+    <button class="btn primary" onclick="exportAll()">⬇ Export .ltx</button>
+  </div>
+</header>
+
+<div class="app" id="appGrid">
+
+  <!-- LEFT: ITEM BROWSER -->
+  <div class="panel">
+    <div class="panel-header">
+      <span class="panel-title">Item Browser</span>
+      <span id="catCount" class="badge">0 items</span>
+    </div>
+    <div class="search-wrap">
+      <input type="text" id="searchInput" placeholder="Search items..." oninput="filterItems()">
+    </div>
+    <div class="sel-indicator" id="selIndicator">← Click item to add to selected tier</div>
+    <div class="panel-body" id="catList">
+      <div class="empty">Load a categories .ltx file<br>to browse items</div>
+    </div>
+  </div><div class="resize-handle" id="leftResizeHandle"></div>
+
+  <!-- MIDDLE: TRADERS & TIERS -->
+  <div class="panel">
+    <div class="panel-header">
+      <span class="panel-title">Traders & Tiers</span>
+    </div>
+    <div class="panel-body">
+      <div class="traders-wrap">
+        <div class="trader-bar">
+          <input type="text" id="newTraderName" placeholder="New trader name (e.g. sidorovich)">
+          <button class="btn primary" onclick="addTrader()">+ Add</button>
+          <button class="btn" onclick="triggerImportDialog()" title="Import an existing trader .ltx file">⬆ Import</button>
+          <input type="file" id="importFile" accept=".ltx,.txt" style="display:none">
+        </div>
+        <div id="traderList"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RIGHT: EXPORT PREVIEW -->
+  <div class="panel export-panel">
+    <div class="panel-header">
+      <span class="panel-title">LTX Output</span>
+    </div>
+    <div class="export-select-wrap">
+      <div class="row">
+        <span class="export-label flex1">Export trader:</span>
+        <select id="exportTraderSel" style="flex:2" onchange="renderExport()">
+          <option value="__all__">All traders</option>
+        </select>
+      </div>
+    </div>
+    <textarea class="export-textarea" id="exportArea" readonly placeholder="; Output will appear here&#10;; Create a trader and add items to get started"></textarea>
+    <div class="export-actions">
+      <button class="btn primary flex1" onclick="copyExport()">Copy</button>
+      <button class="btn flex1" onclick="downloadExport()">Download .ltx</button>
+    </div>
+  </div>
+
+</div>
+
+<div id="notif"></div>
+
+<script>
+// ── STATE ──
+let categories = {}; // { catName: [item1, item2, ...] }
+let itemNames = {};  // { itemId: "Display Name" }
+let traders = [];    // [{ id, name, tiers: [{ id, name, parent, items: [{name,amt,chance}] }] }]
+let selectedTier = null; // { traderId, tierId }
+let uid = 1;
+const genId = () => uid++;
+
+// ── BUILT-IN DEFAULT CATEGORIES (from uploaded file) ──
+const DEFAULT_LTX = `[wpn_pistol_rus_low]
+wpn_pm
+wpn_pmm
+wpn_pb
+wpn_fort
+wpn_tt33
+wpn_oc33
+
+[wpn_pistol_nato_low]
+wpn_beretta
+wpn_walther
+
+[wpn_rifle_rus_low]
+wpn_ak74u_old
+wpn_ak
+wpn_aks
+wpn_aks74
+wpn_bizon
+wpn_ppsh41
+wpn_sks
+wpn_svt40
+
+[wpn_rifle_rus_mid]
+wpn_ak74
+wpn_ak74m
+wpn_akm
+wpn_9a91
+
+[wpn_rifle_rus_high]
+wpn_abakan
+wpn_ak12
+wpn_aek
+wpn_groza
+
+[wpn_rifle_nato_mid]
+wpn_mp5
+wpn_m4a1
+wpn_fal
+wpn_l85
+
+[wpn_rifle_nato_high]
+wpn_aug
+wpn_fn2000
+wpn_scar
+wpn_hk416
+wpn_g36
+
+[wpn_sniper_rus]
+wpn_svd
+wpn_vintorez
+wpn_val
+wpn_sv98
+wpn_mosin
+
+[wpn_sniper_nato]
+wpn_l96a1
+wpn_m24
+
+[wpn_shotgun_rus_low]
+wpn_bm16
+wpn_bm16_full
+wpn_toz34
+wpn_mp133
+
+[wpn_shotgun_rus_high]
+wpn_saiga12s
+wpn_mp153
+
+[wpn_shotgun_nato_low]
+wpn_wincheaster1300
+wpn_remington870
+
+[wpn_shotgun_nato_high]
+wpn_spas12
+wpn_usas12
+
+[wpn_melee]
+wpn_knife
+wpn_knife2
+wpn_knife3
+wpn_axe
+wpn_axe2
+
+[wpn_explosive]
+grenade_f1
+grenade_rgd5
+grenade_smoke
+
+[ammo_rus_common]
+ammo_9x18_fmj
+ammo_9x18_ap
+ammo_5.45x39_fmj
+ammo_5.45x39_ep
+ammo_5.45x39_ap
+ammo_12x70_buck
+ammo_12x76_zhekan
+
+[ammo_rus_mid]
+ammo_7.62x39_fmj
+ammo_7.62x39_ap
+ammo_7.62x25_ps
+
+[ammo_rus_rare]
+ammo_9x39_ap
+ammo_7.62x54_7h1
+ammo_7.62x54_ap
+
+[ammo_nato_common]
+ammo_9x19_fmj
+ammo_9x19_ap
+ammo_9x19_pbp
+
+[ammo_nato_mid]
+ammo_5.56x45_fmj
+ammo_5.56x45_ap
+ammo_11.43x23_fmj
+
+[ammo_nato_rare]
+ammo_7.62x51_fmj
+ammo_7.62x51_ap
+
+[food_packaged]
+bread
+breadold
+kolbasa
+conserva
+beans
+corn
+sausage
+chocolate
+nuts
+mre
+ration_ru
+ration_ukr
+
+[food_zone]
+meat_dog
+meat_flesh
+meat_boar
+
+[drink_basic]
+mineral_water
+water_drink
+flask
+energy_drink
+
+[drink_alcohol]
+vodka
+vodka2
+vodka_quality
+beer
+
+[drug_basic]
+bandage
+jgut
+medkit
+akvatab
+antirad_kalium
+antirad_cystamine
+antibio_chlor
+antibio_sulfad
+medkit_ai1
+
+[drug_military]
+medkit_army
+survival_kit
+drug_booster
+drug_coagulant
+drug_radioprotector
+antirad
+medkit_ai2
+
+[drug_chem]
+cocaine
+adrenalin
+morphine
+caffeine
+drug_sleepingpills
+
+[cigs]
+cigarettes
+cigarettes_russian
+tobacco
+matches
+box_matches
+marijuana
+joint
+cigar1
+cigar2
+
+[outfit_novice_no_comm]
+novice_outfit
+novice_outfit_camo
+
+[outfit_novice_bandit]
+bandit_novice_outfit
+
+[outfit_light_stalker]
+stalker_outfit
+nbc_outfit
+
+[outfit_medium_stalker]
+stalker_bear_outfit
+stalker_graphite_outfit
+stalker_tigerstripe_outfit
+stalker_predator_outfit
+
+[outfit_heavy_stalker]
+light_loner_outfit
+exolight_outfit
+
+[outfit_exo_stalker]
+exo_outfit
+
+[headgear_basic]
+helm_bandana
+helm_respirator_old
+helm_cloth_mask
+helm_respirator_gp5
+helm_hardhat
+helm_metro
+helm_resp
+
+[headgear_combat]
+helm_ranger
+helm_ppm88
+helm_m50
+helm_m40
+helm_tactic
+
+[backpacks]
+itm_backpack
+equ_small_pack
+equ_small_military_pack
+equ_military_pack
+
+[devices_basic]
+detector_radio
+detector_geiger
+detector_simple
+device_flashlight
+
+[devices_advanced]
+detector_advanced
+detector_elite
+device_torch_nv_1
+device_torch_nv_2
+device_torch_nv_3
+device_pda_1
+device_pda_2
+device_pda_3
+
+[tools]
+bolts_pack
+swiss_knife
+leatherman_tool
+rasp_tool
+ramrod_tool
+
+[camping]
+itm_sleepbag
+cooking
+fieldcooker
+compression_bag
+kit_hunt
+itm_tent
+
+[fuels]
+kerosene
+charcoal
+explo_balon_gas
+explo_jerrycan_fuel
+
+[repair_kits_weapon]
+gun_oil
+cleaning_kit_p
+cleaning_kit_s
+ramrod_tool
+light_repair_kit
+medium_repair_kit
+heavy_repair_kit
+
+[repair_kits_outfit]
+glue_b
+glue_a
+sewing_kit_b
+sewing_kit_a
+exo_repair_kit
+
+[artefacts]
+af_black
+af_gravi
+af_electra_sparkler
+af_soul
+af_cristall
+af_fireball
+af_gold_fish
+af_night_star
+af_medusa
+
+[outfit_attachs]
+af_plates
+af_kevlar
+af_camelbak
+af_freon
+af_cooler
+af_grid
+
+[upgrade_items]
+itm_basickit
+itm_advancedkit
+itm_expertkit
+
+[trash]
+bolt
+tarpaulin
+rope
+batteries_dead
+
+[money]
+cash
+roubles
+money_100
+money_500
+money_1000`;
+
+// ── PARSE LTX CATEGORIES ──
+function parseLtx(text) {
+  const result = {};
+  let currentCat = null;
+  const lines = text.split(/\r?\n/);
+  for (let line of lines) {
+    line = line.trim();
+    if (!line || line.startsWith(';')) continue;
+    // Skip macro/inheritance categories that contain ':'
+    const headerMatch = line.match(/^\[([^\]]+)\]/);
+    if (headerMatch) {
+      const raw = headerMatch[1];
+      // skip if contains colon (these are aggregates)
+      if (raw.includes(':')) { currentCat = null; continue; }
+      currentCat = raw;
+      if (!result[currentCat]) result[currentCat] = [];
+    } else if (currentCat) {
+      // item line: take first word, strip inline comments/prices
+      const itemName = line.split(/[\s;]/)[0].trim();
+      if (itemName && !itemName.startsWith(';')) {
+        result[currentCat].push(itemName);
+      }
+    }
+  }
+  return result;
+}
+
+// ── INIT WITH DEFAULT ──
+function initDefault() {
+  categories = parseLtx(DEFAULT_LTX);
+  renderCatList('');
+  updateCatCount();
+}
+
+// ── CATEGORY RENDER ──
+function renderCatList(filter) {
+  const el = document.getElementById('catList');
+  const fl = filter.toLowerCase();
+  let html = '';
+  let totalVisible = 0;
+
+  for (const [cat, items] of Object.entries(categories)) {
+    const visible = fl
+      ? items.filter(i => i.toLowerCase().includes(fl) || (itemNames[i] && itemNames[i].toLowerCase().includes(fl)))
+      : items;
+    if (visible.length === 0) continue;
+    totalVisible += visible.length;
+    const catId = 'cat_' + cat.replace(/[^a-z0-9]/gi, '_');
+    html += `<div class="cat-group">
+      <div class="cat-header" onclick="toggleCat('${catId}')">
+        <span class="cat-chevron${fl ? ' open' : ''}" id="chev_${catId}">▶</span>
+        <span>${cat}</span>
+        <span style="margin-left:auto;font-size:9px;color:var(--text3)">${visible.length}</span>
+      </div>
+      <div class="cat-items${fl ? ' open' : ''}" id="${catId}">`;
+    for (const item of visible) {
+      const dispName = itemNames[item] ? `<span class="item-disp-name">${escHtml(itemNames[item])}</span>` : '';
+      html += `<div class="item-row" onclick="addItemToSelected('${item}')">
+        <span>${item}</span>
+        ${dispName}
+        <span class="add-icon">+</span>
+      </div>`;
+    }
+    html += `</div></div>`;
+  }
+
+  if (!html) html = `<div class="empty">No items match "${filter}"</div>`;
+  el.innerHTML = html;
+}
+
+function toggleCat(id) {
+  const el = document.getElementById(id);
+  const chev = document.getElementById('chev_' + id);
+  el.classList.toggle('open');
+  chev.classList.toggle('open');
+}
+
+function filterItems() {
+  const q = document.getElementById('searchInput').value;
+  renderCatList(q);
+  // auto-expand all when searching
+}
+
+function updateCatCount() {
+  const total = Object.values(categories).reduce((s, a) => s + a.length, 0);
+  document.getElementById('catCount').textContent = total + ' items';
+}
+
+// ── XML NAME FILES ──
+function parseItemNamesXml(text) {
+  // Handles windows-1251 encoded XML (read as binary string)
+  // Covers all three patterns the game uses:
+  //   1. <string id="st_ITEMID_name">   → key = ITEMID
+  //   2. <string id="st_ITEMID">        → key = ITEMID  (no _name suffix)
+  //   3. <string id="ITEMID_name">      → key = ITEMID  (no st_ prefix, but _name suffix)
+  // Skip anything that looks like a description (_descr, _desc, _description)
+  const result = {};
+  const stringRe = /<string\s+id="([^"]+)"[^>]*>[\s\S]*?<text>([^<]*)<\/text>/g;
+  let m;
+  while ((m = stringRe.exec(text)) !== null) {
+    const id = m[1].trim();
+    const displayText = m[2].trim();
+    // Skip empty or formatting-only text
+    if (!displayText || displayText.startsWith('%c[') || displayText.startsWith('\\n')) continue;
+    // Skip descriptions
+    if (id.endsWith('_descr') || id.endsWith('_desc') || id.endsWith('_description')) continue;
+
+    let key = null;
+
+    if (id.startsWith('st_')) {
+      // Pattern 1 & 2: strip st_ prefix, then strip optional _name suffix
+      key = id.slice(3);
+      if (key.endsWith('_name')) key = key.slice(0, -5);
+    } else if (id.endsWith('_name')) {
+      // Pattern 3: no st_ prefix but has _name suffix
+      key = id.slice(0, -5);
+    }
+    // Anything else is not an item name entry — skip
+    if (!key) continue;
+
+    // Don't overwrite if already set (first match wins)
+    if (!result[key]) result[key] = displayText;
+  }
+  return result;
+}
+
+// Merge new names into global map
+function mergeItemNames(newNames) {
+  Object.assign(itemNames, newNames);
+}
+
+document.getElementById('namesFiles').addEventListener('change', function(e) {
+  const files = Array.from(e.target.files);
+  if (!files.length) return;
+  let loaded = 0;
+  for (const f of files) {
+    const reader = new FileReader();
+    // Read as binary string to handle windows-1251 encoding
+    reader.onload = ev => {
+      const parsed = parseItemNamesXml(ev.target.result);
+      mergeItemNames(parsed);
+      loaded++;
+      if (loaded === files.length) {
+        renderCatList(document.getElementById('searchInput').value);
+        renderTraders();
+        notify(`Loaded ${files.length} name file${files.length>1?'s':''} — ${Object.keys(itemNames).length} names total`);
+      }
+    };
+    reader.readAsBinaryString(f);
+  }
+  this.value = '';
+});
+
+// ── FILE UPLOAD (categories) ──
+document.getElementById('catFile').addEventListener('change', function(e) {
+  const f = e.target.files[0];
+  if (!f) return;
+  const reader = new FileReader();
+  reader.onload = ev => {
+    categories = parseLtx(ev.target.result);
+    renderCatList(document.getElementById('searchInput').value);
+    updateCatCount();
+    notify('Categories loaded: ' + Object.keys(categories).length + ' sections');
+  };
+  reader.readAsText(f);
+  this.value = '';
+});
+
+// ── TRADER MANAGEMENT ──
+function addTrader() {
+  const nameEl = document.getElementById('newTraderName');
+  const name = nameEl.value.trim();
+  if (!name) { notify('Enter a trader name'); return; }
+  const trader = { id: genId(), name, tiers: [] };
+  traders.push(trader);
+  nameEl.value = '';
+  renderTraders();
+  renderExportSelect();
+  renderExport();
+}
+
+function removeTrader(id) {
+  traders = traders.filter(t => t.id !== id);
+  if (selectedTier && !traders.find(t => t.id === selectedTier.traderId)) {
+    selectedTier = null;
+    updateSelIndicator();
+  }
+  renderTraders();
+  renderExportSelect();
+  renderExport();
+}
+
+function addTier(traderId) {
+  const nameEl = document.getElementById('tierName_' + traderId);
+  const parentEl = document.getElementById('tierParent_' + traderId);
+  const name = nameEl.value.trim();
+  if (!name) { notify('Enter a tier name'); return; }
+  const trader = traders.find(t => t.id === traderId);
+  if (!trader) return;
+  trader.tiers.push({ id: genId(), name, parent: parentEl.value.trim(), items: [] });
+  nameEl.value = '';
+  parentEl.value = '';
+  renderTraders();
+  renderExport();
+}
+
+function removeTier(traderId, tierId) {
+  const trader = traders.find(t => t.id === traderId);
+  if (!trader) return;
+  trader.tiers = trader.tiers.filter(t => t.id !== tierId);
+  if (selectedTier && selectedTier.tierId === tierId) {
+    selectedTier = null;
+    updateSelIndicator();
+  }
+  renderTraders();
+  renderExport();
+}
+
+function selectTier(traderId, tierId) {
+  if (selectedTier && selectedTier.traderId === traderId && selectedTier.tierId === tierId) {
+    selectedTier = null;
+  } else {
+    selectedTier = { traderId, tierId };
+  }
+  updateSelIndicator();
+  renderTraders();
+}
+
+function updateSelIndicator() {
+  const el = document.getElementById('selIndicator');
+  if (selectedTier) {
+    const trader = traders.find(t => t.id === selectedTier.traderId);
+    const tier = trader?.tiers.find(t => t.id === selectedTier.tierId);
+    if (tier) {
+      el.textContent = '→ Adding to: [' + tier.name + ']';
+      el.classList.add('show');
+    }
+  } else {
+    el.classList.remove('show');
+  }
+}
+
+function addItemToSelected(itemName) {
+  if (!selectedTier) { notify('Select a tier first (click on a tier name)'); return; }
+  const trader = traders.find(t => t.id === selectedTier.traderId);
+  if (!trader) return;
+  const tier = trader.tiers.find(t => t.id === selectedTier.tierId);
+  if (!tier) return;
+  if (tier.items.find(i => i.name === itemName)) { notify('Item already in tier'); return; }
+  tier.items.push({ name: itemName, amt: 1, chance: 0.75 });
+  renderTraders();
+  renderExport();
+  notify('+ ' + itemName);
+}
+
+function removeItem(traderId, tierId, itemName) {
+  const trader = traders.find(t => t.id === traderId);
+  if (!trader) return;
+  const tier = trader.tiers.find(t => t.id === tierId);
+  if (!tier) return;
+  tier.items = tier.items.filter(i => i.name !== itemName);
+  renderTraders();
+  renderExport();
+}
+
+function updateItemField(traderId, tierId, itemName, field, value) {
+  const trader = traders.find(t => t.id === traderId);
+  if (!trader) return;
+  const tier = trader.tiers.find(t => t.id === tierId);
+  if (!tier) return;
+  const item = tier.items.find(i => i.name === itemName);
+  if (!item) return;
+  item[field] = field === 'amt' ? Math.max(1, parseInt(value)||1) : Math.min(1, Math.max(0, parseFloat(value)||0));
+  renderExport();
+}
+
+// ── OVERWRITE DETECTION ──
+// For a given trader, build a map: itemName -> [tierName, ...] (all tiers containing it, in order)
+function buildOverwriteMap(trader) {
+  const map = {}; // itemName -> [{tierId, tierName}]
+  for (const tier of trader.tiers) {
+    for (const item of tier.items) {
+      if (!map[item.name]) map[item.name] = [];
+      map[item.name].push({ tierId: tier.id, tierName: tier.name });
+    }
+  }
+  return map;
+}
+
+// Returns overwrite info for a specific item in a specific tier:
+// { isOverwritten: bool, overwrittenBy: tierName }   — this tier's entry is shadowed by a later tier
+// { isOverwriting: bool, overwrites: tierName }       — this tier shadows an earlier tier
+// A "later" tier (higher index) overrides an earlier one because the game resolves parent chains bottom-up.
+function getOverwriteStatus(trader, tierId, itemName) {
+  const overwriteMap = buildOverwriteMap(trader);
+  const entries = overwriteMap[itemName];
+  if (!entries || entries.length < 2) return null;
+
+  const myIdx = entries.findIndex(e => e.tierId === tierId);
+  if (myIdx === -1) return null;
+
+  // Higher index = higher-numbered tier = overrides lower ones (since supplies_2 inherits supplies_1,
+  // a direct entry in supplies_2 overrides the inherited one from supplies_1)
+  const result = {};
+  if (myIdx < entries.length - 1) {
+    result.isOverwritten = true;
+    result.overwrittenBy = entries[entries.length - 1].tierName;
+  }
+  if (myIdx > 0) {
+    result.isOverwriting = true;
+    result.overwrites = entries[0].tierName;
+  }
+  return result;
+}
+
+// ── IMPORT TRADER LTX ──
+function parseTraderLtx(text, traderName) {
+  const tiers = [];
+  let currentTier = null;
+  const lines = text.split(/\r?\n/);
+
+  for (let line of lines) {
+    line = line.trim();
+    if (!line || line.startsWith(';')) continue;
+
+    // Match [section_name] or [section_name]:parent1,parent2
+    const headerMatch = line.match(/^\[([^\]]+)\](?::(.+))?/);
+    if (headerMatch) {
+      const sectionName = headerMatch[1].trim();
+      // Only import sections with "supplies" in name
+      if (!sectionName.toLowerCase().includes('supplies')) { currentTier = null; continue; }
+
+      // Parent is everything after the colon outside the brackets
+      const parent = headerMatch[2] ? headerMatch[2].trim() : '';
+      currentTier = { id: genId(), name: sectionName, parent, items: [] };
+      tiers.push(currentTier);
+    } else if (currentTier) {
+      // item = amt, chance
+      const m = line.match(/^([a-zA-Z0-9_.\-]+)\s*=\s*([0-9]+)\s*,\s*([0-9.]+)/);
+      if (m) {
+        currentTier.items.push({
+          name: m[1].trim(),
+          amt: parseInt(m[2]) || 1,
+          chance: parseFloat(m[3]) || 0.5
+        });
+      }
+    }
+  }
+  return { id: genId(), name: traderName, tiers };
+}
+
+function triggerImportDialog() {
+  const name = document.getElementById('newTraderName').value.trim();
+  if (!name) { notify('Enter trader name before importing'); document.getElementById('newTraderName').focus(); return; }
+  document.getElementById('importFile').click();
+}
+
+document.getElementById('importFile').addEventListener('change', function(e) {
+  const f = e.target.files[0];
+  if (!f) return;
+  const name = document.getElementById('newTraderName').value.trim() || f.name.replace(/\.ltx$/i,'').replace(/^trade_/,'');
+  const reader = new FileReader();
+  reader.onload = ev => {
+    const trader = parseTraderLtx(ev.target.result, name);
+    if (trader.tiers.length === 0) {
+      notify('No supplies sections found in file');
+      return;
+    }
+    traders.push(trader);
+    document.getElementById('newTraderName').value = '';
+    renderTraders();
+    renderExportSelect();
+    renderExport();
+    notify(`Imported "${name}": ${trader.tiers.length} tiers, ${trader.tiers.reduce((s,t)=>s+t.items.length,0)} items`);
+  };
+  reader.readAsText(f);
+  this.value = '';
+});
+
+// ── RENDER TRADERS ──
+function renderTraders() {
+  const el = document.getElementById('traderList');
+  if (traders.length === 0) {
+    el.innerHTML = '<div class="empty">No traders yet.<br>Enter a name and click Add.</div>';
+    return;
+  }
+
+  let html = '';
+  for (const trader of traders) {
+    html += `<div class="trader-card${selectedTier?.traderId === trader.id ? ' active' : ''}">
+      <div class="trader-card-header">
+        <div class="trader-name">${escHtml(trader.name)}</div>
+        <div class="trader-meta">${trader.tiers.length} tier${trader.tiers.length!==1?'s':''}</div>
+        <button class="btn small danger" onclick="removeTrader(${trader.id})">✕</button>
+      </div>
+      <div class="tier-list">`;
+
+    if (trader.tiers.length === 0) {
+      html += '<div class="empty" style="padding:10px">No tiers yet</div>';
+    }
+    for (const tier of trader.tiers) {
+      const isSel = selectedTier?.traderId === trader.id && selectedTier?.tierId === tier.id;
+      html += `<div class="tier-card${isSel ? ' selected' : ''}">
+        <div class="tier-header" onclick="selectTier(${trader.id}, ${tier.id})">
+          <div class="tier-label">[${escHtml(tier.name)}]</div>
+          ${tier.parent ? `<div class="tier-parent">:${escHtml(tier.parent)}</div>` : ''}
+          <div class="tier-count">${tier.items.length}</div>
+          <button class="btn small danger" style="margin-left:4px" onclick="event.stopPropagation();removeTier(${trader.id},${tier.id})">✕</button>
+        </div>`;
+
+      if (tier.items.length > 0) {
+        html += '<div class="tier-items-list">';
+        for (const item of tier.items) {
+          const ow = getOverwriteStatus(trader, tier.id, item.name);
+          let owBadge = '';
+          let rowClass = 'tier-item';
+          if (ow) {
+            if (ow.isOverwritten && ow.isOverwriting) {
+              rowClass += ' ow-both';
+              owBadge = `<span class="ow-badge ow-badge-both" title="Overwritten by [${escHtml(ow.overwrittenBy)}] and overwrites [${escHtml(ow.overwrites)}]">⚠ mid</span>`;
+            } else if (ow.isOverwritten) {
+              rowClass += ' ow-dead';
+              owBadge = `<span class="ow-badge ow-badge-dead" title="Overwritten by [${escHtml(ow.overwrittenBy)}] — this entry has no effect">✕ overwritten by [${escHtml(ow.overwrittenBy)}]</span>`;
+            } else if (ow.isOverwriting) {
+              rowClass += ' ow-active';
+              owBadge = `<span class="ow-badge ow-badge-active" title="Overrides entry in [${escHtml(ow.overwrites)}]">↑ overrides [${escHtml(ow.overwrites)}]</span>`;
+            }
+          }
+          const dispName = itemNames[item.name]
+            ? `<span class="tier-item-disp-name" title="${escHtml(itemNames[item.name])}">${escHtml(itemNames[item.name])}</span>`
+            : `<span class="tier-item-spacer"></span>`;
+          html += `<div class="${rowClass}">
+            <span class="tier-item-name" title="${escHtml(item.name)}">${escHtml(item.name)}</span>
+            ${dispName}
+            ${owBadge}
+            <input type="number" min="1" max="99" value="${item.amt}"
+              onchange="updateItemField(${trader.id},${tier.id},'${item.name}','amt',this.value)"
+              title="Amount" style="width:54px">
+            <span class="tier-item-sep">,</span>
+            <input type="number" min="0" max="1" step="0.01" value="${item.chance}"
+              onchange="updateItemField(${trader.id},${tier.id},'${item.name}','chance',this.value)"
+              title="Chance (0-1)" style="width:62px">
+            <span class="rm" onclick="removeItem(${trader.id},${tier.id},'${item.name}')">✕</span>
+          </div>`;
+        }
+        html += '</div>';
+      }
+
+      html += '</div>'; // tier-card
+    }
+
+    html += `</div>
+      <div class="add-tier-wrap">
+        <div class="add-tier-row">
+          <input type="text" id="tierName_${trader.id}" placeholder="Tier name (e.g. supplies_1)">
+          <input type="text" id="tierParent_${trader.id}" placeholder="Parent (optional)" style="width:130px">
+          <button class="btn primary small" onclick="addTier(${trader.id})">+ Tier</button>
+        </div>
+      </div>
+    </div>`; // trader-card
+  }
+  el.innerHTML = html;
+}
+
+// ── EXPORT ──
+function renderExportSelect() {
+  const sel = document.getElementById('exportTraderSel');
+  const cur = sel.value;
+  let html = '<option value="__all__">All traders</option>';
+  for (const t of traders) {
+    html += `<option value="${t.id}">${escHtml(t.name)}</option>`;
+  }
+  sel.innerHTML = html;
+  if (traders.find(t => String(t.id) === cur)) sel.value = cur;
+}
+
+function renderExport() {
+  const sel = document.getElementById('exportTraderSel');
+  const filter = sel.value;
+  const toExport = filter === '__all__' ? traders : traders.filter(t => String(t.id) === filter);
+
+  let out = '';
+  for (const trader of toExport) {
+    if (toExport.length > 1) out += `; ============================================================\n`;
+    out += `; Trader: ${trader.name}\n`;
+    if (toExport.length > 1) out += `; ============================================================\n`;
+    out += '\n';
+
+    // buy_supplies line
+    if (trader.tiers.length > 0) {
+      out += '; buy_supplies = ';
+      const tierRefs = trader.tiers.map(t => t.name).reverse();
+      out += tierRefs.join(', ');
+      out += '\n\n';
+    }
+
+    for (const tier of trader.tiers) {
+      const header = tier.parent ? `[${tier.name}]:${tier.parent}` : `[${tier.name}]`;
+      out += header + '\n';
+      if (tier.items.length === 0) {
+        out += '; (empty)\n';
+      } else {
+        const maxLen = Math.max(...tier.items.map(i => i.name.length));
+        for (const item of tier.items) {
+          const pad = ' '.repeat(Math.max(1, maxLen - item.name.length + 4));
+          const chance = item.chance % 1 === 0 ? item.chance.toFixed(0) : item.chance;
+          out += `${item.name}${pad}= ${item.amt}, ${chance}\n`;
+        }
+      }
+      out += '\n';
+    }
+  }
+
+  if (!out) out = '; No traders defined yet.\n; Create a trader and add tiers to generate output.';
+  document.getElementById('exportArea').value = out;
+}
+
+function copyExport() {
+  const text = document.getElementById('exportArea').value;
+  navigator.clipboard.writeText(text).then(() => notify('Copied to clipboard!'));
+}
+
+function downloadExport() {
+  const text = document.getElementById('exportArea').value;
+  const sel = document.getElementById('exportTraderSel');
+  const traderName = sel.value === '__all__' ? 'traders' : (traders.find(t => String(t.id) === sel.value)?.name || 'export');
+  const blob = new Blob([text], { type: 'text/plain' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `trade_${traderName}.ltx`;
+  a.click();
+  notify('Downloaded!');
+}
+
+function exportAll() {
+  document.getElementById('exportTraderSel').value = '__all__';
+  renderExport();
+  downloadExport();
+}
+
+// ── UTILS ──
+function escHtml(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+let notifTimer;
+function notify(msg) {
+  const el = document.getElementById('notif');
+  el.textContent = msg;
+  el.classList.add('show');
+  clearTimeout(notifTimer);
+  notifTimer = setTimeout(() => el.classList.remove('show'), 2000);
+}
+
+// ── KEYBOARD: ENTER TO ADD TRADER ──
+document.getElementById('newTraderName').addEventListener('keydown', e => {
+  if (e.key === 'Enter') addTrader();
+});
+
+// ── LEFT PANEL RESIZE ──
+(function() {
+  const handle = document.getElementById('leftResizeHandle');
+  const grid   = document.getElementById('appGrid');
+  const MIN_W  = 160;
+  const MAX_W  = 600;
+  let dragging = false, startX = 0, startW = 0;
+
+  handle.addEventListener('mousedown', e => {
+    dragging = true;
+    startX = e.clientX;
+    startW = parseInt(getComputedStyle(grid).gridTemplateColumns.split(' ')[0]) || 300;
+    handle.classList.add('dragging');
+    document.body.style.cursor = 'col-resize';
+    document.body.style.userSelect = 'none';
+    e.preventDefault();
+  });
+
+  document.addEventListener('mousemove', e => {
+    if (!dragging) return;
+    const newW = Math.min(MAX_W, Math.max(MIN_W, startW + (e.clientX - startX)));
+    grid.style.setProperty('--left-w', newW + 'px');
+  });
+
+  document.addEventListener('mouseup', () => {
+    if (!dragging) return;
+    dragging = false;
+    handle.classList.remove('dragging');
+    document.body.style.cursor = '';
+    document.body.style.userSelect = '';
+  });
+})();
+
+initDefault();
+renderTraders();
+renderExport();
+</script>
+</body>
+</html>
