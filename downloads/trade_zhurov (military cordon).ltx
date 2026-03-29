@@ -1,32 +1,6 @@
-#include "presets\trade_discounts.ltx"
-#include "presets\trade_presets.ltx"
+; Trader: zhurov (military cordon)
 
-;EDITED BY GROUNDED TRADER OVERHAUL
-;THE MAIN IDEA IS THAT THIS GUY IS A MILITARY TRADER IN CORDON SO HE IS
-;CLOSE TO THE OUTSIDE WORLD, SO HE SMUGGLES SOME STUFF BUT HE STILL IS
-;A MILITARY GUY SO NO NATO WEAPONS, LOW BUYING PRICES BECAUSE HE MAINLY SMUGGLES IN
-;NOT OUT.
-
-[trader]
-buy_condition =  trade_generic_buy
-sell_condition = trade_generic_sell
-buy_supplies = {=actor_goodwill_ge(army:2000)} supplies_5, {=heavy_pockets_functor()} supplies_5, {=actor_goodwill_ge(army:1500)} supplies_4, {=actor_goodwill_ge(army:1000)} supplies_3, {=actor_goodwill_ge(army:500)} supplies_2,  supplies_1
-buy_item_condition_factor = 0.50		;0.40
-buy_item_exponent = 2.6
-sell_item_exponent = 1.2
-
-discounts = discount_army
-
-sell_item_min_condition = 0.6
-sell_item_max_condition = 0.98
-
-;how much the grounded_trader_multipliers influence the item costs (0 to 1)
-sell_mult_influence = 1
-buy_mult_influence = 1
-
-[trade_generic_buy]:merchant
-
-[trade_generic_sell]:merchant
+; buy_supplies = supplies_5, supplies_4, supplies_3, supplies_2, supplies_1
 
 [supplies_1]:common_stock
 ; Zhurov's baseline — what a military checkpoint always has.
@@ -339,3 +313,4 @@ detector_scientific    = 1, 0.15
 af_plates_up           = 1, 0.15
 af_kevlar_up           = 1, 0.15
 toolkit_r7             = 1, 0.15
+

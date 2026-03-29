@@ -1,28 +1,6 @@
-#include "presets\trade_discounts.ltx"
-#include "presets\trade_presets.ltx"
+; Trader: loris
 
-;EDITED GROUNDED TRADER OVERHAUL
-
-[trader]
-buy_condition =  trade_generic_buy
-sell_condition = trade_generic_sell
-buy_supplies = {=actor_goodwill_ge(stalker:1000)} supplies_5, {=heavy_pockets_functor()} supplies_5, {=actor_goodwill_ge(stalker:800)} supplies_4, {=actor_goodwill_ge(stalker:600)} supplies_3, {=actor_goodwill_ge(stalker:400)} supplies_2,  supplies_1
-buy_item_condition_factor = 0.3
-buy_item_exponent = 2.5
-sell_item_exponent = 1.6
-
-discounts = discount_stalker
-
-;how much the grounded_trader_multipliers influence the item costs (0 to 1)
-sell_mult_influence = 1
-buy_mult_influence = 1
-
-sell_item_min_condition = 0.5
-sell_item_max_condition = 0.98
-
-[trade_generic_buy]:trasher
-
-[trade_generic_sell]:trasher
+; buy_supplies = supplies_3, supplies_2, supplies_1
 
 [supplies_1]:common_stock
 ; weapons
@@ -34,7 +12,6 @@ wpn_beretta              = 1, 0.5
 wpn_ak74u_old            = 1, 0.6
 wpn_aks74                = 1, 0.5
 wpn_bizon                = 1, 0.5
-wpn_ak74_old             = 1, 0.7
 wpn_bm16                 = 1, 0.75
 wpn_toz34                = 1, 0.7
 wpn_knife                = 1, 0.8
@@ -137,8 +114,6 @@ wpn_mp5                      = 1, 0.65
 wpn_rpk                      = 1, 0.7
 ; weapon_addons
 kobra                        = 1, 0.7
-c-more                       = 1, 0.6
-wpn_addon_scope_mosin        = 1, 0.55
 ; ammo
 ammo_9x19_pbp                = 8, 0.75
 ammo_9x19_ap                 = 8, 0.75
@@ -149,8 +124,6 @@ ammo_7.62x39_fmj             = 8, 0.7
 ammo_7.62x25_p               = 8, 0.7
 ammo_7.62x25_ps              = 8, 0.7
 ammo_7.62x54_7h1             = 6, 0.7
-ammo_12x76_zhekan            = 6, 0.7
-ammo_12x76_bull              = 6, 0.7
 ; outfits
 stalker_autumn_outfit        = 1, 0.5
 stalker_predator_outfit      = 1, 0.5
@@ -198,91 +171,18 @@ fieldcooker                  = 1, 0.6
 
 [supplies_3]:supplies_2
 ; weapons
-wpn_pb                        = 1, 0.7
-wpn_hpsa                      = 1, 0.7
-wpn_oc33                      = 1, 0.65
-wpn_abakan                    = 1, 0.65
-wpn_ak12                      = 1, 0.6
-wpn_ak103                     = 1, 0.6
-wpn_svd                       = 1, 0.7
-wpn_vintorez                  = 1, 0.6
-wpn_sv98                      = 1, 0.7
-wpn_val                       = 1, 0.6
-wpn_saiga12s                  = 1, 0.7
-wpn_mp153                     = 1, 0.75
-wpn_mossberg590               = 1, 0.55
-wpn_remington870              = 1, 0.6
-wpn_knife2                    = 1, 0.7
-wpn_axe                       = 1, 0.65
-grenade_rgd5                  = 1, 0.7
-; weapons_addons
-wpn_addon_scope               = 1, 0.4
-wpn_addon_scope_po4x34        = 1, 0.4
-1p29                          = 1, 0.4
-acog                          = 1, 0.4
-wpn_addon_silencer            = 1, 0.5
-wpn_sil_pbs1                  = 1, 0.5
-wpn_sil_9mm                   = 1, 0.5
-; ammo
-ammo_9x39_pab9                = 8, 0.7
-ammo_9x39_ap                  = 8, 0.7
-ammo_7.62x54_7h14             = 6, 0.74
-ammo_7.62x54_ap               = 6, 0.74
-ammo_7.62x39_ap               = 8, 0.75
-ammo_5.56x45_fmj              = 8, 0.6
-ammo_5.56x45_ss190            = 8, 0.55
-ammo_5.56x45_ap               = 8, 0.5
-; outfits
-nomad_outfit                  = 1, 0.3
-travel_outfit                 = 1, 0.3
-wastelander_outfit            = 1, 0.3
-stalker_tigerstripe_outfit    = 1, 0.3
-stalker_graphite_outfit       = 1, 0.3
-stalker_drought_outfit        = 1, 0.3
-stalker_bear_outfit           = 1, 0.3
-scientific_outfit             = 1, 0.3
-helm_tactic                   = 1, 0.4
-helm_ranger                   = 1, 0.4
-helm_ppm88                    = 1, 0.4
-helm_m40                      = 1, 0.4
-helm_spartan                  = 1, 0.2
-; outfit_addons
-af_camelbak_up                = 1, 0.6
-af_kevlar                     = 1, 0.7
-; devices
-detector_advanced             = 1, 0.7
-device_torch_nv_1             = 1, 0.6
+wpn_pb              = 1, 0.7
+wpn_hpsa            = 1, 0.7
+wpn_oc33            = 1, 0.65
+wpn_abakan          = 1, 0.65
+wpn_ak12            = 1, 0.6
+wpn_ak103           = 1, 0.6
+wpn_svd             = 1, 0.7
+wpn_vintorez        = 1, 0.6
+wpn_sv98            = 1, 0.7
+wpn_val             = 1, 0.6
+wpn_saiga12s        = 1, 0.7
+wpn_mp153           = 1, 0.75
+wpn_mossberg590     = 1, 0.55
+wpn_remington870    = 1, 0.6
 
-[supplies_4]:supplies_3
-; weapons
-wpn_ak102              = 1, 0.5
-wpn_ak101              = 1, 0.5
-wpn_aek                = 1, 0.5
-wpn_ash12              = 1, 0.5
-wpn_vepr               = 1, 0.5
-wpn_ump45              = 1, 0.5
-wpn_rpk74              = 1, 0.5
-; weapon_addons
-ps01                   = 1, 0.6
-wpn_sil_pbs4           = 1, 0.6
-wpn_sil_tgp-a          = 1, 0.5
-; ammo
-ammo_7.92x33_fmj       = 8, 0.7
-ammo_7.92x33_ap        = 8, 0.7
-ammo_12.7x55_fmj       = 8, 0.7
-ammo_12.7x55_ap        = 8, 0.7
-ammo_pkm_100           = 8, 0.7
-ammo_11.43x23_hydro    = 8, 0.75
-ammo_11.43x23_fmj      = 8, 0.75
-; outfits
-light_loner_outfit     = 1, 0.4
-exolight_outfit        = 1, 0.35
-helm_ach7ex            = 1, 0.55
-helm_battle            = 1, 0.35
-
-[supplies_5]:supplies_4
-; outfits
-stalker_proto_exo_outfit    = 1, 0.2
-exo_outfit                  = 1, 0.15
-helm_exo                    = 1, 0.2
-helm_metro                  = 1, 0.15

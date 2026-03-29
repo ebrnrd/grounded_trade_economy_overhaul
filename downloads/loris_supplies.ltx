@@ -1,28 +1,6 @@
-#include "presets\trade_discounts.ltx"
-#include "presets\trade_presets.ltx"
+; Trader: loris
 
-;EDITED GROUNDED TRADER OVERHAUL
-
-[trader]
-buy_condition =  trade_generic_buy
-sell_condition = trade_generic_sell
-buy_supplies = {=actor_goodwill_ge(stalker:1000)} supplies_5, {=heavy_pockets_functor()} supplies_5, {=actor_goodwill_ge(stalker:800)} supplies_4, {=actor_goodwill_ge(stalker:600)} supplies_3, {=actor_goodwill_ge(stalker:400)} supplies_2,  supplies_1
-buy_item_condition_factor = 0.3
-buy_item_exponent = 2.5
-sell_item_exponent = 1.6
-
-discounts = discount_stalker
-
-;how much the grounded_trader_multipliers influence the item costs (0 to 1)
-sell_mult_influence = 1
-buy_mult_influence = 1
-
-sell_item_min_condition = 0.5
-sell_item_max_condition = 0.98
-
-[trade_generic_buy]:trasher
-
-[trade_generic_sell]:trasher
+; buy_supplies = supplies_5, supplies_4, supplies_3, supplies_2, supplies_1
 
 [supplies_1]:common_stock
 ; weapons
@@ -286,3 +264,4 @@ stalker_proto_exo_outfit    = 1, 0.2
 exo_outfit                  = 1, 0.15
 helm_exo                    = 1, 0.2
 helm_metro                  = 1, 0.15
+
