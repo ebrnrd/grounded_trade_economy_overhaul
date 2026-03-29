@@ -1,0 +1,1018 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Grounded — Trade Categories Organizer</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani:wght@400;500;600;700&display=swap');
+
+  :root {
+    --bg:        #0d0f0b;
+    --bg2:       #121510;
+    --bg3:       #181c14;
+    --bg4:       #1e241a;
+    --border:    #2a3424;
+    --border2:   #3a4832;
+    --accent:    #6daa3f;
+    --accent2:   #4e7d2c;
+    --accent-dim:#3a5a1f;
+    --text:      #c8d4b8;
+    --text2:     #8fa07a;
+    --text3:     #556645;
+    --danger:    #c04040;
+    --warn:      #c08830;
+    --info:      #4a8aaa;
+    --info-dim:  #1a3a4a;
+    --mono:      'Share Tech Mono', monospace;
+    --sans:      'Rajdhani', sans-serif;
+  }
+
+  * { box-sizing:border-box; margin:0; padding:0; }
+
+  body {
+    background:var(--bg); color:var(--text); font-family:var(--sans);
+    font-size:15px; height:100vh; display:flex; flex-direction:column; overflow:hidden;
+  }
+
+  /* ── HEADER ── */
+  header {
+    background:var(--bg2); border-bottom:1px solid var(--border);
+    padding:9px 16px; display:flex; align-items:center; gap:14px;
+    flex-shrink:0; position:relative;
+  }
+  header::after {
+    content:''; position:absolute; bottom:0;left:0;right:0;height:1px;
+    background:linear-gradient(90deg,transparent,var(--accent-dim),transparent);
+  }
+  .logo { font-family:var(--mono); font-size:11px; color:var(--accent); letter-spacing:3px; text-transform:uppercase; }
+  .logo span { color:var(--text3); }
+  .header-title { font-size:19px; font-weight:700; letter-spacing:1px; text-transform:uppercase; }
+  .header-actions { margin-left:auto; display:flex; gap:8px; align-items:center; }
+
+  /* ── LAYOUT ── */
+  .app {
+    flex:1; display:grid;
+    grid-template-columns:var(--left-w,320px) 5px 1fr var(--right-w,300px);
+    overflow:hidden;
+  }
+  .resize-handle {
+    width:5px; background:transparent; cursor:col-resize;
+    flex-shrink:0; border-right:1px solid var(--border); transition:background .15s;
+  }
+  .resize-handle:hover,.resize-handle.dragging { background:var(--accent-dim); border-right-color:var(--accent); }
+
+  /* ── PANELS ── */
+  .panel { display:flex; flex-direction:column; overflow:hidden; border-right:1px solid var(--border); }
+  .panel:last-child { border-right:none; }
+  .panel-header {
+    background:var(--bg3); border-bottom:1px solid var(--border);
+    padding:7px 12px; display:flex; align-items:center; gap:8px; flex-shrink:0;
+  }
+  .panel-title { font-family:var(--mono); font-size:10px; color:var(--accent); letter-spacing:2px; text-transform:uppercase; flex:1; }
+  .panel-body { flex:1; overflow-y:auto; }
+  .panel-body::-webkit-scrollbar { width:4px; }
+  .panel-body::-webkit-scrollbar-thumb { background:var(--border2); border-radius:2px; }
+
+  /* ── TABS ── */
+  .tab-bar { display:flex; flex-shrink:0; border-bottom:1px solid var(--border); background:var(--bg3); }
+  .tab-btn {
+    flex:1; padding:7px 10px; font-family:var(--mono); font-size:10px; letter-spacing:1.5px;
+    text-transform:uppercase; text-align:center; cursor:pointer; color:var(--text3);
+    border:none; border-bottom:2px solid transparent; transition:all .15s; user-select:none; background:transparent;
+  }
+  .tab-btn:hover { color:var(--text2); background:var(--bg4); }
+  .tab-btn.active { color:var(--accent); border-bottom-color:var(--accent); background:var(--bg2); }
+  .tab-pane { display:none; flex-direction:column; flex:1; overflow:hidden; min-height:0; }
+  .tab-pane.active { display:flex; }
+
+  /* ── BUTTONS ── */
+  .btn {
+    font-family:var(--sans); font-weight:600; font-size:13px; letter-spacing:.5px;
+    padding:5px 12px; border:1px solid var(--border2); border-radius:3px;
+    background:var(--bg4); color:var(--text); cursor:pointer; transition:all .15s; white-space:nowrap;
+  }
+  .btn:hover { background:var(--accent-dim); border-color:var(--accent); color:#fff; }
+  .btn.primary { background:var(--accent-dim); border-color:var(--accent); color:#fff; }
+  .btn.primary:hover { background:var(--accent2); }
+  .btn.danger { border-color:var(--danger); color:var(--danger); background:transparent; }
+  .btn.danger:hover { background:#3a1010; }
+  .btn.small { font-size:11px; padding:3px 8px; }
+  .btn.xs { font-size:10px; padding:2px 6px; }
+
+  input[type=text],select,textarea {
+    font-family:var(--mono); font-size:12px; background:var(--bg);
+    border:1px solid var(--border2); border-radius:3px; color:var(--text);
+    padding:5px 8px; outline:none; transition:border-color .15s;
+  }
+  input[type=text]:focus,select:focus,textarea:focus { border-color:var(--accent); }
+  select option { background:var(--bg3); }
+
+  /* ── FILES TAB ── */
+  .file-tab-body { flex:1; overflow-y:auto; padding:8px; min-height:0; }
+  .file-tab-body::-webkit-scrollbar { width:4px; }
+  .file-tab-body::-webkit-scrollbar-thumb { background:var(--border2); border-radius:2px; }
+
+  .file-zone {
+    border:1px dashed var(--border2); border-radius:4px; margin-bottom:6px;
+    padding:11px; text-align:center; cursor:pointer; transition:all .15s;
+    font-size:12px; color:var(--text3);
+  }
+  .file-zone:hover { border-color:var(--accent); color:var(--text2); background:var(--bg3); }
+  .file-zone input { display:none; }
+
+  .file-group { margin-bottom:10px; }
+  .file-group-header {
+    display:flex; align-items:center; gap:6px; margin-bottom:4px;
+    padding:4px 8px; border-radius:3px; background:var(--bg3); border:1px solid var(--border);
+  }
+  .fgh-label { font-family:var(--mono); font-size:10px; letter-spacing:1.2px; text-transform:uppercase; flex:1; }
+  .fgh-label.ltx { color:var(--accent); }
+  .fgh-label.xml { color:var(--info); }
+  .fgh-label.cat { color:var(--warn); }
+
+  .loaded-file {
+    display:flex; align-items:center; gap:6px; padding:3px 8px;
+    border-radius:3px; font-family:var(--mono); font-size:10px; color:var(--text2);
+    border:1px solid var(--border); margin-bottom:2px; background:var(--bg);
+  }
+  .lf-tag { font-size:9px; padding:1px 5px; border-radius:2px; font-weight:700; letter-spacing:.5px; flex-shrink:0; }
+  .lf-tag.ltx { background:#2a3a1a; color:var(--accent); }
+  .lf-tag.xml { background:#1a2a3a; color:var(--info); }
+  .lf-tag.cat { background:#3a2a1a; color:var(--warn); }
+  .lf-name { flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .lf-rm { color:var(--text3); cursor:pointer; flex-shrink:0; }
+  .lf-rm:hover { color:var(--danger); }
+
+  /* ── ITEMS TAB ── */
+  .stats-bar {
+    padding:5px 12px; background:var(--bg3); border-bottom:1px solid var(--border);
+    font-family:var(--mono); font-size:10px; color:var(--text3); display:flex; gap:12px; flex-shrink:0;
+  }
+  .stats-bar span { color:var(--text2); }
+
+  .search-wrap { padding:8px; display:flex; gap:6px; align-items:center; flex-shrink:0; border-bottom:1px solid var(--border); }
+  .search-wrap input { flex:1; }
+
+  .cat-filter { padding:4px 10px 6px; display:flex; gap:5px; flex-wrap:wrap; flex-shrink:0; border-bottom:1px solid var(--border); }
+  .cf-chip {
+    font-family:var(--mono); font-size:9px; padding:2px 7px; border-radius:12px;
+    border:1px solid var(--border2); cursor:pointer; color:var(--text3); transition:all .12s;
+  }
+  .cf-chip:hover,.cf-chip.active { border-color:var(--accent); color:var(--accent); background:var(--accent-dim); }
+
+  .item-list-wrap { padding:4px 0; }
+  .item-entry {
+    padding:4px 10px 4px 14px; display:flex; align-items:center; gap:6px;
+    cursor:grab; border-bottom:1px solid #181e14; transition:background .1s; user-select:none;
+  }
+  .item-entry:hover { background:var(--bg4); }
+  .item-entry.dragging-src { opacity:.4; }
+  .item-entry.in-section { border-left:2px solid var(--accent-dim); }
+  .ie-id { font-family:var(--mono); font-size:11px; color:var(--text2); flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; min-width:0; }
+  .ie-name { font-family:var(--sans); font-size:11px; color:var(--text3); font-style:italic; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; max-width:130px; flex-shrink:0; }
+  .item-entry:hover .ie-name { color:var(--text2); }
+  .ie-section-badge { font-size:9px; font-family:var(--mono); color:var(--text3); background:var(--bg3); border:1px solid var(--border); border-radius:2px; padding:0 4px; flex-shrink:0; }
+
+  /* ── CENTER: SECTIONS ── */
+  .sections-toolbar { padding:8px; border-bottom:1px solid var(--border); display:flex; gap:6px; align-items:center; flex-shrink:0; }
+  .sections-toolbar input { flex:1; }
+
+  .section-card {
+    border:1px solid var(--border); border-radius:3px; margin:6px;
+    background:var(--bg3); transition:border-color .15s;
+  }
+  .section-card.drag-over { border-color:var(--accent); background:#1a2014; }
+  .section-card.macro { border-color:#2a3a4a; }
+  .section-card.macro .section-header { background:#111820; }
+  .section-card.macro .sec-name-display { color:var(--info); }
+
+  .section-header {
+    padding:7px 10px; display:flex; align-items:center; gap:8px;
+    background:var(--bg4); border-bottom:1px solid var(--border);
+    cursor:pointer; user-select:none;
+  }
+  .section-header:hover { background:#222c1a; }
+  .section-card.collapsed .section-header { border-bottom:none; }
+  .section-card.collapsed .section-inherit-list,
+  .section-card.collapsed .section-body,
+  .section-card.collapsed .section-footer { display:none; }
+
+  .sec-chevron { font-size:9px; color:var(--text3); transition:transform .15s; flex-shrink:0; }
+  .section-card.collapsed .sec-chevron { transform:rotate(-90deg); }
+
+  /* Inline-editable name */
+  .sec-name-display {
+    font-family:var(--mono); font-size:12px; color:var(--accent); font-weight:700;
+    flex:1; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+    cursor:text; padding:1px 3px; border-radius:2px; border:1px solid transparent;
+    transition:border-color .1s;
+  }
+  .sec-name-display:hover { border-color:var(--accent-dim); background:#1a2214; }
+  .sec-name-input {
+    font-family:var(--mono); font-size:12px; color:var(--accent); font-weight:700;
+    background:var(--bg); border:1px solid var(--accent); border-radius:2px;
+    padding:1px 5px; flex:1; min-width:60px; outline:none;
+  }
+
+  .sec-macro-badge { font-size:9px; font-family:var(--mono); padding:1px 5px; border-radius:2px; background:#1a2a3a; color:var(--info); border:1px solid #2a3a4a; flex-shrink:0; }
+  .sec-count { font-family:var(--mono); font-size:10px; color:var(--text3); flex-shrink:0; white-space:nowrap; }
+  .sec-actions { display:flex; gap:4px; flex-shrink:0; }
+
+  /* ── INHERITANCE LIST ── */
+  .section-inherit-list { background:#0c1016; border-bottom:1px solid var(--border); padding:4px 0; }
+  .sec-inherit-header {
+    padding:3px 10px; font-family:var(--mono); font-size:9px;
+    color:#2a6a7a; letter-spacing:1.5px; text-transform:uppercase;
+    display:flex; align-items:center; gap:6px;
+  }
+  .sec-inherit-header span { flex:1; }
+
+  .sec-inherit-item {
+    padding:3px 10px 3px 16px; display:flex; align-items:center; gap:6px;
+    font-family:var(--mono); font-size:11px; color:#5a9aba;
+    cursor:grab; border-bottom:1px solid #0e1620; transition:background .1s;
+    user-select:none; background:#0c1016;
+  }
+  .sec-inherit-item:hover { background:#101c26; color:#80c0d8; }
+  .sec-inherit-item.dragging-src { opacity:.35; }
+  .sec-inherit-item .drag-handle { color:#2a5a6a; font-size:12px; cursor:grab; }
+  .sec-inherit-item .si-arrow { font-size:10px; color:#2a6a7a; flex-shrink:0; }
+  .sec-inherit-item .si-id { flex:1; min-width:0; overflow:hidden; text-overflow:ellipsis; }
+  .sec-inherit-item .si-rm { color:#1a4a5a; cursor:pointer; flex-shrink:0; opacity:0; }
+  .sec-inherit-item:hover .si-rm { opacity:1; }
+  .sec-inherit-item .si-rm:hover { color:var(--danger); }
+
+  .inherit-drop-placeholder {
+    height:24px; border:1px dashed #1a4a5a; border-radius:2px; margin:3px 10px;
+    display:flex; align-items:center; justify-content:center;
+    font-size:9px; font-family:var(--mono); color:#2a5a6a;
+  }
+  .inherit-add-row {
+    display:flex; gap:5px; padding:5px 10px; border-top:1px solid #1a2a3a;
+  }
+  .inherit-add-row input {
+    flex:1; font-size:11px; background:#0a1018; border-color:#1a4a5a; color:#7ab8d0;
+  }
+  .inherit-add-row input:focus { border-color:var(--info); }
+  .inherit-add-row .btn {
+    font-size:10px; padding:2px 8px; border-color:#2a5a6a; color:#5a9aba; background:#0e1a28;
+  }
+  .inherit-add-row .btn:hover { background:var(--info-dim); border-color:var(--info); color:#fff; }
+
+  /* ── SECTION BODY ── */
+  .section-body { padding:4px 0; min-height:32px; }
+  .sec-item {
+    padding:3px 10px 3px 16px; display:flex; align-items:center; gap:6px;
+    font-family:var(--mono); font-size:11px; color:var(--text2);
+    cursor:grab; border-bottom:1px solid #1a1f16; transition:background .1s; user-select:none;
+  }
+  .sec-item:hover { background:var(--bg4); color:var(--text); }
+  .sec-item.dragging-src { opacity:.35; }
+  .sec-item .drag-handle { color:var(--text3); font-size:12px; cursor:grab; }
+  .sec-item .si-id { flex:1; min-width:0; overflow:hidden; text-overflow:ellipsis; }
+  .sec-item .si-name { font-family:var(--sans); font-style:italic; font-size:11px; color:var(--text3); max-width:140px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .sec-item:hover .si-name { color:var(--text2); }
+  .sec-item .si-rm { color:var(--text3); cursor:pointer; flex-shrink:0; opacity:0; }
+  .sec-item:hover .si-rm { opacity:1; }
+  .sec-item .si-rm:hover { color:var(--danger); }
+
+  .sec-comment {
+    padding:3px 10px 3px 16px; font-family:var(--mono); font-size:10px;
+    color:var(--text3); display:flex; gap:6px; align-items:center;
+    border-bottom:1px solid #1a1f16; cursor:grab; user-select:none;
+  }
+  .sec-comment .si-rm { color:var(--text3); cursor:pointer; opacity:0; }
+  .sec-comment:hover .si-rm { opacity:1; }
+  .sec-comment .si-rm:hover { color:var(--danger); }
+
+  .drop-placeholder {
+    height:28px; border:1px dashed var(--accent-dim); border-radius:2px; margin:2px 10px;
+    display:flex; align-items:center; justify-content:center;
+    font-size:10px; font-family:var(--mono); color:var(--accent-dim);
+  }
+
+  .section-footer {
+    border-top:1px solid var(--border); padding:6px 10px; display:flex; gap:6px; align-items:center;
+  }
+  .section-footer input { flex:1; font-size:11px; }
+
+  /* ── RIGHT PANEL ── */
+  .export-wrap { padding:8px; display:flex; flex-direction:column; gap:8px; height:100%; }
+  .export-wrap textarea { flex:1; resize:none; font-size:11px; line-height:1.5; background:var(--bg); white-space:pre; overflow-wrap:normal; overflow-x:auto; }
+  .export-actions { display:flex; gap:6px; }
+
+  /* ── TOOLTIP ── */
+  #tooltip {
+    position:fixed; z-index:9999; pointer-events:none;
+    background:var(--bg2); border:1px solid var(--border2); border-radius:4px;
+    padding:8px 12px; max-width:340px; font-size:12px;
+    box-shadow:0 4px 20px rgba(0,0,0,.5); display:none;
+  }
+  #tooltip .tt-id   { font-family:var(--mono); color:var(--accent); font-size:11px; margin-bottom:4px; }
+  #tooltip .tt-name { font-weight:700; font-size:14px; color:var(--text); margin-bottom:4px; }
+  #tooltip .tt-desc { color:var(--text2); font-size:11px; line-height:1.5; max-height:120px; overflow:hidden; }
+
+  /* ── NOTIF ── */
+  #notif {
+    position:fixed; bottom:18px; left:50%; transform:translateX(-50%) translateY(60px);
+    background:var(--accent-dim); border:1px solid var(--accent); border-radius:4px;
+    padding:8px 18px; font-family:var(--mono); font-size:12px; letter-spacing:1px;
+    z-index:9999; transition:transform .25s; pointer-events:none;
+  }
+  #notif.show { transform:translateX(-50%) translateY(0); }
+
+  /* ── MODAL ── */
+  .modal-overlay { position:fixed; inset:0; background:rgba(0,0,0,.7); z-index:9998; display:none; align-items:center; justify-content:center; }
+  .modal-overlay.show { display:flex; }
+  .modal { background:var(--bg2); border:1px solid var(--border2); border-radius:5px; padding:20px; max-width:480px; width:90%; max-height:80vh; overflow-y:auto; }
+  .modal h3 { font-size:16px; font-weight:700; margin-bottom:12px; color:var(--accent); text-transform:uppercase; letter-spacing:1px; }
+  .modal p { font-size:13px; color:var(--text2); margin-bottom:10px; line-height:1.5; }
+  .modal-actions { display:flex; gap:8px; justify-content:flex-end; margin-top:14px; }
+
+  .empty-note { text-align:center; padding:20px; font-family:var(--mono); font-size:11px; color:var(--text3); }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">GROUNDED <span>// TRADE</span></div>
+  <div class="header-title">Categories Organizer</div>
+  <div class="header-actions">
+    <button class="btn small" onclick="showHelp()">? Help</button>
+    <button class="btn small primary" onclick="renderExport()">⟳ Refresh Export</button>
+  </div>
+</header>
+
+<div class="app" id="appGrid">
+
+  <!-- ═══ LEFT PANEL ═══ -->
+  <div class="panel" id="leftPanel">
+    <div class="panel-header">
+      <span class="panel-title">Browser</span>
+    </div>
+
+    <div class="tab-bar">
+      <button class="tab-btn active" id="tabBtnItems" onclick="switchTab('items')">Items</button>
+      <button class="tab-btn"        id="tabBtnFiles" onclick="switchTab('files')">Files</button>
+    </div>
+
+    <!-- ITEMS TAB -->
+    <div class="tab-pane active" id="tabItems">
+      <div class="stats-bar">
+        <span>Items: <span id="statItems">0</span></span>
+        <span>Strings: <span id="statStrings">0</span></span>
+        <span>Sections: <span id="statSections">0</span></span>
+      </div>
+      <div class="search-wrap">
+        <input type="text" id="itemSearch" placeholder="Search items…" oninput="renderItemList()">
+        <select id="filterMode" onchange="renderItemList()" style="font-size:11px;padding:4px 6px;">
+          <option value="all">All</option>
+          <option value="unplaced">Unplaced</option>
+          <option value="placed">Placed</option>
+        </select>
+      </div>
+      <div class="cat-filter" id="catFilter"></div>
+      <div class="panel-body" id="itemListPanel">
+        <div class="empty-note">Load files to populate item list</div>
+      </div>
+    </div>
+
+    <!-- FILES TAB -->
+    <div class="tab-pane" id="tabFiles">
+      <div class="file-tab-body" id="fileTabBody">
+        <div class="file-zone" onclick="document.getElementById('fpCat').click()">
+          <input type="file" id="fpCat" accept=".ltx" onchange="loadCatFile(this)">
+          📂 Load <strong>trade_categories.ltx</strong>
+        </div>
+        <div class="file-zone" onclick="document.getElementById('fpLtx').click()">
+          <input type="file" id="fpLtx" accept=".ltx" multiple onchange="loadLtxFiles(this)">
+          📂 Add <strong>.ltx config files</strong> (multiple)
+        </div>
+        <div class="file-zone" onclick="document.getElementById('fpXml').click()">
+          <input type="file" id="fpXml" accept=".xml" multiple onchange="loadXmlFiles(this)">
+          📂 Add <strong>.xml string files</strong> (multiple)
+        </div>
+        <div id="loadedFilesList"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="resize-handle" id="leftResizeHandle"></div>
+
+  <!-- ═══ CENTER: Sections Editor ═══ -->
+  <div class="panel" id="centerPanel">
+    <div class="panel-header">
+      <span class="panel-title">Sections</span>
+      <button class="btn small" onclick="collapseAll()">Collapse All</button>
+      <button class="btn small" onclick="expandAll()">Expand All</button>
+    </div>
+    <div class="sections-toolbar">
+      <input type="text" id="newSecName" placeholder="New section name…">
+      <input type="text" id="newSecParent" placeholder="Inherits… (optional)" style="width:155px" list="sectionNamesList">
+      <datalist id="sectionNamesList"></datalist>
+      <button class="btn small primary" onclick="addSection()">+ Section</button>
+    </div>
+    <div style="flex-shrink:0;padding:4px 8px 6px;border-bottom:1px solid var(--border);display:flex;gap:6px;">
+      <input type="text" id="secSearch" placeholder="Filter sections…" style="flex:1" oninput="renderSections()">
+    </div>
+    <div class="panel-body" id="sectionsPanel">
+      <div class="empty-note">Load trade_categories.ltx to begin</div>
+    </div>
+  </div>
+
+  <!-- ═══ RIGHT: Export ═══ -->
+  <div class="panel" id="rightPanel">
+    <div class="panel-header"><span class="panel-title">Export</span></div>
+    <div class="export-wrap">
+      <textarea id="exportArea" readonly placeholder="; Export will appear here…"></textarea>
+      <div class="export-actions">
+        <button class="btn small" onclick="copyExport()">⎘ Copy</button>
+        <button class="btn small primary" onclick="downloadExport()">↓ Download .ltx</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div id="tooltip">
+  <div class="tt-id" id="ttId"></div>
+  <div class="tt-name" id="ttName"></div>
+  <div class="tt-desc" id="ttDesc"></div>
+</div>
+<div id="notif"></div>
+
+<div class="modal-overlay" id="helpModal">
+  <div class="modal">
+    <h3>How to use</h3>
+    <p><strong>Files tab</strong> — Load your trade_categories.ltx, then add as many .ltx config and .xml string files as you need. Use "Clear All" to remove all files of one type at once.</p>
+    <p><strong>Items tab</strong> — Browse all known item IDs with their real in-game names. Hover any item for its full description. Filter by prefix chips or placement status. Drag items directly into sections.</p>
+    <p><strong>Sections</strong> — Click a section name directly to rename it inline. Inheritance entries are shown as a separate list under the header — drag to reorder, click ✕ to remove, type to add new ones. Drag items from the left panel or between sections to reorganize.</p>
+    <p><strong>Export</strong> — Click Refresh Export then Download or Copy.</p>
+    <div class="modal-actions"><button class="btn primary" onclick="hideHelp()">Got it</button></div>
+  </div>
+</div>
+
+<script>
+// ══════════════════════════════════════════════
+//  STATE
+// ══════════════════════════════════════════════
+let itemDB      = {};  // id → {inv_name_key, description_key}
+let stringDB    = {};  // string_id → text
+let sections    = [];  // [{id, name, parents:[], items:[{type,val}], collapsed, isMacro}]
+let loadedFiles = [];  // [{name, type:'ltx'|'xml'|'cat'}]
+let nextSecId   = 1;
+let filterCat   = '';
+
+// ══════════════════════════════════════════════
+//  TABS
+// ══════════════════════════════════════════════
+function switchTab(tab) {
+  ['items','files'].forEach(t => {
+    document.getElementById('tabBtn' + t.charAt(0).toUpperCase() + t.slice(1)).classList.toggle('active', t===tab);
+    document.getElementById('tab'   + t.charAt(0).toUpperCase() + t.slice(1)).classList.toggle('active', t===tab);
+  });
+}
+
+// ══════════════════════════════════════════════
+//  FILE LOADING
+// ══════════════════════════════════════════════
+function loadCatFile(input) {
+  const file = input.files[0]; if (!file) return;
+  const r = new FileReader();
+  r.onload = e => {
+    parseCatFile(e.target.result);
+    loadedFiles = loadedFiles.filter(f => f.type!=='cat');
+    loadedFiles.unshift({name:file.name,type:'cat'});
+    afterLoad(); notify('Loaded: '+file.name);
+  };
+  r.readAsText(file); input.value='';
+}
+
+function loadLtxFiles(input) {
+  const files = Array.from(input.files); let done=0;
+  files.forEach(file => {
+    const r = new FileReader();
+    r.onload = e => {
+      parseLtxConfig(e.target.result);
+      loadedFiles = loadedFiles.filter(f => !(f.name===file.name && f.type==='ltx'));
+      loadedFiles.push({name:file.name,type:'ltx'});
+      if (++done===files.length) { afterLoad(); notify(`Loaded ${files.length} .ltx file(s)`); }
+    };
+    r.readAsText(file);
+  });
+  input.value='';
+}
+
+function loadXmlFiles(input) {
+  const files = Array.from(input.files); let done=0;
+  files.forEach(file => {
+    const r = new FileReader();
+    r.onload = e => {
+      parseXmlStrings(e.target.result);
+      loadedFiles = loadedFiles.filter(f => !(f.name===file.name && f.type==='xml'));
+      loadedFiles.push({name:file.name,type:'xml'});
+      if (++done===files.length) { afterLoad(); notify(`Loaded ${files.length} .xml file(s)`); }
+    };
+    r.readAsText(file,'windows-1251');
+  });
+  input.value='';
+}
+
+function clearLtxFiles() {
+  loadedFiles = loadedFiles.filter(f=>f.type!=='ltx');
+  renderLoadedFiles(); notify('Cleared all .ltx config files');
+}
+function clearXmlFiles() {
+  loadedFiles = loadedFiles.filter(f=>f.type!=='xml');
+  renderLoadedFiles(); notify('Cleared all .xml string files');
+}
+function unloadFile(idx) { loadedFiles.splice(idx,1); renderLoadedFiles(); }
+
+function afterLoad() { renderLoadedFiles(); renderSections(); renderItemList(); renderExport(); updateStats(); }
+
+// ── Parsers ──
+function parseCatFile(text) {
+  sections=[]; nextSecId=1;
+  let curSec=null;
+  for (const rawLine of text.split('\n')) {
+    const t = rawLine.trim();
+    const hm = t.match(/^\[([^\]]+)\](?::(.+))?/);
+    if (hm) {
+      const name = hm[1].trim();
+      const parents = hm[2] ? hm[2].trim().split(',').map(p=>p.trim()).filter(Boolean) : [];
+      curSec = {id:nextSecId++, name, parents, items:[], collapsed:false, isMacro:parents.length>1};
+      sections.push(curSec); continue;
+    }
+    if (!curSec) continue;
+    if (t.startsWith(';')) { const c=t.slice(1).trim(); if(c) curSec.items.push({type:'comment',val:c}); continue; }
+    if (!t) continue;
+    const im = t.match(/^([A-Za-z0-9_.\-]+)(?:\s*;.*)?$/);
+    if (im) { const id=im[1]; curSec.items.push({type:'item',val:id}); if(!itemDB[id]) itemDB[id]={inv_name_key:'',description_key:''}; }
+  }
+  updateSectionDatalist();
+}
+
+function parseLtxConfig(text) {
+  let curId=null;
+  for (const rawLine of text.split('\n')) {
+    const l = rawLine.trim();
+    const hm = l.match(/^\[([A-Za-z0-9_.\-]+)\]/);
+    if (hm) { curId=hm[1]; if(!itemDB[curId]) itemDB[curId]={inv_name_key:'',description_key:''}; continue; }
+    if (!curId) continue;
+    const nm=l.match(/^inv_name\s*=\s*([A-Za-z0-9_.\-]+)/); if(nm){itemDB[curId].inv_name_key=nm[1];continue;}
+    const dm=l.match(/^description\s*=\s*([A-Za-z0-9_.\-]+)/); if(dm){itemDB[curId].description_key=dm[1];}
+  }
+}
+
+function parseXmlStrings(text) {
+  const re=/<string\s+id="([^"]+)"[^>]*>\s*<text>([\s\S]*?)<\/text>/g; let m;
+  while((m=re.exec(text))!==null){
+    stringDB[m[1]]=m[2].replace(/\\n/g,'\n').replace(/%c\[[^\]]+\]/g,'').replace(/\x95/g,'•').replace(/\n\s*\n/g,'\n').trim();
+  }
+}
+
+// ══════════════════════════════════════════════
+//  LOOKUPS
+// ══════════════════════════════════════════════
+function getItemName(id) {
+  const e=itemDB[id]; if(!e) return '';
+  if(e.inv_name_key&&stringDB[e.inv_name_key]) return stringDB[e.inv_name_key];
+  return e.inv_name_key||'';
+}
+function getItemDesc(id) {
+  const e=itemDB[id]; if(!e) return '';
+  return (e.description_key&&stringDB[e.description_key])||'';
+}
+function getItemSection(id) {
+  for(const s of sections) if(s.items.some(it=>it.type==='item'&&it.val===id)) return s.name;
+  return null;
+}
+
+// ══════════════════════════════════════════════
+//  FILE LIST RENDER
+// ══════════════════════════════════════════════
+function renderLoadedFiles() {
+  const el=document.getElementById('loadedFilesList');
+  const cat=loadedFiles.filter(f=>f.type==='cat');
+  const ltx=loadedFiles.filter(f=>f.type==='ltx');
+  const xml=loadedFiles.filter(f=>f.type==='xml');
+  let html='';
+
+  if(cat.length) {
+    html+=`<div class="file-group"><div class="file-group-header"><span class="fgh-label cat">Categories File</span></div>`
+      +cat.map(f=>fileRow(f)).join('')+`</div>`;
+  }
+  if(ltx.length) {
+    html+=`<div class="file-group"><div class="file-group-header">
+      <span class="fgh-label ltx">LTX Config (${ltx.length})</span>
+      <button class="btn xs danger" onclick="clearLtxFiles()">Clear All</button>
+    </div>`+ltx.map(f=>fileRow(f)).join('')+`</div>`;
+  }
+  if(xml.length) {
+    html+=`<div class="file-group"><div class="file-group-header">
+      <span class="fgh-label xml">XML Strings (${xml.length})</span>
+      <button class="btn xs danger" onclick="clearXmlFiles()">Clear All</button>
+    </div>`+xml.map(f=>fileRow(f)).join('')+`</div>`;
+  }
+  if(!html) html='<div class="empty-note">No files loaded yet</div>';
+  el.innerHTML=html;
+}
+
+function fileRow(f) {
+  const idx=loadedFiles.indexOf(f);
+  return `<div class="loaded-file">
+    <span class="lf-tag ${f.type}">${f.type.toUpperCase()}</span>
+    <span class="lf-name" title="${escHtml(f.name)}">${escHtml(f.name)}</span>
+    <span class="lf-rm" onclick="unloadFile(${idx})">✕</span>
+  </div>`;
+}
+
+// ══════════════════════════════════════════════
+//  ITEM BROWSER
+// ══════════════════════════════════════════════
+function renderCatFilter() {
+  const pfx=new Set(); for(const id of Object.keys(itemDB)){const p=id.split('_')[0];if(p)pfx.add(p);}
+  const el=document.getElementById('catFilter');
+  el.innerHTML=`<span class="cf-chip ${filterCat===''?'active':''}" onclick="setFilter('')">All</span>`
+    +[...pfx].sort().map(p=>`<span class="cf-chip ${filterCat===p?'active':''}" onclick="setFilter('${p}')">${p}</span>`).join('');
+}
+function setFilter(p){filterCat=p;renderCatFilter();renderItemList();}
+
+function renderItemList() {
+  const query=(document.getElementById('itemSearch').value||'').toLowerCase();
+  const mode=document.getElementById('filterMode').value;
+  const el=document.getElementById('itemListPanel');
+  const ids=Object.keys(itemDB).sort().filter(id=>{
+    if(filterCat&&!id.startsWith(filterCat+'_')&&id!==filterCat) return false;
+    if(query&&!id.toLowerCase().includes(query)&&!getItemName(id).toLowerCase().includes(query)) return false;
+    const sec=getItemSection(id);
+    if(mode==='unplaced'&&sec) return false;
+    if(mode==='placed'&&!sec) return false;
+    return true;
+  });
+  if(!ids.length){el.innerHTML='<div class="empty-note">No items match</div>';return;}
+  let html='<div class="item-list-wrap">';
+  for(const id of ids){
+    const name=getItemName(id), sec=getItemSection(id);
+    html+=`<div class="item-entry${sec?' in-section':''}" draggable="true" data-id="${escHtml(id)}"
+      onmouseenter="showTip(event,'${escHtml(id)}')" onmouseleave="hideTip()"
+      ondragstart="onItemDragStart(event,'${escHtml(id)}')" ondragend="onDragEnd(event)">
+      <span class="ie-id">${escHtml(id)}</span>
+      ${name?`<span class="ie-name" title="${escHtml(name)}">${escHtml(name)}</span>`:''}
+      ${sec?`<span class="ie-section-badge">${escHtml(sec)}</span>`:''}
+    </div>`;
+  }
+  html+='</div>'; el.innerHTML=html; renderCatFilter();
+}
+
+function updateStats() {
+  document.getElementById('statItems').textContent   =Object.keys(itemDB).length;
+  document.getElementById('statStrings').textContent =Object.keys(stringDB).length;
+  document.getElementById('statSections').textContent=sections.length;
+}
+
+// ══════════════════════════════════════════════
+//  SECTIONS EDITOR
+// ══════════════════════════════════════════════
+function updateSectionDatalist() {
+  document.getElementById('sectionNamesList').innerHTML=sections.map(s=>`<option value="${escHtml(s.name)}">`).join('');
+}
+
+function addSection() {
+  const nameEl=document.getElementById('newSecName');
+  const parEl =document.getElementById('newSecParent');
+  const name=nameEl.value.trim(); if(!name){notify('Enter a name');return;}
+  if(sections.find(s=>s.name===name)){notify('Already exists');return;}
+  const parents=parEl.value.trim()?parEl.value.trim().split(',').map(p=>p.trim()).filter(Boolean):[];
+  sections.push({id:nextSecId++,name,parents,items:[],collapsed:false,isMacro:parents.length>1});
+  nameEl.value='';parEl.value='';
+  updateSectionDatalist();renderSections();renderExport();updateStats();notify('Section added: '+name);
+}
+function removeSection(id) {
+  sections=sections.filter(s=>s.id!==id);
+  updateSectionDatalist();renderSections();renderItemList();renderExport();updateStats();
+}
+function toggleSection(id) {
+  const s=sections.find(s=>s.id===id); if(s){s.collapsed=!s.collapsed;renderSections();}
+}
+function collapseAll(){sections.forEach(s=>s.collapsed=true);renderSections();}
+function expandAll()  {sections.forEach(s=>s.collapsed=false);renderSections();}
+
+function removeItemFromSection(secId,idx){
+  const s=sections.find(s=>s.id===secId); if(s){s.items.splice(idx,1);renderSections();renderItemList();renderExport();}
+}
+function addItemToSection(secId){
+  const inp=document.getElementById('secAddItem_'+secId); if(!inp) return;
+  const id=inp.value.trim(); if(!id) return;
+  const s=sections.find(s=>s.id===secId); if(!s) return;
+  if(s.items.some(it=>it.type==='item'&&it.val===id)){notify('Already in section');return;}
+  s.items.push({type:'item',val:id}); if(!itemDB[id]) itemDB[id]={inv_name_key:'',description_key:''};
+  inp.value=''; renderSections();renderItemList();renderExport();updateStats();
+}
+function addCommentToSection(secId){
+  const inp=document.getElementById('secAddCmt_'+secId); if(!inp) return;
+  const t=inp.value.trim(); if(!t) return;
+  const s=sections.find(s=>s.id===secId); if(!s) return;
+  s.items.push({type:'comment',val:t}); inp.value=''; renderSections();renderExport();
+}
+
+// Inheritance
+function addInheritToSection(secId){
+  const inp=document.getElementById('inheritAdd_'+secId); if(!inp) return;
+  const val=inp.value.trim(); if(!val) return;
+  const s=sections.find(s=>s.id===secId); if(!s) return;
+  if(s.parents.includes(val)){notify('Already inherited');return;}
+  s.parents.push(val); s.isMacro=s.parents.length>1; inp.value='';
+  renderSections();renderExport();
+}
+function removeInherit(secId,idx){
+  const s=sections.find(s=>s.id===secId); if(!s) return;
+  s.parents.splice(idx,1); s.isMacro=s.parents.length>1;
+  renderSections();renderExport();
+}
+
+// Inline rename
+function startRename(secId, spanEl) {
+  const s=sections.find(s=>s.id===secId); if(!s) return;
+  const inp=document.createElement('input');
+  inp.type='text'; inp.className='sec-name-input'; inp.value=s.name;
+  spanEl.replaceWith(inp); inp.focus(); inp.select();
+  function commit(){
+    const n=inp.value.trim();
+    if(n&&n!==s.name){
+      const old=s.name; s.name=n;
+      sections.forEach(sec=>{sec.parents=sec.parents.map(p=>p===old?n:p);});
+      updateSectionDatalist(); renderExport();
+    }
+    renderSections();
+  }
+  inp.addEventListener('blur',commit);
+  inp.addEventListener('keydown',e=>{
+    if(e.key==='Enter'){e.preventDefault();inp.blur();}
+    if(e.key==='Escape'){renderSections();}
+    e.stopPropagation();
+  });
+  inp.addEventListener('click',e=>e.stopPropagation());
+}
+
+function renderSections() {
+  const el=document.getElementById('sectionsPanel');
+  const query=(document.getElementById('secSearch').value||'').toLowerCase();
+  const vis=sections.filter(s=>!query||s.name.toLowerCase().includes(query));
+
+  if(!vis.length){el.innerHTML='<div class="empty-note">No sections. Load a file or create one.</div>';updateSectionDatalist();return;}
+
+  let html='';
+  for(const s of vis){
+    const itemCount=s.items.filter(it=>it.type==='item').length;
+    const isMacro=s.parents.length>1;
+
+    html+=`<div class="section-card${s.collapsed?' collapsed':''}${isMacro?' macro':''}"
+      id="sec_${s.id}"
+      ondragover="onSectionDragOver(event,${s.id})"
+      ondragleave="onSectionDragLeave(event,${s.id})"
+      ondrop="onDropInSection(event,${s.id})">`;
+
+    // Header
+    html+=`<div class="section-header" onclick="toggleSection(${s.id})">
+      <span class="sec-chevron">▶</span>
+      <span class="sec-name-display" onclick="event.stopPropagation();startRename(${s.id},this)" title="Click to rename">[${escHtml(s.name)}]</span>
+      ${isMacro?'<span class="sec-macro-badge">MACRO</span>':''}
+      <span class="sec-count">${itemCount} items${s.parents.length?` · <span style="color:var(--info)">${s.parents.length} inherit</span>`:''}</span>
+      <div class="sec-actions" onclick="event.stopPropagation()">
+        <button class="btn xs danger" onclick="removeSection(${s.id})">✕</button>
+      </div>
+    </div>`;
+
+    // Inheritance list
+    if(!s.collapsed){
+      html+=`<div class="section-inherit-list">
+        <div class="sec-inherit-header"><span>↳ INHERITS</span></div>`;
+
+      if(s.parents.length===0){
+        html+=`<div class="inherit-drop-placeholder">No inheritance — add below or drag a section here</div>`;
+      }
+      for(let pi=0;pi<s.parents.length;pi++){
+        const p=s.parents[pi];
+        html+=`<div class="sec-inherit-item" draggable="true"
+          ondragstart="onInheritDragStart(event,${s.id},${pi})"
+          ondragend="onInheritDragEnd(event)"
+          ondragover="onInheritDragOver(event,${s.id},${pi})"
+          ondrop="onInheritDrop(event,${s.id},${pi})">
+          <span class="drag-handle">⋮⋮</span>
+          <span class="si-arrow">⇒</span>
+          <span class="si-id">${escHtml(p)}</span>
+          <span class="si-rm" onclick="removeInherit(${s.id},${pi})">✕</span>
+        </div>`;
+      }
+
+      html+=`<div class="inherit-add-row">
+        <input type="text" id="inheritAdd_${s.id}" placeholder="Add inherited section…" list="sectionNamesList"
+          onkeydown="if(event.key==='Enter')addInheritToSection(${s.id})">
+        <button class="btn" onclick="addInheritToSection(${s.id})">+ Inherit</button>
+      </div></div>`; // end section-inherit-list
+    }
+
+    // Body
+    html+=`<div class="section-body" id="secBody_${s.id}">`;
+    if(!s.items.length) html+=`<div class="drop-placeholder">Drop items here</div>`;
+    for(let idx=0;idx<s.items.length;idx++){
+      const it=s.items[idx];
+      if(it.type==='comment'){
+        html+=`<div class="sec-comment" draggable="true"
+          ondragstart="onSecItemDragStart(event,${s.id},${idx})" ondragend="onDragEnd(event)">
+          <span class="drag-handle">⋮⋮</span>
+          <span style="flex:1">; ${escHtml(it.val)}</span>
+          <span class="si-rm" onclick="removeItemFromSection(${s.id},${idx})">✕</span>
+        </div>`;
+      } else {
+        const name=getItemName(it.val);
+        html+=`<div class="sec-item" draggable="true" data-id="${escHtml(it.val)}"
+          ondragstart="onSecItemDragStart(event,${s.id},${idx})" ondragend="onDragEnd(event)"
+          onmouseenter="showTip(event,'${escHtml(it.val)}')" onmouseleave="hideTip()">
+          <span class="drag-handle">⋮⋮</span>
+          <span class="si-id">${escHtml(it.val)}</span>
+          ${name?`<span class="si-name" title="${escHtml(name)}">${escHtml(name)}</span>`:''}
+          <span class="si-rm" onclick="removeItemFromSection(${s.id},${idx})">✕</span>
+        </div>`;
+      }
+    }
+    html+=`</div>`; // section-body
+
+    if(!s.collapsed){
+      html+=`<div class="section-footer">
+        <input type="text" id="secAddItem_${s.id}" placeholder="Add item ID…" list="knownItemsList"
+          onkeydown="if(event.key==='Enter')addItemToSection(${s.id})">
+        <button class="btn xs primary" onclick="addItemToSection(${s.id})">+ Item</button>
+        <input type="text" id="secAddCmt_${s.id}" placeholder="; comment…" style="width:100px"
+          onkeydown="if(event.key==='Enter')addCommentToSection(${s.id})">
+        <button class="btn xs" onclick="addCommentToSection(${s.id})">+ ;c</button>
+      </div>`;
+    }
+
+    html+=`</div>`; // section-card
+  }
+
+  html+=`<datalist id="knownItemsList">${Object.keys(itemDB).sort().map(id=>`<option value="${escHtml(id)}">`).join('')}</datalist>`;
+  el.innerHTML=html; updateSectionDatalist(); updateStats();
+}
+
+// ══════════════════════════════════════════════
+//  DRAG & DROP — Items
+// ══════════════════════════════════════════════
+let dragData=null;
+
+function onItemDragStart(e,id){
+  dragData={src:'browser',itemId:id};
+  e.dataTransfer.effectAllowed='move';
+  e.currentTarget.classList.add('dragging-src');
+}
+function onSecItemDragStart(e,secId,idx){
+  const s=sections.find(s=>s.id===secId); const it=s?s.items[idx]:null;
+  dragData={src:'section',itemObj:it,secId,idx};
+  e.dataTransfer.effectAllowed='move';
+  e.currentTarget.classList.add('dragging-src'); e.stopPropagation();
+}
+function onDragEnd(e){
+  e.currentTarget.classList.remove('dragging-src');
+  document.querySelectorAll('.section-card').forEach(el=>el.classList.remove('drag-over'));
+  dragData=null;
+}
+function onSectionDragOver(e,secId){
+  if(!dragData||dragData.src==='inherit') return;
+  e.preventDefault(); e.dataTransfer.dropEffect='move';
+  document.getElementById('sec_'+secId)?.classList.add('drag-over');
+}
+function onSectionDragLeave(e,secId){
+  const card=document.getElementById('sec_'+secId);
+  if(card&&!card.contains(e.relatedTarget)) card.classList.remove('drag-over');
+}
+function onDropInSection(e,targetSecId){
+  e.preventDefault();
+  document.getElementById('sec_'+targetSecId)?.classList.remove('drag-over');
+  if(!dragData||dragData.src==='inherit') return;
+  const ts=sections.find(s=>s.id===targetSecId); if(!ts) return;
+
+  if(dragData.src==='browser'){
+    if(ts.items.some(it=>it.type==='item'&&it.val===dragData.itemId)){notify('Already in section');return;}
+    ts.items.push({type:'item',val:dragData.itemId});
+    renderSections();renderItemList();renderExport();
+
+  } else if(dragData.src==='section'){
+    const ss=sections.find(s=>s.id===dragData.secId); if(!ss) return;
+    const [moved]=ss.items.splice(dragData.idx,1);
+    if(targetSecId===dragData.secId){ ss.items.push(moved); }
+    else {
+      if(moved.type==='item'&&ts.items.some(it=>it.type==='item'&&it.val===moved.val)){
+        ss.items.splice(dragData.idx,0,moved); notify('Already in target section'); return;
+      }
+      ts.items.push(moved);
+    }
+    renderSections();renderItemList();renderExport();
+  }
+}
+
+// ══════════════════════════════════════════════
+//  DRAG & DROP — Inherit reorder
+// ══════════════════════════════════════════════
+let inheritDrag=null;
+
+function onInheritDragStart(e,secId,idx){
+  inheritDrag={secId,fromIdx:idx}; dragData={src:'inherit'};
+  e.dataTransfer.effectAllowed='move';
+  e.currentTarget.classList.add('dragging-src'); e.stopPropagation();
+}
+function onInheritDragEnd(e){
+  e.currentTarget.classList.remove('dragging-src');
+  inheritDrag=null; dragData=null;
+}
+function onInheritDragOver(e,secId,idx){
+  if(!inheritDrag||inheritDrag.secId!==secId) return;
+  e.preventDefault(); e.stopPropagation();
+}
+function onInheritDrop(e,secId,toIdx){
+  e.preventDefault(); e.stopPropagation();
+  if(!inheritDrag||inheritDrag.secId!==secId) return;
+  const s=sections.find(s=>s.id===secId); if(!s) return;
+  const from=inheritDrag.fromIdx; if(from===toIdx) return;
+  const [moved]=s.parents.splice(from,1);
+  s.parents.splice(toIdx,0,moved);
+  inheritDrag=null; dragData=null;
+  renderSections(); renderExport();
+}
+
+// ══════════════════════════════════════════════
+//  TOOLTIP
+// ══════════════════════════════════════════════
+let tipTimer=null;
+function showTip(e,id){
+  clearTimeout(tipTimer);
+  tipTimer=setTimeout(()=>{
+    document.getElementById('ttId').textContent  =id;
+    document.getElementById('ttName').textContent=getItemName(id)||'(no name found)';
+    document.getElementById('ttDesc').textContent=getItemDesc(id)||'(no description)';
+    document.getElementById('tooltip').style.display='block'; posTip(e);
+  },180);
+}
+function hideTip(){clearTimeout(tipTimer);document.getElementById('tooltip').style.display='none';}
+function posTip(e){
+  const el=document.getElementById('tooltip'),W=window.innerWidth,H=window.innerHeight;
+  el.style.left=(e.clientX+14)+'px'; el.style.top=(e.clientY+14)+'px';
+  const r=el.getBoundingClientRect();
+  if(r.right >W-10) el.style.left=(e.clientX-r.width -14)+'px';
+  if(r.bottom>H-10) el.style.top =(e.clientY-r.height-14)+'px';
+}
+document.addEventListener('mousemove',e=>{if(document.getElementById('tooltip').style.display==='block')posTip(e);});
+
+// ══════════════════════════════════════════════
+//  EXPORT
+// ══════════════════════════════════════════════
+function renderExport(){
+  let out='';
+  for(const s of sections){
+    const pStr=s.parents.join(',');
+    out+=(pStr?`[${s.name}]:${pStr}`:`[${s.name}]`)+'\n';
+    for(const it of s.items) out+=(it.type==='comment'?`; ${it.val}`:it.val)+'\n';
+    out+='\n';
+  }
+  document.getElementById('exportArea').value=out||'; No sections defined yet.';
+}
+function copyExport(){navigator.clipboard.writeText(document.getElementById('exportArea').value).then(()=>notify('Copied!'));}
+function downloadExport(){
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(new Blob([document.getElementById('exportArea').value],{type:'text/plain'}));
+  a.download='grounded_trade_categories.ltx'; a.click(); notify('Downloaded!');
+}
+
+// ══════════════════════════════════════════════
+//  UTILS
+// ══════════════════════════════════════════════
+function escHtml(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');}
+let notifTimer;
+function notify(msg){
+  const el=document.getElementById('notif'); el.textContent=msg; el.classList.add('show');
+  clearTimeout(notifTimer); notifTimer=setTimeout(()=>el.classList.remove('show'),2200);
+}
+function showHelp(){document.getElementById('helpModal').classList.add('show');}
+function hideHelp(){document.getElementById('helpModal').classList.remove('show');}
+document.getElementById('helpModal').addEventListener('click',e=>{if(e.target===document.getElementById('helpModal'))hideHelp();});
+document.getElementById('newSecName').addEventListener('keydown',e=>{if(e.key==='Enter')addSection();});
+
+// ══════════════════════════════════════════════
+//  RESIZE
+// ══════════════════════════════════════════════
+(function(){
+  const handle=document.getElementById('leftResizeHandle'), grid=document.getElementById('appGrid');
+  const MIN=180,MAX=560; let drag=false,startX=0,startW=0;
+  handle.addEventListener('mousedown',e=>{
+    drag=true;startX=e.clientX;
+    startW=parseInt(getComputedStyle(grid).gridTemplateColumns.split(' ')[0])||320;
+    handle.classList.add('dragging');document.body.style.cursor='col-resize';document.body.style.userSelect='none';e.preventDefault();
+  });
+  document.addEventListener('mousemove',e=>{if(!drag)return;grid.style.setProperty('--left-w',Math.min(MAX,Math.max(MIN,startW+(e.clientX-startX)))+'px');});
+  document.addEventListener('mouseup',()=>{if(!drag)return;drag=false;handle.classList.remove('dragging');document.body.style.cursor='';document.body.style.userSelect='';});
+})();
+</script>
+</body>
+</html>
