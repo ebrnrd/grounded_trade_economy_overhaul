@@ -22,424 +22,301 @@ discounts = discount_duty
 
 
 [supplies_1]:common_stock
-; Petrenko's baseline. Duty runs a tight operation — what he stocks, he stocks reliably.
-; Quantities are higher than Cordon traders. Probabilities reflect a real supply chain.
-; Russian weapons and ammo only at this tier. No Zone items. Ever.
-; Visiting stalkers and loners get access to Duty surplus — at Duty prices.
-
-; Basics — well-stocked compared to frontier traders
-bolts_pack              = 4, 1
-box_matches             = 5, 1
-batteries_dead          = 6, 0.88
-rope                    = 2, 0.75
-tarpaulin               = 2, 0.66
-
-; Food — military rations, not scavenged scraps
-ration_ru               = 3, 0.88
-bread                   = 4, 0.75
-conserva                = 4, 0.75
-beans                   = 3, 0.66
-water_drink             = 5, 1
-mineral_water           = 3, 0.75
-vodka                   = 3, 0.75
-vodka2                  = 3, 0.66
-tobacco                 = 3, 0.75
-cigarettes              = 4, 0.75
-cigarettes_russian      = 4, 0.88
-cooking                 = 3, 0.88
-kerosene                = 2, 0.75
-charcoal                = 3, 0.75
-explo_balon_gas         = 2, 0.66
-explo_jerrycan_fuel     = 2, 0.66
-
-; Medical — Duty invests in keeping their people alive
-; Better stocked than any Cordon trader from the start
-bandage                 = 6, 1
-jgut                    = 4, 0.88
-medkit                  = 4, 0.88
-medkit_ai1              = 3, 0.75
-medkit_army             = 2, 0.66
-tetanus                 = 3, 0.75
-glucose                 = 3, 0.75
-glucose_s               = 2, 0.66
-antirad_kalium          = 4, 0.88
-antirad_cystamine       = 3, 0.75
-antibio_chlor           = 4, 0.88
-antibio_sulfad          = 3, 0.75
-antiemetic              = 3, 0.75
-akvatab                 = 4, 0.88
-yadylin                 = 2, 0.66
-analgetic               = 2, 0.66
-drug_coagulant          = 2, 0.66
-
-; Ammo — Russian calibers, serious quantities
-; 5.45 is Duty's backbone — always reliable
-ammo_5.45x39_fmj        = 20, 1
-ammo_5.45x39_ep         = 15, 0.88
-ammo_5.45x39_ap         = 10, 0.75
-; 9x18 and 9x19 sidearm ammo
-ammo_9x18_fmj           = 15, 0.88
-ammo_9x18_ap            = 10, 0.75
-ammo_9x18_pmm           = 8, 0.66
-ammo_9x19_fmj           = 12, 0.75
-ammo_9x19_ap            = 8, 0.66
-ammo_9x19_pbp           = 6, 0.50
-; 7.62x39 — for the older iron still in circulation
-ammo_7.62x39_fmj        = 15, 0.88
-ammo_7.62x39_ap         = 10, 0.75
-; Shotgun ammo
-ammo_12x70_buck         = 10, 0.75
-ammo_12x76_zhekan       = 7, 0.66
-; PPSh/pistol calibers
-ammo_7.62x25_p          = 8, 0.66
-ammo_7.62x25_ps         = 8, 0.66
-; Grenades — standard issue
-grenade_rgd5            = 4, 0.88
-grenade_f1              = 3, 0.75
-grenade_smoke           = 4, 0.88
-grenade_gd-05           = 3, 0.66
-
-; Weapons — Russian low and mid tier from the start
-; Duty doesn't hand out guns to strangers — probabilities reflect that
-; Pistols
-wpn_pm                  = 1, 0.75
-wpn_pmm                 = 1, 0.66
-wpn_pb                  = 1, 0.60
-wpn_fort                = 1, 0.66
-wpn_aps                 = 1, 0.60
-wpn_gsh18               = 1, 0.50
-wpn_tt33                = 1, 0.50
-wpn_oc33                = 1, 0.44
-; Shotguns
-wpn_bm16                = 1, 0.75
-wpn_bm16_full           = 1, 0.66
-wpn_toz34               = 1, 0.66
-wpn_mp133               = 1, 0.50
-; Rifles — Russian low tier
-wpn_ak74u               = 1, 0.75
-wpn_ak74u_old           = 1, 0.88
-wpn_aks74               = 1, 0.66
-wpn_ak74_old            = 1, 0.60
-wpn_ppsh41              = 1, 0.50
-wpn_sks                 = 1, 0.50
-wpn_bizon               = 1, 0.44
-; Rifles — Russian mid tier appears from the start at Duty HQ
-wpn_akm                 = 1, 0.60
-wpn_akms                = 1, 0.60
-wpn_ak74                = 1, 0.60
-wpn_ak74m               = 1, 0.60
-wpn_aks74_new           = 1, 0.50
-; Melee
-wpn_knife               = 1, 1
-wpn_knife2              = 1, 0.88
-wpn_knife3              = 1, 0.75
-wpn_axe                 = 1, 0.66
-
-; Outfits — Duty novice and basic gear, available to anyone
-dolg_novice_outfit      = 1, 0.75
-dolg_scout_outfit       = 1, 0.60
-helm_rp_bala            = 1, 0.88
-helm_cloth_mask         = 1, 0.75
-helm_respirator_gp5     = 1, 0.66
-helm_ppm88              = 1, 0.66
-helm_hardhat            = 1, 0.50
-
-; Gear
-detector_radio          = 1, 0.88
-detector_geiger         = 1, 0.75
-detector_simple         = 1, 0.66
-device_flashlight       = 1, 0.88
-device_pda_1            = 1, 0.66
-itm_sleepbag            = 1, 0.75
-compression_bag         = 1, 0.66
-itm_backpack            = 1, 0.66
-itm_tent                = 1, 0.50
-kit_hunt                = 1, 0.50
-fieldcooker             = 1, 0.66
-army_bowler             = 1, 0.75
-lead_box                = 3, 0.75
-wpn_binoc_inv           = 1, 0.66
-
-; Silencers — Russian only at this tier
+; weapons
+wpn_pm                  = 1, 0.8
+wpn_fort                = 1, 0.65
+wpn_pb                  = 1, 0.55
+wpn_hpsa                = 1, 0.55
+wpn_beretta             = 1, 0.45
+wpn_colt1911            = 1, 0.4
+wpn_ppsh41              = 1, 0.4
+wpn_ak74u_old           = 1, 0.55
+wpn_kiparis             = 1, 0.4
+wpn_bizon               = 1, 0.5
+wpn_ak74_old            = 1, 0.45
+wpn_ak105               = 1, 0.35
+wpn_toz34               = 1, 0.5
+wpn_toz34_obrez         = 1, 0.55
+wpn_bm16                = 1, 0.5
+wpn_bm16_full           = 1, 0.45
+wpn_knife               = 1, 0.85
+grenade_f1              = 2, 0.5
+; weapon_addons
 wpn_sil_9mm             = 1, 0.75
-wpn_sil_pbs1            = 1, 0.66
-wpn_sil_pbs4            = 1, 0.66
-wpn_sil_aps             = 1, 0.60
-wpn_sil_6p9             = 1, 0.50
-
-; Weapon repair — Duty maintains its gear
-gun_oil                 = 3, 0.88
-gun_oil_ru              = 3, 0.88
-gun_oil_ru_d            = 2, 0.75
-ramrod_tool             = 2, 0.75
-cleaning_kit_p          = 2, 0.75
-cleaning_kit_s          = 2, 0.66
-
+; ammo
+ammo_12x70_buck_self    = 6, 0.9
+ammo_12x70_buck         = 6, 0.8
+ammo_12x76_zhekan       = 6, 0.7
+ammo_9x18_fmj           = 11, 0.9
+ammo_9x18_pmm           = 9, 0.7
+ammo_9x18_ap            = 9, 0.75
+ammo_5.45x39_fmj        = 8, 0.75
+ammo_9x19_fmj           = 8, 0.75
+ammo_11.43x23_fmj       = 8, 0.7
+ammo_7.62x25_ps         = 8, 0.75
+; outfits
+novice_outfit           = 1, 0.8
+dolg_novice_outfit      = 1, 0.8
+itm_backpack            = 1, 0.75
+helm_bandana            = 2, 0.75
+helm_cloth_mask         = 2, 0.75
+helm_resp               = 1, 0.8
+helm_respirator         = 1, 0.75
+; outfit_addons
+; meds
+bandage                 = 4, 0.8
+medkit                  = 3, 0.7
+antibio_chlor           = 1, 0.65
+antiemetic              = 1, 0.65
+yadylin                 = 1, 0.65
+antirad_cystamine       = 2, 0.7
+glucose_s               = 1, 0.7
+caffeine                = 1, 0.65
+salicidic_acid          = 2, 0.7
+jgut                    = 2, 0.75
+; food_drinks_smokes
+bread                   = 2, 0.75
+breadold                = 3, 0.8
+chocolate_p             = 2, 0.6
+protein                 = 2, 0.6
+ration_ukr              = 1, 0.5
+ration_ru               = 1, 0.5
+flask                   = 2, 0.75
+energy_drink            = 2, 0.7
+vodka                   = 2, 0.7
+beer                    = 2, 0.7
+cigarettes_russian      = 2, 0.7
+cigarettes              = 2, 0.7
+; devices
+device_torch_dummy      = 1, 0.75
+device_flashlight       = 1, 0.75
+detector_radio          = 1, 0.75
+detector_geiger         = 1, 0.75
+detector_simple         = 1, 0.75
+device_pda_1            = 1, 0.75
+lead_box                = 1, 0.75
+; tools
+batteries_dead          = 2, 0.75
+swiss_knife             = 1, 0.75
+grooming                = 1, 0.75
+steel_wool              = 2, 0.75
+bolts_pack              = 2, 0.75
+box_matches             = 2, 0.75
+matches                 = 2, 0.75
+itm_sleepbag            = 1, 0.75
+cooking                 = 1, 0.75
+sewing_thread           = 1, 0.7
+glue_b                  = 1, 0.7
+armor_repair_fa         = 1, 0.7
+heavy_sewing_thread     = 1, 0.7
+glue_a                  = 1, 0.7
+glue_e                  = 1, 0.7
+gun_oil_ru              = 1, 0.7
+gun_oil_ru_d            = 1, 0.7
+solvent                 = 1, 0.7
+gun_oil                 = 1, 0.7
+sharpening_stones       = 1, 0.7
+charcoal                = 2, 0.6
+kerosene                = 2, 0.55
 
 [supplies_2]:supplies_1
-; First goodwill unlock. Petrenko acknowledges you exist.
-; Better weapons become available, more reliable quantities.
-; Duty-specific outfits start appearing. Scopes and attachments.
-
-; Food upgrade — Duty officers eat better
-mre                     = 2, 0.66
-sausage                 = 2, 0.60
-nuts                    = 2, 0.50
-chocolate               = 1, 0.44
-mint                    = 2, 0.50
-vodka_quality           = 1, 0.50
-energy_drink            = 2, 0.50
-
-; Medical improvement
-medkit_ai2              = 2, 0.66
-drug_booster            = 2, 0.66
-drug_antidot            = 2, 0.66
-adrenalin               = 2, 0.60
-salicidic_acid          = 2, 0.60
-morphine                = 2, 0.50
-drug_radioprotector     = 1, 0.50
-
-; Ammo — broader caliber coverage, higher quantities
-ammo_9x39_pab9          = 10, 0.75
-ammo_9x39_ap            = 8, 0.66
-ammo_7.62x54_ap         = 6, 0.66
-ammo_7.62x54_7h1        = 5, 0.60
-ammo_12x76_dart         = 5, 0.60
-ammo_vog-25             = 4, 0.75
-ammo_og-7b              = 3, 0.66
-
-; Weapons — mid tier unlocks more reliably, high tier begins
-; Russian mid — more variants, better probabilities
-wpn_ak74_modern         = 1, 0.60
-wpn_ak74_alt            = 1, 0.60
-wpn_ak74m_alt           = 1, 0.60
-wpn_akms_alt            = 1, 0.60
-wpn_ak105               = 1, 0.55
-wpn_9a91                = 1, 0.50
-wpn_vityaz              = 1, 0.50
-wpn_groza               = 1, 0.50
-; Shotguns — better options
-wpn_toz34_custom        = 1, 0.55
-wpn_saiga12s            = 1, 0.44
-wpn_mp133               = 1, 0.60
-; LMG — heavy weapons start appearing
-wpn_rpk                 = 1, 0.44
-; Scopes — Russian optics
-wpn_addon_scope_po4x34  = 1, 0.75
-wpn_addon_scope_pu      = 1, 0.75
-1p29                    = 1, 0.75
-kobra                   = 1, 0.66
-ps01                    = 1, 0.66
-; GL
-wpn_addon_grenade_launcher = 1, 0.50
-; Silencers — broader
-wpn_sil_tgp-a           = 1, 0.60
-wpn_sil_kzrzp           = 1, 0.55
-wpn_sil_atg             = 1, 0.50
-wpn_sil_45              = 1, 0.50
-; Melee
-wpn_axe2                = 1, 0.66
-
-; Outfits — Duty standard gear becomes available
-dolg_outfit             = 1, 0.60
-dolg_red_outfit         = 1, 0.50
-dolg_voin_outfit        = 1, 0.50
-nbc_dolg_outfit         = 1, 0.44
-helm_m40                = 1, 0.66
-helm_m50                = 1, 0.50
-
-; Gear upgrade
-device_torch_nv_1       = 1, 0.66
-equ_small_pack          = 1, 0.75
-detector_advanced       = 1, 0.50
-
-; Artifact containers — Duty uses these, no the artifacts themselves
-af_kevlar               = 1, 0.50
-af_plates               = 1, 0.50
-af_frames               = 1, 0.44
-af_camelbak             = 1, 0.44
-
-; Better repair stock
-cleaning_kit_r5         = 1, 0.66
-toolkit_p               = 2, 0.66
-light_repair_kit        = 1, 0.60
-glue_b                  = 2, 0.75
-sewing_kit_b            = 2, 0.66
-
+; weapons
+wpn_pmm                         = 1, 0.6
+wpn_oc33                        = 1, 0.6
+wpn_tt33                        = 1, 0.6
+wpn_cz52                        = 1, 0.6
+wpn_walther                     = 1, 0.5
+wpn_glock                       = 1, 0.5
+wpn_usp                         = 1, 0.47
+wpn_sks                         = 1, 0.52
+wpn_pp2000                      = 1, 0.47
+wpn_ak74u                       = 1, 0.52
+wpn_vityaz                      = 1, 0.52
+wpn_aks                         = 1, 0.42
+wpn_ak74                        = 1, 0.42
+wpn_akm                         = 1, 0.42
+wpn_mp5                         = 1, 0.52
+wpn_mp7                         = 1, 0.42
+wpn_mosin                       = 1, 0.5
+wpn_fort500                     = 1, 0.5
+wpn_mp133                       = 1, 0.42
+wpn_wincheaster1300             = 1, 0.42
+wpn_remington870                = 1, 0.37
+wpn_rpd                         = 1, 0.45
+grenade_rgd5                    = 2, 0.55
+; weapon_addons
+wpn_addon_silencer              = 1, 0.6
+wpn_sil_6p9                     = 1, 0.6
+wpn_sil_aps                     = 1, 0.55
+wpn_addon_scope_mosin           = 1, 0.55
+wpn_sil_45                      = 1, 0.55
+wpn_sil_pbs1                    = 1, 0.55
+kobra                           = 1, 0.55
+; ammo
+ammo_5.45x39_ep                 = 8, 0.67
+ammo_5.45x39_ap                 = 8, 0.67
+ammo_12x76_dart                 = 6, 0.67
+ammo_7.62x39_fmj                = 7, 0.67
+ammo_7.62x39_ap                 = 7, 0.67
+ammo_7.62x25_p                  = 7, 0.67
+ammo_7.62x54_7h1                = 4, 0.67
+ammo_7.62x54_ap                 = 5, 0.67
+ammo_9x19_pbp                   = 7, 0.67
+ammo_9x19_ap                    = 7, 0.67
+; outfits
+dolg_scout_outfit               = 1, 0.5
+dolg_outfit                     = 1, 0.5
+trenchcoat_dolg_brown_outfit    = 1, 0.5
+helm_respirator_gp5             = 1, 0.7
+helm_hardhat                    = 1, 0.7
+; outfit_addons
+af_freon                        = 1, 0.45
+af_kevlar                       = 1, 0.45
+af_cooler                       = 1, 0.45
+af_frames                       = 1, 0.45
+af_surge                        = 1, 0.45
+; meds
+antirad                         = 2, 0.75
+tetanus                         = 1, 0.6
+glucose                         = 1, 0.6
+drug_psy_blockade               = 2, 0.6
+akvatab                         = 1, 0.6
+stimpack                        = 1, 0.7
+medkit_army                     = 2, 0.6
+morphine                        = 1, 0.7
+drug_sleepingpills              = 1, 0.75
+; food_drinks_smokes
+chocolate                       = 2, 0.6
+water_drink                     = 2, 0.7
+mineral_water                   = 2, 0.7
+tea                             = 1, 0.55
+hand_rolling_tobacco            = 1, 0.75
+cigarettes_lucky                = 1, 0.7
+cigar                           = 1, 0.7
+tobacco                         = 1, 0.7
+; devices
+; tools
+leatherman_tool                 = 1, 0.5
 
 [supplies_3]:supplies_2
-; Trusted. Petrenko shows you the military stockroom.
-; High-tier Russian weapons appear. Some NATO tolerated.
-; Duty heavy outfits and specialist gear.
-
-; Food — officers' mess level
-ration_ukr              = 2, 0.50
-salmon                  = 1, 0.44
-cigar1                  = 1, 0.44
-cigar2                  = 1, 0.33
-
-; Medical — full military pharmacy
-medkit_army             = 3, 0.75
-medkit_scientic         = 2, 0.60
-stimpack                = 2, 0.60
-stimpack_army           = 2, 0.50
-drug_psy_blockade       = 1, 0.44
-drug_sleepingpills      = 1, 0.44
-antirad                 = 2, 0.60
-
-; Ammo — the serious calibers, reliable quantities
-ammo_7.62x54_7h14       = 5, 0.60
-ammo_12.7x55_fmj        = 4, 0.60
-ammo_12.7x55_ap         = 3, 0.50
-; NATO ammo — tolerance for what comes through the Bar
-ammo_5.56x45_fmj        = 8, 0.50
-ammo_5.56x45_ap         = 5, 0.44
-ammo_7.62x51_fmj        = 6, 0.50
-ammo_7.62x51_ap         = 4, 0.44
-ammo_338_lapua_match    = 2, 0.33
-
-; Weapons — Russian high tier
-wpn_abakan              = 1, 0.55
-wpn_abakan_camo         = 1, 0.33
-wpn_aek                 = 1, 0.55
-wpn_ak12                = 1, 0.44
-wpn_ak101               = 1, 0.44
-wpn_ak103               = 1, 0.44
-wpn_ak103_camo          = 1, 0.33
-wpn_ak74m_camo          = 1, 0.33
-wpn_ak74m_duty          = 1, 0.40
-wpn_vsk94               = 1, 0.44
-wpn_rpk74               = 1, 0.44
-wpn_pkm                 = 1, 0.33
-; Snipers — Duty uses these for zone clearing
-wpn_svd                 = 1, 0.40
-wpn_svt40_modern        = 1, 0.44
-wpn_mosin               = 1, 0.50
-; NATO — war trophies and Bar acquisitions, reluctant but practical
-wpn_galil               = 1, 0.33
-wpn_mp5                 = 1, 0.33
-wpn_mp5sd               = 1, 0.22
-; Scopes — better glass
-pso1m21                 = 1, 0.60
-wpn_addon_scope_susat   = 1, 0.44
-wpn_addon_scope_elcan   = 1, 0.33
-
-; Outfits — heavy Duty gear
-dolg_heavy_outfit       = 1, 0.50
-dolg_heavy_redline_outfit = 1, 0.44
-trenchcoat_dolg_brown_outfit = 1, 0.50
-specops_dolg_outfit     = 1, 0.44
-dolg_specops_red_outfit = 1, 0.33
-light_dolg_outfit       = 1, 0.44
-helm_tactic             = 1, 0.50
-helm_metro              = 1, 0.44
-helm_protective         = 1, 0.33
-
-; Gear
-device_pda_2            = 1, 0.50
-device_torch_nv_2       = 1, 0.50
-equ_small_military_pack = 1, 0.66
-
-; Upgraded artifact containers
-af_camelbak_up          = 1, 0.33
-af_frames_up            = 1, 0.33
-af_freon_up             = 1, 0.33
-
-; Serious repair stock
-cleaning_kit_r7         = 1, 0.60
-toolkit_s               = 1, 0.60
-medium_repair_kit       = 1, 0.55
-glue_a                  = 1, 0.66
-sewing_kit_a            = 1, 0.60
-sewing_kit_h            = 1, 0.50
-helmet_repair_kit       = 1, 0.50
-
-; Medical kit
-medkit_ai2              = 2, 0.66
-
+; weapons
+wpn_mp443              = 1, 0.5
+wpn_sig220             = 1, 0.5
+wpn_fnp45              = 1, 0.5
+wpn_k98                = 1, 0.35
+wpn_ak102              = 1, 0.33
+wpn_ak74m              = 1, 0.32
+wpn_ump45              = 1, 0.45
+wpn_m4a1               = 1, 0.3
+wpn_abakan             = 1, 0.3
+wpn_remington700       = 1, 0.3
+wpn_svd                = 1, 0.3
+wpn_svu                = 1, 0.3
+wpn_knife2             = 1, 0.7
+; weapon_addons
+wpn_addon_scope        = 1, 0.45
+wpn_sil_nato           = 1, 0.45
+wpn_sil_pbs4           = 1, 0.45
+c-more                 = 1, 0.45
+wpn_addon_scope_pu     = 1, 0.45
+; ammo
+ammo_7.92x33_fmj       = 6, 0.55
+ammo_7.92x33_ap        = 6, 0.55
+ammo_7.62x54_7h14      = 8, 0.55
+ammo_9x39_pab9         = 7, 0.55
+ammo_9x39_ap           = 7, 0.55
+ammo_5.56x45_fmj       = 8, 0.55
+ammo_11.43x23_hydro    = 7, 0.55
+ammo_5.56x45_ss190     = 7, 0.55
+ammo_5.56x45_ap        = 7, 0.55
+ammo_357_hp_mag        = 5, 0.55
+ammo_5.7x28_ss195      = 6, 0.55
+ammo_7.62x51_fmj       = 6, 0.55
+; outfits
+specops_dolg_outfit    = 1, 0.4
+dolg_voin_outfit       = 1, 0.4
+dolg_red_outfit        = 1, 0.35
+light_dolg_outfit      = 1, 0.4
+equ_small_pack         = 1, 0.65
+helm_ach7              = 1, 0.6
+helm_m40               = 1, 0.6
+; outfit_addons
+af_camelbak            = 1, 0.55
+af_plates              = 1, 0.55
+af_grid                = 1, 0.55
+; meds
+drug_booster           = 1, 0.6
+stimpack_army          = 1, 0.6
+survival_kit           = 1, 0.6
+; food_drinks_smokes
+; devices
+detector_advanced      = 1, 0.65
+device_torch_nv_1      = 1, 0.55
+device_pda_2           = 1, 0.65
+; tools
+army_bowler            = 1, 0.6
+fieldcooker            = 1, 0.6
+explo_jerrycan_fuel    = 1, 0.6
 
 [supplies_4]:supplies_3
-; Deep trust. The armory backdoor.
-; Specialist weapons, exo-adjacent outfits, the best medical.
-; These items are rare even here — Duty doesn't give these away.
-
-; Medical — the good stuff
-medkit_ai3              = 2, 0.50
-stimpack_scientic       = 1, 0.44
-survival_kit            = 1, 0.44
-
-; Ammo — the rarest calibers Duty runs
-ammo_9x39_ap            = 10, 0.75
-ammo_12.7x55_ap         = 4, 0.66
-ammo_357_hp_mag         = 3, 0.33
-
-; Weapons — Duty's best and rarest
-wpn_aek_duty            = 1, 0.44
-wpn_aek_camo            = 1, 0.33
-wpn_val                 = 1, 0.40
-wpn_vintorez            = 1, 0.33
-wpn_svu                 = 1, 0.33
-wpn_sv98                = 1, 0.33
-wpn_pkm                 = 1, 0.40
-; Knife
-wpn_knife4              = 1, 0.66
-wpn_knife5              = 1, 0.44
-
-; Outfits — proto-exo and exolight tier
-dolg_pantsir_outfit     = 1, 0.44
-dolg_heavy_proto_exo_outfit = 1, 0.33
-dolg_proto_exo_outfit   = 1, 0.33
-dolg_exolight_outfit    = 1, 0.25
-dolg_scientific_outfit  = 1, 0.25
-helm_exo                = 1, 0.25
-
-; Gear
-device_pda_3            = 1, 0.44
-device_torch_nv_3       = 1, 0.44
-equ_military_pack       = 1, 0.50
-detector_elite          = 1, 0.33
-
-; Upgraded artifact containers
-af_grid_up              = 1, 0.25
-af_surge_up             = 1, 0.25
-af_surge                = 1, 0.33
-af_grid                 = 1, 0.33
-
-; Heavy repair
-heavy_repair_kit        = 1, 0.44
-toolkit_r7              = 1, 0.44
-exo_repair_kit          = 1, 0.33
-
-; Heavy weapons — very rare
-wpn_rg-6                = 1, 0.25
-ammo_vog-25             = 6, 0.66
-
+; weapons
+wpn_ak101                  = 1, 0.27
+wpn_ak103                  = 1, 0.27
+wpn_ak12                   = 1, 0.27
+wpn_sig552                 = 1, 0.27
+wpn_g36k                   = 1, 0.27
+; weapon_addons
+acog                       = 1, 0.41
+eot                        = 1, 0.41
+wpn_addon_scope_galil      = 1, 0.41
+; ammo
+ammo_12.7x55_fmj           = 6, 0.68
+ammo_12.7x55_ap            = 3, 0.68
+; outfits
+nbc_dolg_outfit            = 1, 0.24
+dolg_scientific_outfit     = 1, 0.24
+dolg_specops_red_outfit    = 1, 0.24
+helm_m50                   = 1, 0.4
+helm_ppm88                 = 1, 0.4
+helm_battle                = 1, 0.4
+; outfit_addons
+af_surge_up                = 1, 0.35
+af_frames_up               = 1, 0.35
+; meds
+medkit_ai1                 = 1, 0.75
+; food_drinks_smokes
+; devices
+; tools
+sewing_kit_b               = 1, 0.55
+sewing_kit_a               = 1, 0.55
 
 [supplies_5]:supplies_4
-; Maximum trust. Things that should not be for sale.
-
-; Duty exo — the faction's elite gear, extremely rare
-dolg_exo_outfit         = 1, 0.15
-exo_dolg_wood_outfit    = 1, 0.15
-exo_dolg_urban_outfit   = 1, 0.15
-dolg_nosorog_outfit     = 1, 0.10
-dolg_scientific_red_outfit  = 1, 0.15
-dolg_scientific_wood_outfit = 1, 0.15
-dolg_heavy_outfit       = 1, 0.20
-helm_spartan            = 1, 0.15
-
-; The absolute best weapons
-wpn_abakan_camo         = 1, 0.20
-wpn_aek_camo            = 1, 0.15
-wpn_ak74m_duty          = 1, 0.20
-wpn_sv98_custom         = 1, 0.15
-wpn_val_modern          = 1, 0.15
-wpn_pkp                 = 1, 0.15
-wpn_rpg7                = 1, 0.10
-
-; Tourist pack — the best backpack
-equ_tourist_pack        = 1, 0.20
-
-; Upgraded artifact containers
-af_cooler_up            = 1, 0.20
-af_cooler               = 1, 0.25
+; weapons
+wpn_g36                = 1, 0.3
+wpn_aek_duty           = 1, 0.75
+wpn_m16                = 1, 0.3
+wpn_scar               = 1, 0.26
+; weapon_addons
+wpn_addon_scope_zf4    = 1, 0.35
+wpn_sil_tgp-a          = 1, 0.35
+ps01                   = 1, 0.35
+pso1m21                = 1, 0.35
+; ammo
+ammo_7.62x51_ap        = 8, 0.36
+ammo_magnum_300        = 5, 0.51
+ammo_5.7x28_ss190      = 6, 0.51
+ammo_pkm_100           = 4, 0.51
+ammo_12x76_bull        = 4, 0.51
+; outfits
+exo_dolg_outfit        = 1, 0.24
+dolg_nosorog_outfit    = 1, 0.02
+dolg_exo_outfit        = 1, 0.05
+helm_metro             = 1, 0.2
+helm_exo               = 1, 0.18
+helm_spartan           = 1, 0.18
+equ_military_pack      = 1, 0.4
+; meds
+; food_drinks_smokes
+; devices
+device_torch_nv_2      = 1, 0.35
+; tools
